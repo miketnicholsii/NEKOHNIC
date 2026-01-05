@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/hooks/use-auth";
 
 // Public pages
 import Index from "./pages/Index";
@@ -47,53 +48,55 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<Index />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/personal-brand" element={<PersonalBrand />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/get-started" element={<GetStarted />} />
-          <Route path="/contact" element={<Contact />} />
-          
-          {/* Auth routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          
-          {/* Legal routes */}
-          <Route path="/legal/privacy" element={<Privacy />} />
-          <Route path="/legal/terms" element={<Terms />} />
-          
-          {/* Authenticated app routes */}
-          <Route path="/app" element={<AppLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="onboarding" element={<Onboarding />} />
-            <Route path="business-starter" element={<BusinessStarter />} />
-            <Route path="business-credit" element={<BusinessCredit />} />
-            <Route path="personal-brand" element={<PersonalBrandBuilder />} />
-            <Route path="resources" element={<Resources />} />
-            <Route path="account" element={<Account />} />
-            <Route path="support" element={<Support />} />
-          </Route>
-          
-          {/* Admin routes */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="content" element={<AdminContent />} />
-            <Route path="plans" element={<AdminPlans />} />
-            <Route path="announcements" element={<AdminAnnouncements />} />
-          </Route>
-          
-          {/* Fallback */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/personal-brand" element={<PersonalBrand />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/get-started" element={<GetStarted />} />
+            <Route path="/contact" element={<Contact />} />
+            
+            {/* Auth routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            
+            {/* Legal routes */}
+            <Route path="/legal/privacy" element={<Privacy />} />
+            <Route path="/legal/terms" element={<Terms />} />
+            
+            {/* Authenticated app routes */}
+            <Route path="/app" element={<AppLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="onboarding" element={<Onboarding />} />
+              <Route path="business-starter" element={<BusinessStarter />} />
+              <Route path="business-credit" element={<BusinessCredit />} />
+              <Route path="personal-brand" element={<PersonalBrandBuilder />} />
+              <Route path="resources" element={<Resources />} />
+              <Route path="account" element={<Account />} />
+              <Route path="support" element={<Support />} />
+            </Route>
+            
+            {/* Admin routes */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="content" element={<AdminContent />} />
+              <Route path="plans" element={<AdminPlans />} />
+              <Route path="announcements" element={<AdminAnnouncements />} />
+            </Route>
+            
+            {/* Fallback */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
