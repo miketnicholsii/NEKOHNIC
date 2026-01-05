@@ -1,7 +1,9 @@
+import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
 import { PricingCard } from "@/components/PricingCard";
+import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
 import { CheckCircle2, HelpCircle } from "lucide-react";
 import {
   Accordion,
@@ -120,147 +122,162 @@ export default function Pricing() {
       {/* Hero */}
       <section className="pt-32 pb-20 bg-background">
         <div className="container mx-auto px-6 lg:px-8 text-center">
-          <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-4">
-            Pricing
-          </span>
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tightest text-foreground mb-6 max-w-3xl mx-auto">
-            Simple, transparent pricing.
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Start free and upgrade as you grow. No hidden fees, no surprises — just clear value at every tier.
-          </p>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-4">
+              Pricing
+            </span>
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tightest text-foreground mb-6 max-w-3xl mx-auto">
+              Simple, transparent pricing.
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Start free and upgrade as you grow. No hidden fees, no surprises — just clear value at every tier.
+            </p>
+          </motion.div>
         </div>
       </section>
 
       {/* Pricing Cards */}
       <section className="py-12 bg-background">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
+          <AnimatedStagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
             {pricingPlans.map((plan) => (
-              <PricingCard
-                key={plan.name}
-                name={plan.name}
-                description={plan.description}
-                price={plan.price}
-                features={plan.features}
-                highlighted={plan.highlighted}
-                badge={plan.badge}
-                ctaText={plan.ctaText}
-              />
+              <motion.div key={plan.name} variants={staggerItem}>
+                <PricingCard
+                  name={plan.name}
+                  description={plan.description}
+                  price={plan.price}
+                  features={plan.features}
+                  highlighted={plan.highlighted}
+                  badge={plan.badge}
+                  ctaText={plan.ctaText}
+                />
+              </motion.div>
             ))}
-          </div>
+          </AnimatedStagger>
         </div>
       </section>
 
       {/* Comparison Table */}
       <section className="py-20 lg:py-32 bg-muted/30">
         <div className="container mx-auto px-6 lg:px-8">
-          <SectionHeading
-            label="Compare Plans"
-            title="Find the right fit."
-            description="See what's included in each tier at a glance."
-            centered
-            className="mb-12"
-          />
+          <AnimatedSection>
+            <SectionHeading
+              label="Compare Plans"
+              title="Find the right fit."
+              description="See what's included in each tier at a glance."
+              centered
+              className="mb-12"
+            />
+          </AnimatedSection>
 
-          <div className="overflow-x-auto">
-            <table className="w-full max-w-5xl mx-auto bg-card rounded-2xl border border-border overflow-hidden">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left p-4 font-medium text-muted-foreground">Feature</th>
-                  <th className="text-center p-4 font-display font-bold text-foreground">Free</th>
-                  <th className="text-center p-4 font-display font-bold text-foreground">Start</th>
-                  <th className="text-center p-4 font-display font-bold text-primary bg-primary/5">Build</th>
-                  <th className="text-center p-4 font-display font-bold text-foreground">Scale</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonFeatures.map((row, index) => (
-                  <tr key={row.feature} className={index < comparisonFeatures.length - 1 ? "border-b border-border" : ""}>
-                    <td className="p-4 text-sm text-foreground">{row.feature}</td>
-                    <td className="text-center p-4">
-                      {typeof row.free === "boolean" ? (
-                        row.free ? (
-                          <CheckCircle2 className="h-5 w-5 text-primary mx-auto" />
-                        ) : (
-                          <span className="text-muted-foreground/40">—</span>
-                        )
-                      ) : (
-                        <span className="text-xs text-muted-foreground">{row.free}</span>
-                      )}
-                    </td>
-                    <td className="text-center p-4">
-                      {typeof row.start === "boolean" ? (
-                        row.start ? (
-                          <CheckCircle2 className="h-5 w-5 text-primary mx-auto" />
-                        ) : (
-                          <span className="text-muted-foreground/40">—</span>
-                        )
-                      ) : (
-                        <span className="text-xs text-muted-foreground">{row.start}</span>
-                      )}
-                    </td>
-                    <td className="text-center p-4 bg-primary/5">
-                      {typeof row.build === "boolean" ? (
-                        row.build ? (
-                          <CheckCircle2 className="h-5 w-5 text-primary mx-auto" />
-                        ) : (
-                          <span className="text-muted-foreground/40">—</span>
-                        )
-                      ) : (
-                        <span className="text-xs text-muted-foreground">{row.build}</span>
-                      )}
-                    </td>
-                    <td className="text-center p-4">
-                      {typeof row.scale === "boolean" ? (
-                        row.scale ? (
-                          <CheckCircle2 className="h-5 w-5 text-primary mx-auto" />
-                        ) : (
-                          <span className="text-muted-foreground/40">—</span>
-                        )
-                      ) : (
-                        <span className="text-xs text-muted-foreground">{row.scale}</span>
-                      )}
-                    </td>
+          <AnimatedSection delay={0.2}>
+            <div className="overflow-x-auto">
+              <table className="w-full max-w-5xl mx-auto bg-card rounded-2xl border border-border overflow-hidden">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left p-4 font-medium text-muted-foreground">Feature</th>
+                    <th className="text-center p-4 font-display font-bold text-foreground">Free</th>
+                    <th className="text-center p-4 font-display font-bold text-foreground">Start</th>
+                    <th className="text-center p-4 font-display font-bold text-primary bg-primary/5">Build</th>
+                    <th className="text-center p-4 font-display font-bold text-foreground">Scale</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {comparisonFeatures.map((row, index) => (
+                    <tr key={row.feature} className={index < comparisonFeatures.length - 1 ? "border-b border-border" : ""}>
+                      <td className="p-4 text-sm text-foreground">{row.feature}</td>
+                      <td className="text-center p-4">
+                        {typeof row.free === "boolean" ? (
+                          row.free ? (
+                            <CheckCircle2 className="h-5 w-5 text-primary mx-auto" />
+                          ) : (
+                            <span className="text-muted-foreground/40">—</span>
+                          )
+                        ) : (
+                          <span className="text-xs text-muted-foreground">{row.free}</span>
+                        )}
+                      </td>
+                      <td className="text-center p-4">
+                        {typeof row.start === "boolean" ? (
+                          row.start ? (
+                            <CheckCircle2 className="h-5 w-5 text-primary mx-auto" />
+                          ) : (
+                            <span className="text-muted-foreground/40">—</span>
+                          )
+                        ) : (
+                          <span className="text-xs text-muted-foreground">{row.start}</span>
+                        )}
+                      </td>
+                      <td className="text-center p-4 bg-primary/5">
+                        {typeof row.build === "boolean" ? (
+                          row.build ? (
+                            <CheckCircle2 className="h-5 w-5 text-primary mx-auto" />
+                          ) : (
+                            <span className="text-muted-foreground/40">—</span>
+                          )
+                        ) : (
+                          <span className="text-xs text-muted-foreground">{row.build}</span>
+                        )}
+                      </td>
+                      <td className="text-center p-4">
+                        {typeof row.scale === "boolean" ? (
+                          row.scale ? (
+                            <CheckCircle2 className="h-5 w-5 text-primary mx-auto" />
+                          ) : (
+                            <span className="text-muted-foreground/40">—</span>
+                          )
+                        ) : (
+                          <span className="text-xs text-muted-foreground">{row.scale}</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* FAQ */}
       <section className="py-20 lg:py-32 bg-background">
         <div className="container mx-auto px-6 lg:px-8">
-          <SectionHeading
-            label="FAQ"
-            title="Common questions."
-            centered
-            className="mb-12"
-          />
+          <AnimatedSection>
+            <SectionHeading
+              label="FAQ"
+              title="Common questions."
+              centered
+              className="mb-12"
+            />
+          </AnimatedSection>
 
-          <div className="max-w-3xl mx-auto">
-            <Accordion type="single" collapsible className="space-y-4">
-              {faqs.map((faq, index) => (
-                <AccordionItem 
-                  key={index} 
-                  value={`faq-${index}`}
-                  className="bg-card border border-border rounded-xl px-6 data-[state=open]:shadow-md transition-shadow"
-                >
-                  <AccordionTrigger className="text-left font-medium hover:no-underline py-5">
-                    <div className="flex items-center gap-3">
-                      <HelpCircle className="h-5 w-5 text-primary flex-shrink-0" />
-                      {faq.question}
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground pb-5 pl-8">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
+          <AnimatedSection delay={0.2}>
+            <div className="max-w-3xl mx-auto">
+              <Accordion type="single" collapsible className="space-y-4">
+                {faqs.map((faq, index) => (
+                  <AccordionItem 
+                    key={index} 
+                    value={`faq-${index}`}
+                    className="bg-card border border-border rounded-xl px-6 data-[state=open]:shadow-md transition-shadow"
+                  >
+                    <AccordionTrigger className="text-left font-medium hover:no-underline py-5">
+                      <div className="flex items-center gap-3">
+                        <HelpCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                        {faq.question}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground pb-5 pl-8">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 

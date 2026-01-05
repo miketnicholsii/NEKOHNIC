@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -5,6 +6,7 @@ import { TierCard } from "@/components/TierCard";
 import { ProgressTracker } from "@/components/ProgressTracker";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
 import { 
   ArrowRight, 
   Building2, 
@@ -116,7 +118,12 @@ export default function Services() {
       {/* Hero */}
       <section className="pt-32 pb-20 bg-background">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="max-w-3xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-3xl"
+          >
             <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-4">
               Services
             </span>
@@ -127,7 +134,7 @@ export default function Services() {
               A guided journey from idea to legitimate, credit-worthy business. 
               Every step is structured, trackable, and designed for long-term success.
             </p>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -135,7 +142,7 @@ export default function Services() {
       <section className="py-20 lg:py-32 bg-muted/30">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-            <div>
+            <AnimatedSection direction="left">
               <SectionHeading
                 label="Step 1: Start"
                 title="Business Starter Flow"
@@ -143,8 +150,15 @@ export default function Services() {
               />
 
               <div className="mt-8 space-y-6">
-                {legitimacySteps.map((step) => (
-                  <div key={step.title} className="flex items-start gap-4 p-4 rounded-xl bg-card border border-border">
+                {legitimacySteps.map((step, index) => (
+                  <motion.div 
+                    key={step.title} 
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex items-start gap-4 p-4 rounded-xl bg-card border border-border"
+                  >
                     <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
                       <step.icon className="h-5 w-5" />
                     </div>
@@ -152,35 +166,37 @@ export default function Services() {
                       <h4 className="font-medium text-foreground">{step.title}</h4>
                       <p className="text-sm text-muted-foreground">{step.description}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
               {/* EIN Warning */}
-              <div className="mt-8 p-6 rounded-xl bg-secondary/10 border border-secondary/30">
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-medium text-foreground mb-2">Important: EIN is FREE</p>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      Your Employer Identification Number (EIN) is completely free directly from the IRS. 
-                      NEKO guides you to the official IRS website — we never charge for EIN filing.
-                    </p>
-                    <a 
-                      href="https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
-                    >
-                      Apply for EIN at IRS.gov
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
+              <AnimatedSection delay={0.4} className="mt-8">
+                <div className="p-6 rounded-xl bg-secondary/10 border border-secondary/30">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-foreground mb-2">Important: EIN is FREE</p>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Your Employer Identification Number (EIN) is completely free directly from the IRS. 
+                        NEKO guides you to the official IRS website — we never charge for EIN filing.
+                      </p>
+                      <a 
+                        href="https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                      >
+                        Apply for EIN at IRS.gov
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </AnimatedSection>
+            </AnimatedSection>
 
-            <div className="lg:pl-8">
+            <AnimatedSection direction="right" delay={0.2} className="lg:pl-8">
               <div className="p-8 rounded-2xl bg-card border border-border shadow-md sticky top-28">
                 <h3 className="font-display font-bold text-lg mb-6">Your Progress</h3>
                 <ProgressTracker steps={businessStarterSteps} />
@@ -191,7 +207,7 @@ export default function Services() {
                   </Button>
                 </Link>
               </div>
-            </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -199,39 +215,44 @@ export default function Services() {
       {/* Business Credit Builder */}
       <section className="py-20 lg:py-32 bg-background">
         <div className="container mx-auto px-6 lg:px-8">
-          <SectionHeading
-            label="Step 2: Build"
-            title="Tiered Business Credit Builder"
-            description="Business credit is built in stages, not overnight. Each tier prepares you for the next, with emphasis on legitimacy and early payments."
-            className="mb-12"
-          />
+          <AnimatedSection>
+            <SectionHeading
+              label="Step 2: Build"
+              title="Tiered Business Credit Builder"
+              description="Business credit is built in stages, not overnight. Each tier prepares you for the next, with emphasis on legitimacy and early payments."
+              className="mb-12"
+            />
+          </AnimatedSection>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <AnimatedStagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {creditTiers.map((tier) => (
-              <TierCard
-                key={tier.tier}
-                tier={tier.tier}
-                title={tier.title}
-                description={tier.description}
-                features={tier.features}
-                status={tier.status}
-                progress={tier.progress}
-              />
+              <motion.div key={tier.tier} variants={staggerItem}>
+                <TierCard
+                  tier={tier.tier}
+                  title={tier.title}
+                  description={tier.description}
+                  features={tier.features}
+                  status={tier.status}
+                  progress={tier.progress}
+                />
+              </motion.div>
             ))}
-          </div>
+          </AnimatedStagger>
 
-          <div className="mt-12 p-6 rounded-2xl bg-primary/5 border border-primary/20 max-w-3xl">
-            <div className="flex items-start gap-4">
-              <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0" />
-              <div>
-                <p className="font-medium text-foreground mb-2">The Key to Business Credit</p>
-                <p className="text-muted-foreground">
-                  Pay early, pay in full, and be consistent. Business credit bureaus (Dun & Bradstreet, Experian Business, Equifax Business) 
-                  reward responsible payment behavior. There are no shortcuts — only smart, strategic steps.
-                </p>
+          <AnimatedSection delay={0.4} className="mt-12">
+            <div className="p-6 rounded-2xl bg-primary/5 border border-primary/20 max-w-3xl">
+              <div className="flex items-start gap-4">
+                <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-foreground mb-2">The Key to Business Credit</p>
+                  <p className="text-muted-foreground">
+                    Pay early, pay in full, and be consistent. Business credit bureaus (Dun & Bradstreet, Experian Business, Equifax Business) 
+                    reward responsible payment behavior. There are no shortcuts — only smart, strategic steps.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -240,71 +261,75 @@ export default function Services() {
         <div className="container mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
             {/* Personal Brand */}
-            <div className="p-8 lg:p-10 rounded-2xl bg-card border border-border">
-              <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-4">
-                Step 3: Brand
-              </span>
-              <h2 className="font-display text-2xl lg:text-3xl font-bold mb-4">
-                Personal Brand Builder
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Create a professional digital presence that tells your story, showcases your skills, 
-                and positions you as a credible founder or creator.
-              </p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  "Visually appealing personal or brand page",
-                  "Digital CV that tells your story",
-                  "Skills and goals showcase",
-                  "Shareable, modern, intentional design",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-foreground">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span className="text-sm">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link to="/personal-brand">
-                <Button variant="outline" className="group">
-                  Learn More
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Button>
-              </Link>
-            </div>
+            <AnimatedSection direction="left">
+              <div className="p-8 lg:p-10 rounded-2xl bg-card border border-border h-full">
+                <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-4">
+                  Step 3: Brand
+                </span>
+                <h2 className="font-display text-2xl lg:text-3xl font-bold mb-4">
+                  Personal Brand Builder
+                </h2>
+                <p className="text-muted-foreground mb-6">
+                  Create a professional digital presence that tells your story, showcases your skills, 
+                  and positions you as a credible founder or creator.
+                </p>
+                <ul className="space-y-3 mb-8">
+                  {[
+                    "Visually appealing personal or brand page",
+                    "Digital CV that tells your story",
+                    "Skills and goals showcase",
+                    "Shareable, modern, intentional design",
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-foreground">
+                      <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                      <span className="text-sm">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link to="/personal-brand">
+                  <Button variant="outline" className="group">
+                    Learn More
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
+              </div>
+            </AnimatedSection>
 
             {/* Scale */}
-            <div className="p-8 lg:p-10 rounded-2xl bg-card border border-border">
-              <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-4">
-                Step 4: Scale
-              </span>
-              <h2 className="font-display text-2xl lg:text-3xl font-bold mb-4">
-                Growth & Scale (When Ready)
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Scaling is optional and should only happen when you're ready. 
-                These resources are positioned as supportive tools, not requirements.
-              </p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  "Instagram follower growth strategies",
-                  "Professional business cards via Moo.com",
-                  "Brand audits and upgrades",
-                  "Advanced progress tracking",
-                  "Growth readiness diagnostics",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-foreground">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span className="text-sm">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link to="/pricing">
-                <Button variant="outline" className="group">
-                  View Plans
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Button>
-              </Link>
-            </div>
+            <AnimatedSection direction="right" delay={0.2}>
+              <div className="p-8 lg:p-10 rounded-2xl bg-card border border-border h-full">
+                <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-4">
+                  Step 4: Scale
+                </span>
+                <h2 className="font-display text-2xl lg:text-3xl font-bold mb-4">
+                  Growth & Scale (When Ready)
+                </h2>
+                <p className="text-muted-foreground mb-6">
+                  Scaling is optional and should only happen when you're ready. 
+                  These resources are positioned as supportive tools, not requirements.
+                </p>
+                <ul className="space-y-3 mb-8">
+                  {[
+                    "Instagram follower growth strategies",
+                    "Professional business cards via Moo.com",
+                    "Brand audits and upgrades",
+                    "Advanced progress tracking",
+                    "Growth readiness diagnostics",
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-foreground">
+                      <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                      <span className="text-sm">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link to="/pricing">
+                  <Button variant="outline" className="group">
+                    View Plans
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
+              </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -312,20 +337,22 @@ export default function Services() {
       {/* CTA */}
       <section className="py-20 lg:py-32 bg-tertiary">
         <div className="container mx-auto px-6 lg:px-8 text-center">
-          <SectionHeading
-            label="Ready to Begin?"
-            title="Your journey starts with one step."
-            description="Start with our free tier and progress at your own pace. No pressure, no hype — just clear guidance."
-            centered
-            light
-            className="mb-10"
-          />
-          <Link to="/get-started">
-            <Button variant="hero" size="xl" className="group">
-              Get Started Free
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
+          <AnimatedSection>
+            <SectionHeading
+              label="Ready to Begin?"
+              title="Your journey starts with one step."
+              description="Start with our free tier and progress at your own pace. No pressure, no hype — just clear guidance."
+              centered
+              light
+              className="mb-10"
+            />
+            <Link to="/get-started">
+              <Button variant="hero" size="xl" className="group">
+                Get Started Free
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </AnimatedSection>
         </div>
       </section>
 

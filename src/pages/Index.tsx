@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { FeatureCard } from "@/components/FeatureCard";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ProgressTracker } from "@/components/ProgressTracker";
+import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
 import { 
   ArrowRight, 
   Building2, 
@@ -103,27 +105,47 @@ export default function Index() {
         <div className="container mx-auto px-6 lg:px-8 relative z-10 text-center">
           <div className="max-w-4xl mx-auto">
             {/* Label */}
-            <div className="animate-fade-in mb-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-8"
+            >
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm text-primary-foreground text-sm font-medium tracking-wide">
                 <Sparkles className="h-4 w-4" />
                 Your Operating System for Success
               </span>
-            </div>
+            </motion.div>
 
             {/* Main Headline */}
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tightest text-primary-foreground mb-6 animate-slide-up">
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tightest text-primary-foreground mb-6"
+            >
               Build Your Business.
               <br />
               <span className="text-primary-foreground/80">Build Your Brand.</span>
-            </h1>
+            </motion.h1>
 
             {/* Subheadline */}
-            <p className="text-lg md:text-xl text-primary-foreground/70 max-w-2xl mx-auto mb-10 animate-slide-up stagger-1">
+            <motion.p 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-lg md:text-xl text-primary-foreground/70 max-w-2xl mx-auto mb-10"
+            >
               NEKO is your guided platform for building legitimate businesses and personal brands — from zero to scale — with progress tracking every step of the way.
-            </p>
+            </motion.p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up stagger-2">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            >
               <Link to="/get-started">
                 <Button variant="hero" size="xl" className="group">
                   Get Started Free
@@ -135,33 +157,43 @@ export default function Index() {
                   Explore Services
                 </Button>
               </Link>
-            </div>
+            </motion.div>
 
             {/* Trust indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-6 mt-12 animate-fade-in stagger-3">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="flex flex-wrap items-center justify-center gap-6 mt-12"
+            >
               {["Guidance + Execution", "Education + Structure", "Progress + Momentum"].map((item) => (
                 <div key={item} className="flex items-center gap-2 text-primary-foreground/60 text-sm">
                   <CheckCircle2 className="h-4 w-4 text-primary-foreground" />
                   {item}
                 </div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-pulse-soft">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.6 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-pulse-soft"
+        >
           <div className="w-6 h-10 rounded-full border-2 border-primary-foreground/30 flex items-start justify-center p-2">
             <div className="w-1 h-2 bg-primary-foreground/50 rounded-full" />
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* What is NEKO Section */}
       <section className="py-20 lg:py-32 bg-background">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div>
+            <AnimatedSection direction="left">
               <SectionHeading
                 label="What is NEKO?"
                 title="Your guided path from idea to reality."
@@ -185,9 +217,9 @@ export default function Index() {
                   ))}
                 </div>
               </div>
-            </div>
+            </AnimatedSection>
 
-            <div className="lg:pl-8">
+            <AnimatedSection direction="right" delay={0.2} className="lg:pl-8">
               <div className="p-8 rounded-2xl bg-card border border-border shadow-md">
                 <h3 className="font-display font-bold text-lg mb-6 flex items-center gap-2">
                   <Target className="h-5 w-5 text-primary" />
@@ -195,7 +227,7 @@ export default function Index() {
                 </h3>
                 <ProgressTracker steps={journeySteps} />
               </div>
-            </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -203,53 +235,57 @@ export default function Index() {
       {/* Features Section */}
       <section className="py-20 lg:py-32 bg-muted/30">
         <div className="container mx-auto px-6 lg:px-8">
-          <SectionHeading
-            label="Platform Features"
-            title="Everything you need to start, build, and grow."
-            description="From business formation to personal branding, NEKO provides the tools and guidance for every stage of your journey."
-            centered
-            className="mb-16"
-          />
+          <AnimatedSection>
+            <SectionHeading
+              label="Platform Features"
+              title="Everything you need to start, build, and grow."
+              description="From business formation to personal branding, NEKO provides the tools and guidance for every stage of your journey."
+              centered
+              className="mb-16"
+            />
+          </AnimatedSection>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <FeatureCard
-                key={feature.title}
-                icon={feature.icon}
-                title={feature.title}
-                description={feature.description}
-                className={`animate-slide-up stagger-${(index % 3) + 1}`}
-              />
+          <AnimatedStagger className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature) => (
+              <motion.div key={feature.title} variants={staggerItem}>
+                <FeatureCard
+                  icon={feature.icon}
+                  title={feature.title}
+                  description={feature.description}
+                />
+              </motion.div>
             ))}
-          </div>
+          </AnimatedStagger>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="py-20 lg:py-32 bg-tertiary">
         <div className="container mx-auto px-6 lg:px-8 text-center">
-          <SectionHeading
-            label="Ready to Start?"
-            title="Begin your journey today."
-            description="Join thousands of founders who are building their businesses the right way — with NEKO as their guide."
-            centered
-            light
-            className="mb-10"
-          />
+          <AnimatedSection>
+            <SectionHeading
+              label="Ready to Start?"
+              title="Begin your journey today."
+              description="Join thousands of founders who are building their businesses the right way — with NEKO as their guide."
+              centered
+              light
+              className="mb-10"
+            />
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/get-started">
-              <Button variant="hero" size="xl" className="group">
-                Get Started Free
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
-            <Link to="/pricing">
-              <Button variant="hero-outline" size="xl">
-                View Pricing
-              </Button>
-            </Link>
-          </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link to="/get-started">
+                <Button variant="hero" size="xl" className="group">
+                  Get Started Free
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+              <Link to="/pricing">
+                <Button variant="hero-outline" size="xl">
+                  View Pricing
+                </Button>
+              </Link>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
