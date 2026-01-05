@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   CheckCircle2, 
   Building2, 
@@ -75,16 +76,31 @@ export default function GetStarted() {
     stage: "",
     goal: "",
     message: "",
+    // Honeypot field - hidden from users, bots will fill it
+    website: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name.trim() || !formData.email.trim()) {
+    // Client-side validation
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    
+    if (!name || name.length < 2) {
       toast({
-        title: "Please fill in required fields",
-        description: "Name and email are required.",
+        title: "Please enter your name",
+        description: "Name must be at least 2 characters.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast({
+        title: "Please enter a valid email",
+        description: "We need a valid email to get in touch.",
         variant: "destructive",
       });
       return;
@@ -92,23 +108,63 @@ export default function GetStarted() {
 
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const { data, error } = await supabase.functions.invoke("contact-submit", {
+        body: {
+          name,
+          email,
+          businessName: formData.businessName.trim(),
+          stage: formData.stage,
+          goal: formData.goal,
+          message: formData.message.trim(),
+          website: formData.website, // Honeypot
+        },
+      });
+
+      if (error) {
+        console.error("Submission error:", error);
+        toast({
+          title: "Something went wrong",
+          description: "Please try again or email us directly at hello@helloneko.co",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data?.error) {
+        toast({
+          title: "Submission failed",
+          description: data.error,
+          variant: "destructive",
+        });
+        return;
+      }
     
-    toast({
-      title: "Welcome to NEKO!",
-      description: "We'll be in touch soon to help you get started.",
-    });
-    
-    setFormData({
-      name: "",
-      email: "",
-      businessName: "",
-      stage: "",
-      goal: "",
-      message: "",
-    });
-    setIsSubmitting(false);
+      toast({
+        title: "Welcome to NEKO!",
+        description: data?.message || "We'll be in touch soon to help you get started.",
+      });
+      
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        businessName: "",
+        stage: "",
+        goal: "",
+        message: "",
+        website: "",
+      });
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      toast({
+        title: "Something went wrong",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Easing as tuple for type compatibility
@@ -150,6 +206,20 @@ export default function GetStarted() {
             {/* Form */}
             <AnimatedSection direction="left">
               <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+                {/* Honeypot field - hidden from humans */}
+                <div className="absolute -left-[9999px]" aria-hidden="true">
+                  <Label htmlFor="website">Website</Label>
+                  <Input
+                    id="website"
+                    name="website"
+                    type="text"
+                    value={formData.website}
+                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
                 {/* Name & Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div className="space-y-2">
@@ -160,6 +230,7 @@ export default function GetStarted() {
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="Jane Doe"
                       className="h-11 sm:h-12"
+                      maxLength={100}
                       required
                     />
                   </div>
@@ -172,6 +243,7 @@ export default function GetStarted() {
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="jane@example.com"
                       className="h-11 sm:h-12"
+                      maxLength={255}
                       required
                     />
                   </div>
@@ -186,6 +258,7 @@ export default function GetStarted() {
                     onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
                     placeholder="ACME LLC"
                     className="h-11 sm:h-12"
+                    maxLength={200}
                   />
                 </div>
 
@@ -198,7 +271,7 @@ export default function GetStarted() {
                         key={option.value}
                         type="button"
                         onClick={() => setFormData({ ...formData, stage: option.value })}
-                        className={`p-3 sm:p-4 rounded-xl border text-left transition-all duration-200 ${
+                        className={`p-3 sm:p-4 rounded-xl border text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 ${
                           formData.stage === option.value
                             ? "border-primary bg-primary/5 ring-1 ring-primary/20"
                             : "border-border hover:border-primary/30 hover:bg-muted/50"
@@ -247,6 +320,7 @@ export default function GetStarted() {
                     placeholder="Tell us more about your business idea or goals..."
                     rows={4}
                     className="resize-none"
+                    maxLength={2000}
                   />
                 </div>
 
