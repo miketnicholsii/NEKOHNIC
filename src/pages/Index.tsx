@@ -5,7 +5,6 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { FeatureCard } from "@/components/FeatureCard";
 import { SectionHeading } from "@/components/SectionHeading";
-import { ProgressTracker } from "@/components/ProgressTracker";
 import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
 import { 
   ArrowRight, 
@@ -17,33 +16,30 @@ import {
   CheckCircle2,
   Sparkles,
   Target,
-  Shield
+  Shield,
+  XCircle
 } from "lucide-react";
 
 const journeySteps = [
   {
-    id: "start",
-    title: "Start Your Business",
-    description: "Form your LLC, get your EIN, and establish legitimacy",
-    status: "completed" as const,
+    step: "01",
+    title: "Start your business",
+    description: "Form your LLC, get your EIN, establish legitimacy",
   },
   {
-    id: "build",
-    title: "Build Business Credit",
-    description: "Progress through credit tiers with strategic vendor accounts",
-    status: "current" as const,
+    step: "02",
+    title: "Build business credit",
+    description: "Progress through credit tiers strategically",
   },
   {
-    id: "brand",
-    title: "Create Your Brand",
-    description: "Build your personal brand and digital presence",
-    status: "upcoming" as const,
+    step: "03",
+    title: "Create your brand",
+    description: "Build your Digital CV and web presence",
   },
   {
-    id: "scale",
-    title: "Scale Responsibly",
-    description: "Grow with intention when you're ready",
-    status: "locked" as const,
+    step: "04",
+    title: "Grow with intention",
+    description: "Scale when you're ready, not before",
   },
 ];
 
@@ -51,51 +47,34 @@ const features = [
   {
     icon: Building2,
     title: "Business Formation",
-    description: "Step-by-step guidance to properly form your LLC and establish your business the right way.",
+    description: "Step-by-step guidance to properly form your LLC and establish your business with a legitimacy checklist.",
   },
   {
     icon: CreditCard,
     title: "Business Credit Roadmap",
-    description: "Clear, tiered approach to building business credit through legitimate means.",
+    description: "A tiered approach to building business credit through vendor accounts, store credit, and revolving lines.",
   },
   {
     icon: User,
     title: "Personal Brand Builder",
-    description: "Create a professional digital presence that tells your story and showcases your work.",
-  },
-  {
-    icon: Globe,
-    title: "Web Presence Guide",
-    description: "Templates and structure for landing pages, about sections, and service offerings.",
-  },
-  {
-    icon: Shield,
-    title: "Legitimacy First",
-    description: "Everything we teach prioritizes proper business practices and long-term success.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Progress Tracking",
-    description: "Visual milestones and checklists to track your journey and maintain momentum.",
+    description: "Create your Digital CV — a professional page that tells your story, showcases your work, and builds credibility.",
   },
 ];
 
-const trustPoints = [
-  "Not a credit repair service",
-  "Not get-rich-quick schemes",
-  "Not legal or financial advice",
-  "Not a generic website builder",
+const notList = [
+  "A credit repair service",
+  "Legal or financial advice",
+  "Get-rich-quick schemes",
+  "A generic website builder",
 ];
 
 const trustIndicators = ["Guidance + Execution", "Education + Structure", "Progress + Momentum"];
 
-// Easing curve as tuple for Framer Motion type compatibility
 const easeOut: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
 export default function Index() {
   const prefersReducedMotion = useReducedMotion();
   
-  // Animation config - simplified if reduced motion preferred
   const fadeIn = prefersReducedMotion 
     ? { initial: {}, animate: {}, transition: {} }
     : { 
@@ -110,25 +89,21 @@ export default function Index() {
       
       {/* Hero Section */}
       <section className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-16 sm:pt-0 sm:pb-0">
-        {/* Geometric background elements - decorative only */}
         <div 
           className="absolute inset-0 overflow-hidden pointer-events-none" 
           aria-hidden="true"
         >
-          {/* Floating blobs - reduced on mobile for performance */}
           <div className="absolute top-1/4 left-1/4 w-64 sm:w-80 lg:w-96 h-64 sm:h-80 lg:h-96 bg-primary-foreground/5 rounded-full blur-2xl sm:blur-3xl motion-safe:animate-float opacity-60 sm:opacity-100" />
           <div 
             className="absolute bottom-1/4 right-1/4 w-56 sm:w-72 lg:w-80 h-56 sm:h-72 lg:h-80 bg-primary-foreground/5 rounded-full blur-2xl sm:blur-3xl motion-safe:animate-float opacity-60 sm:opacity-100" 
             style={{ animationDelay: "2s" }} 
           />
-          {/* Concentric circles - hidden on very small screens */}
           <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] lg:w-[600px] h-[500px] lg:h-[600px] border border-primary-foreground/10 rounded-full" />
           <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] lg:w-[800px] h-[700px] lg:h-[800px] border border-primary-foreground/5 rounded-full" />
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="max-w-4xl mx-auto">
-            {/* Label */}
             <motion.div 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0 }}
@@ -140,7 +115,6 @@ export default function Index() {
               </span>
             </motion.div>
 
-            {/* Main Headline - responsive clamp sizing */}
             <motion.h1 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0.1 }}
@@ -151,22 +125,20 @@ export default function Index() {
               <span className="text-primary-foreground/80">Build Your Brand.</span>
             </motion.h1>
 
-            {/* Subheadline */}
             <motion.p 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0.2 }}
               className="text-base sm:text-lg md:text-xl text-primary-foreground/70 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2 sm:px-0"
             >
-              NEKO is your guided platform for building legitimate businesses and personal brands — from zero to scale — with progress tracking every step of the way.
+              NÈKO is a guided platform for building legitimate businesses and personal brands — from zero to scale — with progress tracking at every step.
             </motion.p>
 
-            {/* CTAs - full width on mobile */}
             <motion.div 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4 sm:px-0"
             >
-              <Link to="/get-started" className="w-full sm:w-auto">
+              <Link to="/signup" className="w-full sm:w-auto">
                 <Button variant="hero" size="xl" className="w-full sm:w-auto group">
                   Get Started Free
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -179,7 +151,6 @@ export default function Index() {
               </Link>
             </motion.div>
 
-            {/* Trust indicators - better mobile wrap */}
             <motion.div 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0.5 }}
@@ -195,7 +166,6 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Scroll indicator - hidden on very small screens */}
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -215,23 +185,23 @@ export default function Index() {
           <div className="grid lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-20 items-center">
             <AnimatedSection direction="left">
               <SectionHeading
-                label="What is NEKO?"
+                label="What is NÈKO?"
                 title="Your guided path from idea to reality."
-                description="NEKO is a structured operating system that helps first-time founders, creators, freelancers, and side-hustlers build legitimate businesses and personal brands — with clear progress tracking at every stage."
+                description="NÈKO is a structured operating system for first-time founders, creators, freelancers, and side-hustlers. We reduce overwhelm by providing a clear roadmap with progress checkpoints at every stage."
               />
 
               <div className="mt-6 sm:mt-8 space-y-4">
                 <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
-                  We believe starting a business shouldn't be overwhelming. NEKO provides the roadmap, education, and structure you need to move from "I want to start something" to "I'm running a legitimate business."
+                  Starting a business shouldn't be overwhelming. NÈKO provides the roadmap, education, and structure you need to move from "I want to start something" to "I'm running a legitimate business."
                 </p>
               </div>
 
               <div className="mt-6 sm:mt-8 p-4 sm:p-6 rounded-2xl bg-muted/50 border border-border">
-                <p className="text-sm font-medium text-foreground mb-3 sm:mb-4">NEKO is NOT:</p>
+                <p className="text-sm font-medium text-foreground mb-3 sm:mb-4">NÈKO is NOT:</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                  {trustPoints.map((point) => (
+                  {notList.map((point) => (
                     <div key={point} className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                      <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 flex-shrink-0" aria-hidden="true" />
+                      <XCircle className="h-3.5 w-3.5 text-muted-foreground/50 flex-shrink-0" />
                       <span>{point}</span>
                     </div>
                   ))}
@@ -245,7 +215,23 @@ export default function Index() {
                   <Target className="h-4 w-4 sm:h-5 sm:w-5 text-primary" aria-hidden="true" />
                   Your Journey
                 </h3>
-                <ProgressTracker steps={journeySteps} />
+                <div className="space-y-4">
+                  {journeySteps.map((step, index) => (
+                    <div key={step.step} className="flex items-start gap-4">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 ${
+                        index === 0 
+                          ? "bg-primary text-primary-foreground" 
+                          : "bg-muted text-muted-foreground"
+                      }`}>
+                        {step.step}
+                      </div>
+                      <div className="pt-1">
+                        <h4 className="font-medium text-foreground text-sm">{step.title}</h4>
+                        <p className="text-xs text-muted-foreground">{step.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </AnimatedSection>
           </div>
@@ -259,13 +245,13 @@ export default function Index() {
             <SectionHeading
               label="Platform Features"
               title="Everything you need to start, build, and grow."
-              description="From business formation to personal branding, NEKO provides the tools and guidance for every stage of your journey."
+              description="From business formation to personal branding, NÈKO provides the tools and guidance for every stage of your journey."
               centered
               className="mb-10 sm:mb-12 lg:mb-16"
             />
           </AnimatedSection>
 
-          <AnimatedStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+          <AnimatedStagger className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 max-w-5xl mx-auto">
             {features.map((feature) => (
               <motion.div key={feature.title} variants={staggerItem}>
                 <FeatureCard
@@ -276,6 +262,20 @@ export default function Index() {
               </motion.div>
             ))}
           </AnimatedStagger>
+
+          {/* Additional feature pills */}
+          <AnimatedSection delay={0.4} className="mt-12 flex flex-wrap justify-center gap-3">
+            {[
+              { icon: Globe, label: "Web Presence Guide" },
+              { icon: Shield, label: "Legitimacy First" },
+              { icon: TrendingUp, label: "Progress Tracking" },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border text-sm text-muted-foreground">
+                <item.icon className="h-4 w-4 text-primary" />
+                {item.label}
+              </div>
+            ))}
+          </AnimatedSection>
         </div>
       </section>
 
@@ -286,14 +286,14 @@ export default function Index() {
             <SectionHeading
               label="Ready to Start?"
               title="Begin your journey today."
-              description="Join thousands of founders who are building their businesses the right way — with NEKO as their guide."
+              description="Join founders who are building their businesses the right way — with NÈKO as their guide."
               centered
               light
               className="mb-8 sm:mb-10"
             />
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4 sm:px-0">
-              <Link to="/get-started" className="w-full sm:w-auto">
+              <Link to="/signup" className="w-full sm:w-auto">
                 <Button variant="hero" size="xl" className="w-full sm:w-auto group">
                   Get Started Free
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />

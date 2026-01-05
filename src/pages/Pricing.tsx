@@ -15,7 +15,7 @@ import {
 const pricingPlans = [
   {
     name: "Free",
-    description: "Get started and explore",
+    description: "Start exploring",
     price: "Free",
     features: [
       "Business starter checklist",
@@ -28,7 +28,7 @@ const pricingPlans = [
   },
   {
     name: "Start",
-    description: "For early-stage founders",
+    description: "Early-stage founders",
     price: "$19",
     features: [
       "Everything in Free",
@@ -42,7 +42,7 @@ const pricingPlans = [
   },
   {
     name: "Build",
-    description: "For serious builders",
+    description: "Serious builders",
     price: "$49",
     highlighted: true,
     badge: "Most Popular",
@@ -53,13 +53,13 @@ const pricingPlans = [
       "Vendor guidance & resources",
       "Expanded personal brand page",
       "Business identity guidance",
-      "Moo.com integration",
+      "Priority email support",
     ],
     ctaText: "Start Building",
   },
   {
     name: "Scale",
-    description: "For growth-ready businesses",
+    description: "Growth-ready businesses",
     price: "$99",
     features: [
       "Everything in Build",
@@ -77,23 +77,23 @@ const pricingPlans = [
 const faqs = [
   {
     question: "Is this a credit repair service?",
-    answer: "No. NEKO is not a credit repair service. We focus on building business credit through legitimate means — proper business formation, vendor accounts, and responsible payment behavior. We do not repair personal credit or make promises about credit scores.",
+    answer: "No. NÈKO is not a credit repair service. We focus on building business credit through legitimate means — proper business formation, vendor accounts, and responsible payment behavior. We do not repair personal credit or make promises about credit scores.",
   },
   {
     question: "Do you charge for EIN filing?",
-    answer: "Absolutely not. Your EIN is free directly from the IRS. NEKO provides guidance and links to the official IRS website, but we never charge for EIN filing. Be wary of any service that does.",
+    answer: "Absolutely not. Your EIN is free directly from the IRS. NÈKO provides guidance and links to the official IRS website, but we never charge for EIN filing. Be wary of any service that does.",
   },
   {
-    question: "Is NEKO a get-rich-quick program?",
-    answer: "No. Building a legitimate business takes time, effort, and patience. NEKO provides structure and education — not shortcuts. Our approach emphasizes doing things the right way for long-term success.",
+    question: "Is NÈKO a get-rich-quick program?",
+    answer: "No. Building a legitimate business takes time, effort, and patience. NÈKO provides structure and education — not shortcuts. Our approach emphasizes doing things the right way for long-term success.",
   },
   {
     question: "Do I need to start with a paid plan?",
     answer: "No. Our Free tier includes the business starter checklist, EIN guidance, and a high-level credit roadmap. You can explore and learn before committing to a paid plan.",
   },
   {
-    question: "What makes NEKO different from other business tools?",
-    answer: "NEKO is a guided operating system — not just a tool. We focus on the entire journey from idea to scale, with structured progress tracking, education at every step, and an emphasis on legitimacy over hacks.",
+    question: "What makes NÈKO different from other business tools?",
+    answer: "NÈKO is a guided operating system — not just a tool. We focus on the entire journey from idea to scale, with structured progress tracking, education at every step, and an emphasis on legitimacy over hacks.",
   },
   {
     question: "Can I cancel anytime?",

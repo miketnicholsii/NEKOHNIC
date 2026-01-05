@@ -1,8 +1,10 @@
+import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
 import { 
   ArrowRight, 
   User, 
@@ -66,6 +68,14 @@ const presencePages = [
   },
 ];
 
+const benefits = [
+  "Stand out to clients, partners, and opportunities",
+  "Control your narrative — tell your story your way",
+  "Create a professional first impression online",
+  "Connect all your work and profiles in one place",
+  "Build long-term credibility as you grow",
+];
+
 export default function PersonalBrand() {
   return (
     <main className="min-h-screen bg-background">
@@ -74,7 +84,12 @@ export default function PersonalBrand() {
       {/* Hero */}
       <section className="pt-32 pb-20 bg-background">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="max-w-3xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-3xl"
+          >
             <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-4">
               Personal Brand
             </span>
@@ -83,19 +98,18 @@ export default function PersonalBrand() {
               <br />
               <span className="text-muted-foreground">Your Story. Your Brand.</span>
             </h1>
-            <p className="text-xl text-muted-foreground">
-              Create a professional personal brand page that tells your story, showcases your work, 
-              and positions you as a credible founder, creator, or professional.
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Create a professional personal brand page that showcases your story, work, and credibility — designed to open doors.
             </p>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* What's a Digital CV */}
+      {/* What is a Digital CV */}
       <section className="py-20 lg:py-32 bg-muted/30">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div>
+            <AnimatedSection direction="left">
               <SectionHeading
                 label="What is a Digital CV?"
                 title="More than a resume. A professional brand artifact."
@@ -103,72 +117,69 @@ export default function PersonalBrand() {
               />
 
               <div className="mt-8 space-y-4">
-                <p className="text-muted-foreground">
-                  This isn't a social network or a generic portfolio template. It's an intentional, 
-                  modern representation of who you are professionally — designed to build credibility 
-                  and open doors.
+                <p className="text-muted-foreground leading-relaxed">
+                  This isn't a social network or a generic portfolio template. It's an intentional, modern representation of who you are professionally — designed to build credibility and open doors.
                 </p>
-                <p className="text-muted-foreground">
-                  Whether you're a freelancer pitching clients, a founder seeking partners, 
-                  or a creator building an audience — your Digital CV is your professional home base.
+                <p className="text-muted-foreground leading-relaxed">
+                  Whether you're a freelancer pitching clients, a founder seeking partners, or a creator building an audience — your Digital CV is your professional home base.
                 </p>
               </div>
 
-              <div className="mt-8 flex items-center gap-4">
-                <Link to="/get-started">
+              <div className="mt-8">
+                <Link to="/signup">
                   <Button variant="cta" size="lg" className="group">
                     Create Yours
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
               </div>
-            </div>
+            </AnimatedSection>
 
             {/* Preview Card */}
-            <div className="relative">
-              <div className="p-8 rounded-2xl bg-card border border-border shadow-lg">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-display font-bold text-xl">
-                    JD
+            <AnimatedSection direction="right" delay={0.2}>
+              <div className="relative">
+                <div className="p-8 rounded-2xl bg-card border border-border shadow-lg">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-display font-bold text-xl">
+                      JD
+                    </div>
+                    <div>
+                      <h3 className="font-display font-bold text-lg">Jane Doe</h3>
+                      <p className="text-sm text-muted-foreground">Founder & Creative Director</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-display font-bold text-lg">Jane Doe</h3>
-                    <p className="text-sm text-muted-foreground">Founder & Creative Director</p>
-                  </div>
-                </div>
-                
-                <p className="text-muted-foreground mb-6">
-                  Building products at the intersection of design and technology. 
-                  Passionate about creating experiences that matter.
-                </p>
+                  
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                    Building products at the intersection of design and technology. Passionate about creating experiences that matter.
+                  </p>
 
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {["Product Design", "Brand Strategy", "Startup Advisor"].map((tag) => (
-                    <span 
-                      key={tag}
-                      className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {["Product Design", "Brand Strategy", "Startup Advisor"].map((tag) => (
+                      <span 
+                        key={tag}
+                        className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <Globe className="h-4 w-4" />
+                      janedoe.com
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Mail className="h-4 w-4" />
+                      hello@janedoe.com
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Globe className="h-4 w-4" />
-                    janedoe.com
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Mail className="h-4 w-4" />
-                    hello@janedoe.com
-                  </div>
-                </div>
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/10 rounded-2xl -z-10" />
+                <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-secondary/10 rounded-2xl -z-10" />
               </div>
-
-              {/* Decorative elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/10 rounded-2xl -z-10" />
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-secondary/10 rounded-2xl -z-10" />
-            </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -176,45 +187,51 @@ export default function PersonalBrand() {
       {/* Brand Elements */}
       <section className="py-20 lg:py-32 bg-background">
         <div className="container mx-auto px-6 lg:px-8">
-          <SectionHeading
-            label="What's Included"
-            title="Everything your brand needs."
-            description="Your Digital CV brings together the essential elements of a professional personal brand."
-            centered
-            className="mb-16"
-          />
+          <AnimatedSection>
+            <SectionHeading
+              label="What's Included"
+              title="Everything your brand needs."
+              description="Your Digital CV brings together the essential elements of a professional personal brand."
+              centered
+              className="mb-16"
+            />
+          </AnimatedSection>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {brandElements.map((element, index) => (
-              <div
+          <AnimatedStagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {brandElements.map((element) => (
+              <motion.div
                 key={element.title}
-                className={`p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300 text-center animate-slide-up stagger-${(index % 4) + 1}`}
+                variants={staggerItem}
+                className="p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300 text-center"
               >
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-5 mx-auto">
                   <element.icon className="h-6 w-6" />
                 </div>
                 <h3 className="font-display font-bold text-lg mb-2">{element.title}</h3>
                 <p className="text-sm text-muted-foreground">{element.description}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </AnimatedStagger>
         </div>
       </section>
 
       {/* Web Presence Guide */}
       <section className="py-20 lg:py-32 bg-muted/30">
         <div className="container mx-auto px-6 lg:px-8">
-          <SectionHeading
-            label="Web Presence"
-            title="Structure for your digital home."
-            description="Beyond your Digital CV, NEKO provides guidance and templates for building a complete web presence."
-            className="mb-12"
-          />
+          <AnimatedSection>
+            <SectionHeading
+              label="Web Presence"
+              title="Structure for your digital home."
+              description="Beyond your Digital CV, NÈKO provides guidance and templates for building a complete web presence."
+              className="mb-12"
+            />
+          </AnimatedSection>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl">
+          <AnimatedStagger className="grid md:grid-cols-2 gap-6 max-w-4xl">
             {presencePages.map((page) => (
-              <div
+              <motion.div
                 key={page.title}
+                variants={staggerItem}
                 className="p-6 rounded-2xl bg-card border border-border flex items-start gap-4"
               >
                 <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
@@ -231,23 +248,23 @@ export default function PersonalBrand() {
                   </div>
                   <p className="text-sm text-muted-foreground">{page.description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </AnimatedStagger>
 
-          <div className="mt-10 p-6 rounded-2xl bg-card border border-border max-w-4xl">
-            <div className="flex items-start gap-4">
-              <Sparkles className="h-6 w-6 text-primary flex-shrink-0" />
-              <div>
-                <p className="font-medium text-foreground mb-2">Structure, Not CMS</p>
-                <p className="text-muted-foreground">
-                  NEKO provides structure, templates, and educational guidance for your web presence — 
-                  not a full content management system. We help you understand what you need and how to build it, 
-                  whether you use NEKO or take your knowledge elsewhere.
-                </p>
+          <AnimatedSection delay={0.3} className="mt-10">
+            <div className="p-6 rounded-2xl bg-card border border-border max-w-4xl">
+              <div className="flex items-start gap-4">
+                <Sparkles className="h-6 w-6 text-primary flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-foreground mb-2">Structure, Not CMS</p>
+                  <p className="text-muted-foreground leading-relaxed">
+                    NÈKO provides structure, templates, and educational guidance for your web presence — not a full content management system. We help you understand what you need and how to build it.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -255,30 +272,27 @@ export default function PersonalBrand() {
       <section className="py-20 lg:py-32 bg-background">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <SectionHeading
-              label="Why Build Your Brand?"
-              title="Credibility opens doors."
-              centered
-              className="mb-10"
-            />
+            <AnimatedSection>
+              <SectionHeading
+                label="Why Build Your Brand?"
+                title="Credibility opens doors."
+                centered
+                className="mb-10"
+              />
+            </AnimatedSection>
 
-            <div className="grid gap-4">
-              {[
-                "Stand out to clients, partners, and opportunities",
-                "Control your narrative — tell your story your way",
-                "Create a professional first impression online",
-                "Connect all your work and profiles in one place",
-                "Build long-term credibility as you grow",
-              ].map((benefit) => (
-                <div 
+            <AnimatedStagger className="grid gap-4">
+              {benefits.map((benefit) => (
+                <motion.div 
                   key={benefit} 
+                  variants={staggerItem}
                   className="flex items-center gap-3 p-4 rounded-xl bg-muted/50 text-left"
                 >
                   <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
                   <span className="text-foreground">{benefit}</span>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </AnimatedStagger>
           </div>
         </div>
       </section>
@@ -286,20 +300,22 @@ export default function PersonalBrand() {
       {/* CTA */}
       <section className="py-20 lg:py-32 bg-tertiary">
         <div className="container mx-auto px-6 lg:px-8 text-center">
-          <SectionHeading
-            label="Ready to Build?"
-            title="Create your Digital CV today."
-            description="Start with our templates and build a professional personal brand that grows with you."
-            centered
-            light
-            className="mb-10"
-          />
-          <Link to="/get-started">
-            <Button variant="hero" size="xl" className="group">
-              Get Started
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
+          <AnimatedSection>
+            <SectionHeading
+              label="Ready to Build?"
+              title="Create your Digital CV today."
+              description="Start with our templates and build a professional personal brand that grows with you."
+              centered
+              light
+              className="mb-10"
+            />
+            <Link to="/signup">
+              <Button variant="hero" size="xl" className="group">
+                Get Started
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </AnimatedSection>
         </div>
       </section>
 

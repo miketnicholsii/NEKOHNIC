@@ -5,18 +5,18 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
-import { ArrowRight, Heart, Target, Lightbulb, Users } from "lucide-react";
+import { ArrowRight, Heart, Target, Lightbulb, Users, Quote } from "lucide-react";
 
 const values = [
   {
     icon: Target,
     title: "Intentional Growth",
-    description: "We believe in building businesses that are sustainable, legitimate, and aligned with your goals — not shortcuts that compromise your future.",
+    description: "We build for sustainability and legitimacy, not shortcuts. Every feature is designed to support long-term success, not quick wins that compromise your future.",
   },
   {
     icon: Heart,
     title: "Founder-First",
-    description: "Every feature, every guide, every resource is designed with first-time founders in mind. We remember what it's like to start from zero.",
+    description: "Every guide, every resource, every feature is built with first-time founders in mind. We remember what it feels like to start from zero.",
   },
   {
     icon: Lightbulb,
@@ -26,7 +26,7 @@ const values = [
   {
     icon: Users,
     title: "Community Driven",
-    description: "NEKO is built for the creator economy — freelancers, side-hustlers, and entrepreneurs who want to do things the right way.",
+    description: "NÈKO is built for the creator economy — freelancers, side-hustlers, and entrepreneurs who want to build something meaningful the right way.",
   },
 ];
 
@@ -37,8 +37,7 @@ export default function About() {
 
       {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-center justify-center bg-gradient-hero overflow-hidden">
-        {/* Background elements */}
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
           <div className="absolute top-1/3 left-1/3 w-80 h-80 bg-primary-foreground/5 rounded-full blur-3xl" />
           <div className="absolute bottom-1/3 right-1/3 w-96 h-96 bg-primary-foreground/5 rounded-full blur-3xl" />
         </div>
@@ -65,7 +64,7 @@ export default function About() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg md:text-xl text-primary-foreground/70 mb-4"
+              className="text-lg md:text-xl text-primary-foreground/70"
             >
               Welcome, we're glad you're here.
             </motion.p>
@@ -80,7 +79,7 @@ export default function About() {
             <AnimatedSection>
               <SectionHeading
                 label="Our Story"
-                title="NEKO exists in the space between signal and noise."
+                title="NÈKO exists in the space between signal and noise."
                 className="mb-8"
               />
             </AnimatedSection>
@@ -88,31 +87,31 @@ export default function About() {
             <AnimatedSection delay={0.2}>
               <div className="prose prose-lg text-muted-foreground space-y-6">
                 <p>
-                  "Hello, NÈKO" is both a greeting and a beginning. It's the moment before the work starts, where context is set and intent becomes clear.
+                  "Hello, NÈKO" is both a greeting and a beginning. It's the moment before the work starts — where context is set and intent becomes clear.
                 </p>
                 <p>
-                  At NEKO, we work alongside individuals and organizations navigating growth, change, and complexity — helping shape decisions at the intersection of business, technology, and long-term strategy.
+                  We work alongside individuals navigating growth, change, and complexity. Our focus is helping shape decisions at the intersection of business, technology, and long-term strategy.
                 </p>
                 <p>
-                  We observe systems as they form, fracture, and realign, tracing patterns that are not immediately visible. Our work is less about answers and more about positioning — deciding where to stand, when to move, and what to leave untouched.
+                  NÈKO began with a simple question: what if starting a business didn't have to be overwhelming? What if there was a clear path from "I want to do something" to "I'm running a legitimate, credit-worthy business"?
                 </p>
                 <p>
-                  NEKO began as a simple idea: what if starting a business didn't have to be overwhelming? What if there was a clear path from "I want to do something" to "I'm running a legitimate business"?
-                </p>
-                <p>
-                  That idea became a platform — a guided operating system for building businesses and personal brands from the ground up, with education, structure, and progress tracking at its core.
+                  That question became a platform — a guided operating system for building businesses and personal brands from the ground up, with education, structure, and progress tracking at its core.
                 </p>
               </div>
             </AnimatedSection>
 
             <AnimatedSection delay={0.4}>
-              <div className="mt-12 p-8 rounded-2xl bg-primary/5 border border-primary/20">
-                <p className="text-lg font-display font-semibold text-foreground mb-2">
-                  "Hello, NÈKO" is a greeting and a beginning.
-                </p>
-                <p className="text-muted-foreground">
-                  It's the moment where intent becomes clear and the work begins.
-                </p>
+              <div className="mt-12 p-8 rounded-2xl bg-primary/5 border border-primary/20 relative">
+                <Quote className="absolute top-6 left-6 h-8 w-8 text-primary/20" />
+                <div className="pl-8">
+                  <p className="text-xl font-display font-semibold text-foreground mb-3">
+                    "Hello, NÈKO" is a greeting and a beginning.
+                  </p>
+                  <p className="text-muted-foreground">
+                    It's the moment where intent becomes clear and the work begins.
+                  </p>
+                </div>
               </div>
             </AnimatedSection>
           </div>
@@ -145,7 +144,7 @@ export default function About() {
                 <h3 className="text-xl font-display font-bold mb-3 text-foreground">
                   {value.title}
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground leading-relaxed">
                   {value.description}
                 </p>
               </motion.div>
@@ -167,11 +166,11 @@ export default function About() {
                 className="mb-8"
               />
               
-              <p className="text-lg text-primary-foreground/70 mb-10">
-                NEKO's mission is to make starting a business accessible, understandable, and achievable for everyone. We provide the roadmap so you can focus on what matters — building something meaningful.
+              <p className="text-lg text-primary-foreground/70 mb-10 leading-relaxed">
+                NÈKO's mission is to make starting a business accessible, understandable, and achievable for everyone. We provide the roadmap so you can focus on what matters — building something meaningful.
               </p>
 
-              <Link to="/get-started">
+              <Link to="/signup">
                 <Button variant="hero" size="xl" className="group">
                   Start Your Journey
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
