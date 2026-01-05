@@ -12,11 +12,24 @@ interface TierCardProps {
   className?: string;
 }
 
-const tierColors = {
-  0: "tier-0",
-  1: "tier-1", 
-  2: "tier-2",
-  3: "tier-3",
+const getTierColor = (tier: number) => {
+  switch (tier) {
+    case 0: return "bg-tier-0";
+    case 1: return "bg-tier-1";
+    case 2: return "bg-tier-2";
+    case 3: return "bg-tier-3";
+    default: return "bg-tier-0";
+  }
+};
+
+const getTierBgColor = (tier: number) => {
+  switch (tier) {
+    case 0: return "bg-tier-0/20 text-muted-foreground";
+    case 1: return "bg-tier-1/20 text-primary";
+    case 2: return "bg-tier-2/20 text-amber-600";
+    case 3: return "bg-tier-3/20 text-secondary";
+    default: return "bg-tier-0/20 text-muted-foreground";
+  }
 };
 
 export function TierCard({
@@ -47,7 +60,7 @@ export function TierCard({
       <div
         className={cn(
           "absolute top-0 left-0 right-0 h-1.5",
-          `bg-tier-${tier}`
+          getTierColor(tier)
         )}
         style={{ width: isCurrent ? `${progress}%` : status === "unlocked" ? "100%" : "0%" }}
       />
@@ -62,7 +75,7 @@ export function TierCard({
                   "inline-flex items-center justify-center w-8 h-8 rounded-lg text-sm font-bold",
                   isLocked
                     ? "bg-muted text-muted-foreground"
-                    : `bg-tier-${tier}/20 text-tier-${tier}`
+                    : getTierBgColor(tier)
                 )}
               >
                 {tier}
@@ -93,7 +106,7 @@ export function TierCard({
             </div>
             <div className="h-2 bg-muted rounded-full overflow-hidden">
               <div
-                className={cn("h-full rounded-full transition-all duration-500", `bg-tier-${tier}`)}
+                className={cn("h-full rounded-full transition-all duration-500", getTierColor(tier))}
                 style={{ width: `${progress}%` }}
               />
             </div>

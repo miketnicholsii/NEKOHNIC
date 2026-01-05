@@ -9,6 +9,8 @@ import Services from "./pages/Services";
 import PersonalBrand from "./pages/PersonalBrand";
 import Pricing from "./pages/Pricing";
 import GetStarted from "./pages/GetStarted";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +28,8 @@ const App = () => (
           <Route path="/personal-brand" element={<PersonalBrand />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/get-started" element={<GetStarted />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
