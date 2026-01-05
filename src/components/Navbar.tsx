@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { User } from "@supabase/supabase-js";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -13,9 +15,30 @@ const navLinks = [
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
   const location = useLocation();
 
+  useEffect(() => {
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   const isHeroPage = location.pathname === "/" || location.pathname === "/about";
+
+  // Determine CTA destination based on auth status
+  const ctaHref = user ? "/app" : "/signup";
+  const ctaLabel = user ? "Dashboard" : "Get Started";
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isHeroPage ? "bg-transparent" : "glass"}`}>
@@ -45,11 +68,21 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden lg:block">
-            <Link to="/get-started">
+          {/* CTA Buttons */}
+          <div className="hidden lg:flex items-center gap-4">
+            {!user && (
+              <Link to="/login">
+                <Button 
+                  variant={isHeroPage ? "hero-outline" : "ghost"} 
+                  size="default"
+                >
+                  Log In
+                </Button>
+              </Link>
+            )}
+            <Link to={ctaHref}>
               <Button variant={isHeroPage ? "hero" : "cta"} size="lg">
-                Get Started
+                {ctaLabel}
               </Button>
             </Link>
           </div>
@@ -83,11 +116,20 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link to="/get-started" onClick={() => setIsOpen(false)}>
-              <Button variant="hero" size="lg" className="w-full mt-4">
-                Get Started
-              </Button>
-            </Link>
+            <div className="flex flex-col gap-3 mt-4">
+              {!user && (
+                <Link to="/login" onClick={() => setIsOpen(false)}>
+                  <Button variant="hero-outline" size="lg" className="w-full">
+                    Log In
+                  </Button>
+                </Link>
+              )}
+              <Link to={ctaHref} onClick={() => setIsOpen(false)}>
+                <Button variant="hero" size="lg" className="w-full">
+                  {ctaLabel}
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       )}
