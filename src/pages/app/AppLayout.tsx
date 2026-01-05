@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { User, Session } from "@supabase/supabase-js";
-import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
 import {
   LayoutDashboard,
   Building2,
@@ -16,8 +15,10 @@ import {
   X,
   ChevronRight,
   Sparkles,
+  Crown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 const navItems = [
   { href: "/app", label: "Overview", icon: LayoutDashboard, exact: true },
@@ -32,53 +33,27 @@ const bottomNavItems = [
   { href: "/app/support", label: "Support", icon: HelpCircle },
 ];
 
-// Simple plan badge
-const planBadges: Record<string, { label: string; color: string }> = {
+const planBadges: Record<string, { label: string; color: string; icon?: typeof Sparkles }> = {
   free: { label: "Free", color: "bg-muted text-muted-foreground" },
-  start: { label: "Start", color: "bg-primary/10 text-primary" },
-  build: { label: "Build", color: "bg-secondary/10 text-secondary" },
-  scale: { label: "Scale", color: "bg-tertiary/10 text-tertiary-foreground" },
+  start: { label: "Start", color: "bg-primary/10 text-primary", icon: Sparkles },
+  build: { label: "Build", color: "bg-secondary/10 text-secondary", icon: Crown },
+  scale: { label: "Scale", color: "bg-tertiary text-tertiary-foreground", icon: Crown },
 };
 
 export default function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { user, isLoading, subscription, isAdmin, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [userPlan] = useState("free"); // TODO: Fetch from subscription
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setIsLoading(false);
-        
-        if (!session) {
-          navigate("/login");
-        }
-      }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setIsLoading(false);
-      
-      if (!session) {
-        navigate("/login");
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+    if (!isLoading && !user) {
+      navigate("/login");
+    }
+  }, [isLoading, user, navigate]);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    await signOut();
     navigate("/");
   };
 
@@ -98,10 +73,11 @@ export default function AppLayout() {
   }
 
   if (!user) {
-    return null; // Will redirect
+    return null;
   }
 
-  const currentPlan = planBadges[userPlan] || planBadges.free;
+  const currentPlan = planBadges[subscription.tier] || planBadges.free;
+  const PlanIcon = currentPlan.icon || Sparkles;
 
   return (
     <div className="min-h-screen bg-muted/30 flex">
@@ -146,6 +122,18 @@ export default function AppLayout() {
                 {item.label}
               </Link>
             ))}
+            
+            {/* Admin link if user is admin */}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                onClick={() => setSidebarOpen(false)}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted mt-4 border-t border-border pt-4"
+              >
+                <Crown className="h-5 w-5" />
+                Admin Panel
+              </Link>
+            )}
           </nav>
 
           {/* Bottom Nav */}
@@ -216,10 +204,13 @@ export default function AppLayout() {
 
             <div className="flex items-center gap-4">
               {/* Plan Badge */}
-              <div className={cn("px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5", currentPlan.color)}>
-                <Sparkles className="h-3.5 w-3.5" />
-                {currentPlan.label}
-              </div>
+              <Link 
+                to="/app/account"
+                className={cn("px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 hover:opacity-80 transition-opacity", currentPlan.color)}
+              >
+                <PlanIcon className="h-3.5 w-3.5" />
+                {SUBSCRIPTION_TIERS[subscription.tier].name}
+              </Link>
 
               {/* User Menu */}
               <div className="flex items-center gap-3">
