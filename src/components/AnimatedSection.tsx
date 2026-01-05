@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion as useFramerReducedMotion } from "framer-motion";
 import { useRef, ReactNode } from "react";
 
 interface AnimatedSectionProps {
@@ -10,12 +10,14 @@ interface AnimatedSectionProps {
 }
 
 const directionVariants = {
-  up: { y: 40, opacity: 0 },
-  down: { y: -40, opacity: 0 },
-  left: { x: 40, opacity: 0 },
-  right: { x: -40, opacity: 0 },
+  up: { y: 24, opacity: 0 },
+  down: { y: -24, opacity: 0 },
+  left: { x: 24, opacity: 0 },
+  right: { x: -24, opacity: 0 },
   none: { opacity: 0 },
 };
+
+const visible = { x: 0, y: 0, opacity: 1 };
 
 export function AnimatedSection({
   children,
@@ -24,16 +26,22 @@ export function AnimatedSection({
   direction = "up",
   once = true,
 }: AnimatedSectionProps) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, margin: "-100px 0px" });
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, margin: "-80px 0px" });
+  const prefersReducedMotion = useFramerReducedMotion();
+
+  // If user prefers reduced motion, render without animation
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <motion.div
       ref={ref}
       initial={directionVariants[direction]}
-      animate={isInView ? { x: 0, y: 0, opacity: 1 } : directionVariants[direction]}
+      animate={isInView ? visible : directionVariants[direction]}
       transition={{
-        duration: 0.6,
+        duration: 0.5,
         delay,
         ease: [0.25, 0.1, 0.25, 1],
       }}
@@ -54,11 +62,17 @@ interface AnimatedStaggerProps {
 export function AnimatedStagger({
   children,
   className = "",
-  staggerDelay = 0.1,
+  staggerDelay = 0.08,
   once = true,
 }: AnimatedStaggerProps) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, margin: "-50px 0px" });
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, margin: "-40px 0px" });
+  const prefersReducedMotion = useFramerReducedMotion();
+
+  // If user prefers reduced motion, render without animation
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <motion.div
@@ -81,13 +95,13 @@ export function AnimatedStagger({
 }
 
 export const staggerItem = {
-  hidden: { y: 30, opacity: 0 },
+  hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
     transition: {
-      duration: 0.5,
-      ease: [0.25, 0.1, 0.25, 1] as const,
+      duration: 0.4,
+      ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
     },
   },
 };
