@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAchievements } from "@/hooks/use-achievements";
+import { useStreaks } from "@/hooks/use-streaks";
 import { TIER_COLORS, CATEGORY_LABELS, Achievement } from "@/lib/achievements";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -194,11 +195,15 @@ function AchievementModal({
 }
 
 export default function AchievementsBadges() {
-  const { stats, getAchievementsByCategory, isLoading } = useAchievements();
+  const { streaks } = useStreaks();
+  const { stats, getAchievementsByCategory, isLoading } = useAchievements({
+    login_streak_current: streaks.login_streak_current,
+    task_streak_current: streaks.task_streak_current,
+  });
   const [selectedAchievement, setSelectedAchievement] = useState<AchievementWithStatus | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
-  const categories = ["all", "foundation", "credit", "brand", "milestone", "special"] as const;
+  const categories = ["all", "foundation", "credit", "brand", "milestone", "streak", "special"] as const;
 
   const getAchievementsForTab = (category: string) => {
     if (category === "all") {

@@ -18,6 +18,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useTasks, Task, TaskInsert } from "@/hooks/use-tasks";
+import { useStreaks } from "@/hooks/use-streaks";
 import { toast } from "sonner";
 import {
   Plus,
@@ -51,7 +52,10 @@ const STATUS_CONFIG = {
 };
 
 export default function TaskManager() {
-  const { tasks, isLoading, createTask, updateTask, deleteTask } = useTasks();
+  const { recordTaskCompletion } = useStreaks();
+  const { tasks, isLoading, createTask, updateTask, deleteTask } = useTasks({
+    onTaskComplete: recordTaskCompletion,
+  });
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newTask, setNewTask] = useState<TaskInsert>({
     title: "",

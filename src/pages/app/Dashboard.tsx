@@ -13,6 +13,7 @@ import DashboardStats from "@/components/dashboard/DashboardStats";
 import TierProgress from "@/components/dashboard/TierProgress";
 import FullProductSuite from "@/components/dashboard/FullProductSuite";
 import AchievementsPreview from "@/components/dashboard/AchievementsPreview";
+import StreakTracker from "@/components/dashboard/StreakTracker";
 import {
   ArrowRight,
   Crown,
@@ -130,7 +131,8 @@ export default function Dashboard() {
           <FullProductSuite />
           
           {/* Bottom cards grid */}
-          <div className="grid lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            <StreakTracker />
             <AchievementsPreview />
             <TierProgress />
             <NextSteps />

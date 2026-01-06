@@ -12,7 +12,7 @@ interface EarnedAchievement {
   metadata: unknown;
 }
 
-export function useAchievements() {
+export function useAchievements(streaks?: { login_streak_current: number; task_streak_current: number }) {
   const { user } = useAuth();
   const { progress } = useProgress();
   const { toast } = useToast();
@@ -111,10 +111,16 @@ export function useAchievements() {
         }
         return false;
 
+      case "login_streak":
+        return (streaks?.login_streak_current || 0) >= (requirement.count || 0);
+
+      case "task_streak":
+        return (streaks?.task_streak_current || 0) >= (requirement.count || 0);
+
       default:
         return false;
     }
-  }, [progress, moduleProgress, completedSteps, tradelineCount, user]);
+  }, [progress, moduleProgress, completedSteps, tradelineCount, user, streaks]);
 
   // Award achievement
   const awardAchievement = useCallback(async (achievementId: string) => {

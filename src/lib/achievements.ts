@@ -22,6 +22,8 @@ import {
   User,
   Globe,
   Sparkles,
+  Calendar,
+  CheckSquare,
   LucideIcon
 } from "lucide-react";
 
@@ -30,11 +32,11 @@ export interface Achievement {
   name: string;
   description: string;
   icon: LucideIcon;
-  category: "foundation" | "credit" | "brand" | "milestone" | "special";
+  category: "foundation" | "credit" | "brand" | "milestone" | "special" | "streak";
   tier: "bronze" | "silver" | "gold" | "platinum";
   xpReward: number;
   requirement: {
-    type: "progress_step" | "progress_count" | "tradeline_count" | "credit_score" | "special";
+    type: "progress_step" | "progress_count" | "tradeline_count" | "credit_score" | "special" | "login_streak" | "task_streak";
     module?: string;
     step?: string;
     count?: number;
@@ -262,6 +264,88 @@ export const ACHIEVEMENTS: Achievement[] = [
     xpReward: 2000,
     requirement: { type: "progress_count", count: 30 },
   },
+
+  // Streak Achievements
+  {
+    id: "login_streak_3",
+    name: "Getting Started",
+    description: "Log in 3 days in a row",
+    icon: Calendar,
+    category: "streak",
+    tier: "bronze",
+    xpReward: 75,
+    requirement: { type: "login_streak", count: 3 },
+  },
+  {
+    id: "login_streak_7",
+    name: "Week Warrior",
+    description: "Maintain a 7-day login streak",
+    icon: Flame,
+    category: "streak",
+    tier: "silver",
+    xpReward: 200,
+    requirement: { type: "login_streak", count: 7 },
+  },
+  {
+    id: "login_streak_14",
+    name: "Committed",
+    description: "Maintain a 14-day login streak",
+    icon: Flame,
+    category: "streak",
+    tier: "gold",
+    xpReward: 400,
+    requirement: { type: "login_streak", count: 14 },
+  },
+  {
+    id: "login_streak_30",
+    name: "Unstoppable Force",
+    description: "Maintain a 30-day login streak",
+    icon: Crown,
+    category: "streak",
+    tier: "platinum",
+    xpReward: 1000,
+    requirement: { type: "login_streak", count: 30 },
+  },
+  {
+    id: "task_streak_3",
+    name: "Task Starter",
+    description: "Complete tasks 3 days in a row",
+    icon: CheckSquare,
+    category: "streak",
+    tier: "bronze",
+    xpReward: 100,
+    requirement: { type: "task_streak", count: 3 },
+  },
+  {
+    id: "task_streak_7",
+    name: "Productivity Pro",
+    description: "Complete tasks 7 days in a row",
+    icon: Zap,
+    category: "streak",
+    tier: "silver",
+    xpReward: 250,
+    requirement: { type: "task_streak", count: 7 },
+  },
+  {
+    id: "task_streak_14",
+    name: "Goal Crusher",
+    description: "Complete tasks 14 days in a row",
+    icon: TrendingUp,
+    category: "streak",
+    tier: "gold",
+    xpReward: 500,
+    requirement: { type: "task_streak", count: 14 },
+  },
+  {
+    id: "task_streak_30",
+    name: "Legendary Achiever",
+    description: "Complete tasks 30 days in a row",
+    icon: Trophy,
+    category: "streak",
+    tier: "platinum",
+    xpReward: 1500,
+    requirement: { type: "task_streak", count: 30 },
+  },
 ];
 
 export const TIER_COLORS = {
@@ -300,6 +384,7 @@ export const CATEGORY_LABELS = {
   credit: "Credit Building",
   brand: "Personal Brand",
   milestone: "Milestones",
+  streak: "Streaks",
   special: "Special",
 };
 

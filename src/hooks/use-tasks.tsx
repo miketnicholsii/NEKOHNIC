@@ -21,7 +21,11 @@ export interface Task {
 export type TaskInsert = Omit<Task, "id" | "user_id" | "created_at" | "updated_at" | "trello_card_id" | "trello_synced_at">;
 export type TaskUpdate = Partial<TaskInsert>;
 
-export function useTasks() {
+interface UseTasksOptions {
+  onTaskComplete?: () => void;
+}
+
+export function useTasks(options?: UseTasksOptions) {
   const { user } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -78,6 +82,10 @@ export function useTasks() {
   const updateTask = async (id: string, updates: TaskUpdate): Promise<Task | null> => {
     if (!user) return null;
 
+    // Check if task is being marked as done
+    const currentTask = tasks.find(t => t.id === id);
+    const isCompletingTask = updates.status === "done" && currentTask?.status !== "done";
+
     try {
       const { data, error: updateError } = await supabase
         .from("user_tasks")
@@ -91,6 +99,12 @@ export function useTasks() {
       
       const updatedTask = data as Task;
       setTasks(prev => prev.map(t => t.id === id ? updatedTask : t));
+
+      // Trigger callback when task is completed
+      if (isCompletingTask && options?.onTaskComplete) {
+        options.onTaskComplete();
+      }
+
       return updatedTask;
     } catch (err) {
       console.error("Error updating task:", err);

@@ -520,6 +520,51 @@ export type Database = {
         }
         Relationships: []
       }
+      user_streaks: {
+        Row: {
+          created_at: string
+          id: string
+          last_login_date: string | null
+          last_task_date: string | null
+          login_streak_current: number
+          login_streak_longest: number
+          task_streak_current: number
+          task_streak_longest: number
+          total_login_days: number
+          total_tasks_completed: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_login_date?: string | null
+          last_task_date?: string | null
+          login_streak_current?: number
+          login_streak_longest?: number
+          task_streak_current?: number
+          task_streak_longest?: number
+          total_login_days?: number
+          total_tasks_completed?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_login_date?: string | null
+          last_task_date?: string | null
+          login_streak_current?: number
+          login_streak_longest?: number
+          task_streak_current?: number
+          task_streak_longest?: number
+          total_login_days?: number
+          total_tasks_completed?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_tasks: {
         Row: {
           created_at: string
