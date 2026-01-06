@@ -179,10 +179,13 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Demo accounts - for dev only */}
+        {/* Demo hint */}
         <div className="mt-6 p-4 rounded-xl bg-primary-foreground/5 border border-primary-foreground/10 backdrop-blur-sm">
-          <p className="text-xs text-primary-foreground/60 text-center">
-            Demo mode • Use demo-free@neko.test / Password123!
+          <p className="text-xs text-primary-foreground/60 text-center mb-2 font-medium">
+            Want to test the platform?
+          </p>
+          <p className="text-xs text-primary-foreground/50 text-center">
+            Create a free account to explore. Auto-confirm is enabled for easy testing.
           </p>
         </div>
       </motion.div>
