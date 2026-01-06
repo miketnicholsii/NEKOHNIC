@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { InstagramSection } from "./InstagramSection";
+import { ArrowUpRight } from "lucide-react";
 
 const footerLinks = {
   platform: [
@@ -10,7 +11,7 @@ const footerLinks = {
   ],
   company: [
     { href: "/about", label: "About" },
-    { href: "/get-started", label: "Contact" },
+    { href: "/contact", label: "Contact" },
   ],
   legal: [
     { href: "/legal/privacy", label: "Privacy Policy" },
@@ -20,34 +21,43 @@ const footerLinks = {
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
   return (
-    <footer ref={ref} className="bg-tertiary text-tertiary-foreground">
-      <div className="container mx-auto px-6 lg:px-8 py-16 lg:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+    <footer ref={ref} className="relative bg-tertiary text-tertiary-foreground overflow-hidden">
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-dark opacity-50 pointer-events-none" aria-hidden="true" />
+      <div className="absolute inset-0 bg-gradient-glow opacity-30 pointer-events-none" aria-hidden="true" />
+      
+      <div className="relative container mx-auto px-6 lg:px-8 py-16 lg:py-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
           {/* Brand */}
-          <div className="lg:col-span-1">
-            <Link to="/" className="inline-block mb-6">
-              <span className="font-display text-2xl font-bold tracking-display text-primary-foreground">
+          <div className="lg:col-span-2">
+            <Link to="/" className="inline-block mb-6 group">
+              <span className="font-display text-3xl font-bold tracking-tight text-primary-foreground transition-all duration-300 group-hover:text-primary">
                 NÈKO.
               </span>
             </Link>
-            <p className="text-primary-foreground/60 text-sm leading-relaxed max-w-xs">
+            <p className="text-primary-foreground/60 text-sm leading-relaxed max-w-sm mb-6">
               Your guided operating system for building businesses and personal brands — from idea to scale.
             </p>
+            <div className="flex items-center gap-2 text-xs text-primary-foreground/40 tracking-wider uppercase">
+              <span className="w-8 h-px bg-primary-foreground/20" />
+              Business · Tech · Strategy
+            </div>
           </div>
 
           {/* Platform Links */}
           <div>
-            <h4 className="font-display text-sm font-semibold tracking-wide text-primary-foreground mb-6 uppercase">
+            <h4 className="font-display text-xs font-bold tracking-wider text-primary-foreground/80 mb-6 uppercase">
               Platform
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3.5">
               {footerLinks.platform.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-sm text-primary-foreground/60 hover:text-primary transition-colors"
+                    className="group inline-flex items-center gap-1 text-sm text-primary-foreground/60 hover:text-primary transition-colors duration-300"
                   >
                     {link.label}
+                    <ArrowUpRight className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </Link>
                 </li>
               ))}
@@ -56,36 +66,29 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
 
           {/* Company Links */}
           <div>
-            <h4 className="font-display text-sm font-semibold tracking-wide text-primary-foreground mb-6 uppercase">
+            <h4 className="font-display text-xs font-bold tracking-wider text-primary-foreground/80 mb-6 uppercase">
               Company
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3.5">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-sm text-primary-foreground/60 hover:text-primary transition-colors"
+                    className="group inline-flex items-center gap-1 text-sm text-primary-foreground/60 hover:text-primary transition-colors duration-300"
                   >
                     {link.label}
+                    <ArrowUpRight className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </Link>
                 </li>
               ))}
-            </ul>
-          </div>
-
-          {/* Legal Links */}
-          <div>
-            <h4 className="font-display text-sm font-semibold tracking-wide text-primary-foreground mb-6 uppercase">
-              Legal
-            </h4>
-            <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-sm text-primary-foreground/60 hover:text-primary transition-colors"
+                    className="group inline-flex items-center gap-1 text-sm text-primary-foreground/60 hover:text-primary transition-colors duration-300"
                   >
                     {link.label}
+                    <ArrowUpRight className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </Link>
                 </li>
               ))}
@@ -94,8 +97,8 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
 
           {/* Instagram */}
           <div>
-            <h4 className="font-display text-sm font-semibold tracking-wide text-primary-foreground mb-6 uppercase">
-              Instagram
+            <h4 className="font-display text-xs font-bold tracking-wider text-primary-foreground/80 mb-6 uppercase">
+              Connect
             </h4>
             <InstagramSection />
           </div>
@@ -107,9 +110,11 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             <p className="text-xs text-primary-foreground/40 tracking-wide">
               © {new Date().getFullYear()} NÈKO. All rights reserved.
             </p>
-            <p className="text-xs text-primary-foreground/40 tracking-wide">
-              BUSINESS. | TECH. | STRATEGY.
-            </p>
+            <div className="flex items-center gap-6">
+              <span className="text-xs text-primary-foreground/40 tracking-wide">
+                Built for founders, by founders.
+              </span>
+            </div>
           </div>
         </div>
       </div>
