@@ -5,7 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { FeatureCard } from "@/components/FeatureCard";
 import { SectionHeading } from "@/components/SectionHeading";
-import { Anim;atedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
+import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
 import { 
   ArrowRight, 
   Building2, 
