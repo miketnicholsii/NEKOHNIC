@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import { Eye, EyeOff, Loader2, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, ArrowLeft, CheckCircle2, Tag, XCircle } from "lucide-react";
 
 const benefits = [
   "Free forever tier available",
@@ -16,17 +16,40 @@ const benefits = [
   "Cancel anytime",
 ];
 
+interface PromoCodeStatus {
+  isValid: boolean;
+  isChecking: boolean;
+  message: string;
+  promoData: {
+    id: string;
+    description: string;
+    tier_upgrade: string | null;
+    discount_percent: number;
+    free_months: number;
+  } | null;
+}
+
 export default function Signup() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user, isLoading: authLoading } = useAuth();
+  const [searchParams] = useSearchParams();
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
+    promoCode: searchParams.get("promo") || "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showPromoField, setShowPromoField] = useState(!!searchParams.get("promo"));
   const [isLoading, setIsLoading] = useState(false);
+  const [promoStatus, setPromoStatus] = useState<PromoCodeStatus>({
+    isValid: false,
+    isChecking: false,
+    message: "",
+    promoData: null,
+  });
 
   // Redirect if already logged in
   useEffect(() => {
@@ -35,12 +58,115 @@ export default function Signup() {
     }
   }, [authLoading, user, navigate]);
 
+  // Validate promo code on initial load if present in URL
+  useEffect(() => {
+    const promoFromUrl = searchParams.get("promo");
+    if (promoFromUrl) {
+      validatePromoCode(promoFromUrl);
+    }
+  }, [searchParams]);
+
+  const validatePromoCode = async (code: string) => {
+    const trimmedCode = code.trim().toUpperCase();
+    
+    if (!trimmedCode) {
+      setPromoStatus({ isValid: false, isChecking: false, message: "", promoData: null });
+      return;
+    }
+
+    setPromoStatus(prev => ({ ...prev, isChecking: true, message: "" }));
+
+    try {
+      const { data, error } = await supabase
+        .from("promo_codes")
+        .select("id, code, description, discount_percent, free_months, tier_upgrade, max_uses, current_uses, is_active, expires_at")
+        .eq("code", trimmedCode)
+        .single();
+
+      if (error || !data) {
+        setPromoStatus({
+          isValid: false,
+          isChecking: false,
+          message: "Invalid promo code",
+          promoData: null,
+        });
+        return;
+      }
+
+      // Check if code is active
+      if (!data.is_active) {
+        setPromoStatus({
+          isValid: false,
+          isChecking: false,
+          message: "This promo code is no longer active",
+          promoData: null,
+        });
+        return;
+      }
+
+      // Check if code has expired
+      if (data.expires_at && new Date(data.expires_at) < new Date()) {
+        setPromoStatus({
+          isValid: false,
+          isChecking: false,
+          message: "This promo code has expired",
+          promoData: null,
+        });
+        return;
+      }
+
+      // Check if code has reached max uses
+      if (data.max_uses && data.current_uses >= data.max_uses) {
+        setPromoStatus({
+          isValid: false,
+          isChecking: false,
+          message: "This promo code has reached its usage limit",
+          promoData: null,
+        });
+        return;
+      }
+
+      // Code is valid
+      setPromoStatus({
+        isValid: true,
+        isChecking: false,
+        message: data.description || "Promo code applied!",
+        promoData: {
+          id: data.id,
+          description: data.description || "",
+          tier_upgrade: data.tier_upgrade,
+          discount_percent: data.discount_percent || 0,
+          free_months: data.free_months || 0,
+        },
+      });
+    } catch {
+      setPromoStatus({
+        isValid: false,
+        isChecking: false,
+        message: "Error validating promo code",
+        promoData: null,
+      });
+    }
+  };
+
+  const handlePromoCodeChange = (value: string) => {
+    setFormData({ ...formData, promoCode: value });
+    
+    // Debounce validation
+    const timeoutId = setTimeout(() => {
+      validatePromoCode(value);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     const name = formData.name.trim();
     const email = formData.email.trim();
     const password = formData.password;
+    const promoCode = formData.promoCode.trim().toUpperCase();
 
     if (!name || !email || !password) {
       toast({
@@ -59,18 +185,30 @@ export default function Signup() {
       return;
     }
 
+    // If promo code is entered but invalid, show error
+    if (promoCode && !promoStatus.isValid) {
+      toast({
+        title: "Invalid promo code",
+        description: "Please enter a valid promo code or remove it.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     
     try {
       const redirectUrl = `${window.location.origin}/app`;
       
-      const { error } = await supabase.auth.signUp({
+      const { data: signUpData, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: redirectUrl,
           data: {
             full_name: name,
+            promo_code: promoStatus.isValid ? promoCode : null,
+            promo_code_id: promoStatus.promoData?.id || null,
           },
         },
       });
@@ -92,13 +230,30 @@ export default function Signup() {
         return;
       }
 
+      // If promo code was used and user was created, record the redemption
+      if (promoStatus.isValid && promoStatus.promoData && signUpData.user) {
+        try {
+          // Insert redemption record
+          await supabase.from("promo_code_redemptions").insert({
+            promo_code_id: promoStatus.promoData.id,
+            user_id: signUpData.user.id,
+          });
+        } catch {
+          // Promo tracking failed but signup succeeded - continue
+        }
+      }
+
+      const promoMessage = promoStatus.isValid 
+        ? ` ${promoStatus.promoData?.description || "Promo code applied!"}`
+        : "";
+
       toast({
         title: "Account created!",
-        description: "Welcome to NÈKO. Let's get started.",
+        description: `Welcome to NÈKO.${promoMessage}`,
       });
       
       navigate("/app/onboarding");
-    } catch (err) {
+    } catch {
       toast({
         title: "Something went wrong",
         description: "Please try again later.",
@@ -201,6 +356,53 @@ export default function Signup() {
                 At least 8 characters
               </p>
             </div>
+
+            {/* Promo Code Section */}
+            {!showPromoField ? (
+              <button
+                type="button"
+                onClick={() => setShowPromoField(true)}
+                className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
+              >
+                <Tag className="h-4 w-4" />
+                Have a promo code?
+              </button>
+            ) : (
+              <div className="space-y-2">
+                <Label htmlFor="promoCode">Promo Code</Label>
+                <div className="relative">
+                  <Input
+                    id="promoCode"
+                    type="text"
+                    value={formData.promoCode}
+                    onChange={(e) => handlePromoCodeChange(e.target.value.toUpperCase())}
+                    placeholder="ENTER CODE"
+                    className={`h-12 pr-12 uppercase ${
+                      promoStatus.isValid 
+                        ? "border-primary bg-primary/5" 
+                        : promoStatus.message && !promoStatus.isChecking 
+                          ? "border-destructive" 
+                          : ""
+                    }`}
+                    maxLength={50}
+                  />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    {promoStatus.isChecking ? (
+                      <Loader2 className="h-5 w-5 text-muted-foreground animate-spin" />
+                    ) : promoStatus.isValid ? (
+                      <CheckCircle2 className="h-5 w-5 text-primary" />
+                    ) : promoStatus.message ? (
+                      <XCircle className="h-5 w-5 text-destructive" />
+                    ) : null}
+                  </div>
+                </div>
+                {promoStatus.message && (
+                  <p className={`text-xs ${promoStatus.isValid ? "text-primary" : "text-destructive"}`}>
+                    {promoStatus.message}
+                  </p>
+                )}
+              </div>
+            )}
 
             <Button
               type="submit"
