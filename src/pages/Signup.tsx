@@ -230,7 +230,7 @@ export default function Signup() {
         return;
       }
 
-      // If promo code was used and user was created, record the redemption
+      // If promo code was used and user was created, record the redemption and store for checkout
       if (promoStatus.isValid && promoStatus.promoData && signUpData.user) {
         try {
           // Insert redemption record
@@ -238,6 +238,9 @@ export default function Signup() {
             promo_code_id: promoStatus.promoData.id,
             user_id: signUpData.user.id,
           });
+          
+          // Store promo code in localStorage for checkout flow
+          localStorage.setItem("appliedPromoCode", promoCode);
         } catch {
           // Promo tracking failed but signup succeeded - continue
         }

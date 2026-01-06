@@ -32,7 +32,7 @@ serve(async (req) => {
 
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
     const authHeader = req.headers.get("Authorization");
@@ -44,16 +44,17 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
-    // Get the requested tier from the body
+    // Get the requested tier and promo code from the body
     const body = await req.json();
     const tier = body.tier as string;
+    const promoCode = body.promoCode as string | undefined;
     
     if (!tier || !TIER_PRICES[tier]) {
       throw new Error(`Invalid tier: ${tier}. Valid tiers are: start, build, scale`);
     }
 
     const priceId = TIER_PRICES[tier];
-    logStep("Creating checkout for tier", { tier, priceId });
+    logStep("Creating checkout for tier", { tier, priceId, promoCode });
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
     
@@ -67,7 +68,56 @@ serve(async (req) => {
 
     const origin = req.headers.get("origin") || "https://neko.app";
     
-    const session = await stripe.checkout.sessions.create({
+    // Look up promo code and create/get Stripe coupon if valid
+    let stripeCouponId: string | undefined;
+    if (promoCode) {
+      const { data: promoData, error: promoError } = await supabaseClient
+        .from("promo_codes")
+        .select("*")
+        .eq("code", promoCode.toUpperCase())
+        .eq("is_active", true)
+        .single();
+
+      if (!promoError && promoData) {
+        // Check expiry
+        const isExpired = promoData.expires_at && new Date(promoData.expires_at) < new Date();
+        const isMaxedOut = promoData.max_uses && promoData.current_uses >= promoData.max_uses;
+        
+        if (!isExpired && !isMaxedOut && promoData.discount_percent && promoData.discount_percent > 0) {
+          logStep("Valid promo code found", { code: promoCode, discount: promoData.discount_percent });
+          
+          // Create or get Stripe coupon
+          const couponId = `NEKO_${promoCode.toUpperCase()}`;
+          try {
+            // Try to retrieve existing coupon
+            await stripe.coupons.retrieve(couponId);
+            stripeCouponId = couponId;
+            logStep("Using existing Stripe coupon", { couponId });
+          } catch {
+            // Coupon doesn't exist, create it
+            const coupon = await stripe.coupons.create({
+              id: couponId,
+              percent_off: promoData.discount_percent,
+              duration: promoData.free_months && promoData.free_months > 0 ? "repeating" : "once",
+              duration_in_months: promoData.free_months || undefined,
+              name: `NEKO Promo: ${promoCode.toUpperCase()}`,
+            });
+            stripeCouponId = coupon.id;
+            logStep("Created new Stripe coupon", { couponId: coupon.id });
+          }
+
+          // Increment usage counter
+          await supabaseClient
+            .from("promo_codes")
+            .update({ current_uses: (promoData.current_uses || 0) + 1 })
+            .eq("id", promoData.id);
+        }
+      } else {
+        logStep("Promo code not found or invalid", { code: promoCode });
+      }
+    }
+    
+    const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
       line_items: [
@@ -82,10 +132,18 @@ serve(async (req) => {
       metadata: {
         user_id: user.id,
         tier: tier,
+        promo_code: promoCode || "",
       },
-    });
+    };
 
-    logStep("Checkout session created", { sessionId: session.id, url: session.url });
+    // Apply discount if we have a valid coupon
+    if (stripeCouponId) {
+      sessionConfig.discounts = [{ coupon: stripeCouponId }];
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
+
+    logStep("Checkout session created", { sessionId: session.id, url: session.url, hasDiscount: !!stripeCouponId });
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
