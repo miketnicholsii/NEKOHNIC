@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
@@ -11,22 +11,20 @@ const navLinks = [
   { href: "/services", label: "Services" },
   { href: "/personal-brand", label: "Personal Brand" },
   { href: "/pricing", label: "Pricing" },
-];
+] as const;
 
-export function Navbar() {
+export const Navbar = memo(function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const location = useLocation();
 
   useEffect(() => {
-    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      (_, session) => {
         setUser(session?.user ?? null);
       }
     );
 
-    // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
     });
@@ -34,9 +32,15 @@ export function Navbar() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const isHeroPage = location.pathname === "/" || location.pathname === "/about";
+  const toggleMenu = useCallback(() => {
+    setIsOpen(prev => !prev);
+  }, []);
 
-  // Determine CTA destination based on auth status
+  const closeMenu = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  const isHeroPage = location.pathname === "/" || location.pathname === "/about";
   const ctaHref = user ? "/app" : "/signup";
   const ctaLabel = user ? "Dashboard" : "Get Started";
 
@@ -90,8 +94,9 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             className={`lg:hidden p-2 ${isHeroPage ? "text-primary-foreground" : "text-foreground"}`}
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={toggleMenu}
             aria-label="Toggle menu"
+            aria-expanded={isOpen}
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -106,7 +111,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 to={link.href}
-                onClick={() => setIsOpen(false)}
+                onClick={closeMenu}
                 className={`text-base font-medium tracking-wide py-2 transition-colors ${
                   location.pathname === link.href
                     ? "text-primary"
@@ -118,13 +123,13 @@ export function Navbar() {
             ))}
             <div className="flex flex-col gap-3 mt-4">
               {!user && (
-                <Link to="/login" onClick={() => setIsOpen(false)}>
+                <Link to="/login" onClick={closeMenu}>
                   <Button variant="hero-outline" size="lg" className="w-full">
                     Log In
                   </Button>
                 </Link>
               )}
-              <Link to={ctaHref} onClick={() => setIsOpen(false)}>
+              <Link to={ctaHref} onClick={closeMenu}>
                 <Button variant="hero" size="lg" className="w-full">
                   {ctaLabel}
                 </Button>
@@ -135,4 +140,4 @@ export function Navbar() {
       )}
     </nav>
   );
-}
+});

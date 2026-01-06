@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,30 +13,52 @@ interface InstagramData {
   formatted: string | null;
 }
 
-export function InstagramSection() {
-  const [data, setData] = useState<InstagramData | null>(null);
-  const [loading, setLoading] = useState(true);
+// Cache for Instagram data to prevent duplicate fetches
+let cachedData: InstagramData | null = null;
+let fetchPromise: Promise<InstagramData> | null = null;
+
+async function fetchInstagramData(): Promise<InstagramData> {
+  if (cachedData) return cachedData;
+  
+  if (fetchPromise) return fetchPromise;
+  
+  fetchPromise = (async () => {
+    try {
+      const { data: response, error } = await supabase.functions.invoke("instagram-followers");
+      
+      if (error) {
+        console.error("Failed to fetch Instagram data:", error);
+        return { followers: null, formatted: null };
+      }
+      
+      cachedData = response;
+      return response;
+    } catch (err) {
+      console.error("Instagram fetch error:", err);
+      return { followers: null, formatted: null };
+    } finally {
+      fetchPromise = null;
+    }
+  })();
+  
+  return fetchPromise;
+}
+
+export const InstagramSection = memo(function InstagramSection() {
+  const [data, setData] = useState<InstagramData | null>(cachedData);
+  const [loading, setLoading] = useState(!cachedData);
 
   useEffect(() => {
-    async function fetchFollowers() {
-      try {
-        const { data: response, error } = await supabase.functions.invoke("instagram-followers");
-        
-        if (error) {
-          console.error("Failed to fetch Instagram data:", error);
-          setData({ followers: null, formatted: null });
-        } else {
-          setData(response);
-        }
-      } catch (err) {
-        console.error("Instagram fetch error:", err);
-        setData({ followers: null, formatted: null });
-      } finally {
-        setLoading(false);
-      }
+    if (cachedData) {
+      setData(cachedData);
+      setLoading(false);
+      return;
     }
 
-    fetchFollowers();
+    fetchInstagramData().then(result => {
+      setData(result);
+      setLoading(false);
+    });
   }, []);
 
   return (
@@ -89,30 +111,23 @@ export function InstagramSection() {
       </Button>
     </motion.div>
   );
-}
+});
 
-export function InstagramBadge() {
-  const [data, setData] = useState<InstagramData | null>(null);
-  const [loading, setLoading] = useState(true);
+export const InstagramBadge = memo(function InstagramBadge() {
+  const [data, setData] = useState<InstagramData | null>(cachedData);
+  const [loading, setLoading] = useState(!cachedData);
 
   useEffect(() => {
-    async function fetchFollowers() {
-      try {
-        const { data: response, error } = await supabase.functions.invoke("instagram-followers");
-        
-        if (error) {
-          setData({ followers: null, formatted: null });
-        } else {
-          setData(response);
-        }
-      } catch {
-        setData({ followers: null, formatted: null });
-      } finally {
-        setLoading(false);
-      }
+    if (cachedData) {
+      setData(cachedData);
+      setLoading(false);
+      return;
     }
 
-    fetchFollowers();
+    fetchInstagramData().then(result => {
+      setData(result);
+      setLoading(false);
+    });
   }, []);
 
   return (
@@ -131,4 +146,4 @@ export function InstagramBadge() {
       ) : null}
     </a>
   );
-}
+});

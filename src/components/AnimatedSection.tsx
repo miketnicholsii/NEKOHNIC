@@ -1,5 +1,5 @@
 import { motion, useInView, useReducedMotion as useFramerReducedMotion } from "framer-motion";
-import { useRef, ReactNode } from "react";
+import { useRef, ReactNode, memo } from "react";
 
 interface AnimatedSectionProps {
   children: ReactNode;
@@ -19,7 +19,7 @@ const directionVariants = {
 
 const visible = { x: 0, y: 0, opacity: 1 };
 
-export function AnimatedSection({
+export const AnimatedSection = memo(function AnimatedSection({
   children,
   className = "",
   delay = 0,
@@ -30,7 +30,6 @@ export function AnimatedSection({
   const isInView = useInView(ref, { once, margin: "-80px 0px" });
   const prefersReducedMotion = useFramerReducedMotion();
 
-  // If user prefers reduced motion, render without animation
   if (prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
@@ -50,7 +49,7 @@ export function AnimatedSection({
       {children}
     </motion.div>
   );
-}
+});
 
 interface AnimatedStaggerProps {
   children: ReactNode;
@@ -59,7 +58,7 @@ interface AnimatedStaggerProps {
   once?: boolean;
 }
 
-export function AnimatedStagger({
+export const AnimatedStagger = memo(function AnimatedStagger({
   children,
   className = "",
   staggerDelay = 0.08,
@@ -69,7 +68,6 @@ export function AnimatedStagger({
   const isInView = useInView(ref, { once, margin: "-40px 0px" });
   const prefersReducedMotion = useFramerReducedMotion();
 
-  // If user prefers reduced motion, render without animation
   if (prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
@@ -92,7 +90,7 @@ export function AnimatedStagger({
       {children}
     </motion.div>
   );
-}
+});
 
 export const staggerItem = {
   hidden: { y: 20, opacity: 0 },
