@@ -2,7 +2,6 @@ import { useState, useEffect, memo } from "react";
 import { Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 
 const INSTAGRAM_URL = "https://www.instagram.com/hellneko.co";
@@ -24,15 +23,26 @@ async function fetchInstagramData(): Promise<InstagramData> {
   
   fetchPromise = (async () => {
     try {
-      const { data: response, error } = await supabase.functions.invoke("instagram-followers");
+      // Use direct fetch with GET method since the edge function requires GET
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/instagram-followers`,
+        {
+          method: "GET",
+          headers: {
+            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+        }
+      );
       
-      if (error) {
-        console.error("Failed to fetch Instagram data:", error);
+      if (!response.ok) {
+        console.error("Failed to fetch Instagram data:", response.status);
         return { followers: null, formatted: null };
       }
       
-      cachedData = response;
-      return response;
+      const data = await response.json();
+      cachedData = data;
+      return data;
     } catch (err) {
       console.error("Instagram fetch error:", err);
       return { followers: null, formatted: null };
