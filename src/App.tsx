@@ -40,6 +40,7 @@ const PersonalBrandBuilder = lazy(() => import("./pages/app/PersonalBrandBuilder
 const Resources = lazy(() => import("./pages/app/Resources"));
 const Account = lazy(() => import("./pages/app/Account"));
 const Support = lazy(() => import("./pages/app/Support"));
+const Analytics = lazy(() => import("./pages/app/Analytics"));
 
 // Admin pages - lazy load
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
@@ -111,6 +112,7 @@ const App = () => (
                   <Route path="resources" element={<Resources />} />
                   <Route path="account" element={<Account />} />
                   <Route path="support" element={<Support />} />
+                  <Route path="analytics" element={<Analytics />} />
                 </Route>
                 
                 {/* Admin routes */}

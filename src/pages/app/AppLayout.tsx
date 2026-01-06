@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Sparkles,
   Crown,
+  BarChart3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -25,6 +26,7 @@ const navItems = [
   { href: "/app/business-starter", label: "Business Starter", icon: Building2 },
   { href: "/app/business-credit", label: "Business Credit", icon: CreditCard },
   { href: "/app/personal-brand", label: "Personal Brand", icon: UserIcon },
+  { href: "/app/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/app/resources", label: "Resources", icon: BookOpen },
 ];
 
