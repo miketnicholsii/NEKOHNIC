@@ -239,7 +239,7 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       await resend.emails.send({
         from: "NEKO <onboarding@resend.dev>",
-        to: ["hello@helloneko.co"],
+        to: ["neko@helloneko.co"],
         subject: `New NEKO Lead: ${name}`,
         html: `
           <h2>New Contact Form Submission</h2>

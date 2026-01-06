@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
 import { Link } from "react-router-dom";
+import { InstagramSection } from "./InstagramSection";
 
 const footerLinks = {
   platform: [
@@ -89,6 +90,14 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* Instagram */}
+          <div>
+            <h4 className="font-display text-sm font-semibold tracking-wide text-primary-foreground mb-6 uppercase">
+              Instagram
+            </h4>
+            <InstagramSection />
           </div>
         </div>
 
