@@ -89,8 +89,8 @@ export default function ProfilePreview({ cv, open, onOpenChange }: Props) {
               </p>
             )}
 
-            {/* Contact Email */}
-            {cv.contact_email && (
+            {/* Contact Email - only shown if user opted in */}
+            {cv.contact_email && cv.show_email_publicly && (
               <a
                 href={`mailto:${cv.contact_email}`}
                 className={`inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full text-sm font-medium transition-colors ${

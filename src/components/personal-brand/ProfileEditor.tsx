@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { DigitalCV } from "@/pages/app/PersonalBrandBuilder";
-import { Upload, X, Plus } from "lucide-react";
+import { Upload, X, Plus, AlertTriangle } from "lucide-react";
 
 interface Props {
   cv: DigitalCV;
@@ -156,6 +157,33 @@ export default function ProfileEditor({ cv, setCV, userId }: Props) {
             placeholder="you@example.com"
             className="mt-1.5"
           />
+          
+          {/* Public email opt-in toggle */}
+          <div className="mt-4 p-4 bg-muted/50 rounded-lg border border-border">
+            <div className="flex items-start gap-3">
+              <Switch
+                id="show_email_publicly"
+                checked={cv.show_email_publicly}
+                onCheckedChange={(checked) => 
+                  setCV(prev => prev ? { ...prev, show_email_publicly: checked } : null)
+                }
+              />
+              <div className="flex-1">
+                <Label htmlFor="show_email_publicly" className="font-medium cursor-pointer">
+                  Show email on public profile
+                </Label>
+                <p className="text-xs text-muted-foreground mt-1">
+                  When enabled, visitors can see your email and use the "Contact Me" button.
+                </p>
+                {cv.show_email_publicly && (
+                  <div className="flex items-center gap-1.5 mt-2 text-xs text-amber-600">
+                    <AlertTriangle className="h-3 w-3" />
+                    <span>Your email will be visible to anyone on the internet</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div>

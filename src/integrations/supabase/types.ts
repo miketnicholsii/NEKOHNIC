@@ -93,6 +93,7 @@ export type Database = {
           projects: Json | null
           seo_description: string | null
           seo_title: string | null
+          show_email_publicly: boolean
           skills: string[] | null
           slug: string | null
           social_image_url: string | null
@@ -112,6 +113,7 @@ export type Database = {
           projects?: Json | null
           seo_description?: string | null
           seo_title?: string | null
+          show_email_publicly?: boolean
           skills?: string[] | null
           slug?: string | null
           social_image_url?: string | null
@@ -131,6 +133,7 @@ export type Database = {
           projects?: Json | null
           seo_description?: string | null
           seo_title?: string | null
+          show_email_publicly?: boolean
           skills?: string[] | null
           slug?: string | null
           social_image_url?: string | null

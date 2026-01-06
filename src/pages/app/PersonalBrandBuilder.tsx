@@ -32,6 +32,7 @@ export interface DigitalCV {
   projects: Project[] | null;
   links: SocialLink[] | null;
   contact_email: string | null;
+  show_email_publicly: boolean;
   goals: string | null;
   seo_title: string | null;
   seo_description: string | null;
@@ -91,6 +92,7 @@ export default function PersonalBrandBuilder() {
           ...data,
           projects,
           links,
+          show_email_publicly: data.show_email_publicly ?? false,
         });
       } else {
         // Create initial CV record
@@ -104,6 +106,7 @@ export default function PersonalBrandBuilder() {
           links: [],
           template: "default",
           is_published: false,
+          show_email_publicly: false,
         };
 
         const { data: newCV, error: insertError } = await supabase
@@ -117,6 +120,7 @@ export default function PersonalBrandBuilder() {
           ...newCV,
           projects: [],
           links: [],
+          show_email_publicly: false,
         });
       }
     } catch (error) {
@@ -142,6 +146,7 @@ export default function PersonalBrandBuilder() {
           projects: JSON.parse(JSON.stringify(cv.projects || [])),
           links: JSON.parse(JSON.stringify(cv.links || [])),
           contact_email: cv.contact_email,
+          show_email_publicly: cv.show_email_publicly,
           goals: cv.goals,
           seo_title: cv.seo_title,
           seo_description: cv.seo_description,

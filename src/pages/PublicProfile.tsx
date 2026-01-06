@@ -40,6 +40,7 @@ interface DigitalCV {
   projects: Project[] | null;
   links: SocialLink[] | null;
   contact_email: string | null;
+  show_email_publicly: boolean;
   goals: string | null;
   seo_title: string | null;
   seo_description: string | null;
@@ -90,6 +91,7 @@ export default function PublicProfile() {
             ...data,
             projects,
             links,
+            show_email_publicly: data.show_email_publicly ?? false,
           });
         } else {
           setNotFound(true);
@@ -205,8 +207,8 @@ export default function PublicProfile() {
               </p>
             )}
 
-            {/* Contact Email */}
-            {cv.contact_email && (
+            {/* Contact Email - only shown if user opted in */}
+            {cv.contact_email && cv.show_email_publicly && (
               <a
                 href={`mailto:${cv.contact_email}`}
                 className={`inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-full font-medium transition-colors ${
