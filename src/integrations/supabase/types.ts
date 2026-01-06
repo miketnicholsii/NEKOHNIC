@@ -493,6 +493,54 @@ export type Database = {
         }
         Relationships: []
       }
+      user_tasks: {
+        Row: {
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          module: string | null
+          priority: string | null
+          status: string
+          step: string | null
+          title: string
+          trello_card_id: string | null
+          trello_synced_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          module?: string | null
+          priority?: string | null
+          status?: string
+          step?: string | null
+          title: string
+          trello_card_id?: string | null
+          trello_synced_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          module?: string | null
+          priority?: string | null
+          status?: string
+          step?: string | null
+          title?: string
+          trello_card_id?: string | null
+          trello_synced_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
