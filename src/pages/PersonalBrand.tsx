@@ -141,20 +141,20 @@ export default function PersonalBrand() {
                 <div className="p-8 rounded-2xl bg-card border border-border shadow-lg">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-display font-bold text-xl">
-                      JD
+                      <User className="h-8 w-8" />
                     </div>
                     <div>
-                      <h3 className="font-display font-bold text-lg">Jane Doe</h3>
-                      <p className="text-sm text-muted-foreground">Founder & Creative Director</p>
+                      <h3 className="font-display font-bold text-lg">Your Name</h3>
+                      <p className="text-sm text-muted-foreground">Your Title & Role</p>
                     </div>
                   </div>
                   
                   <p className="text-muted-foreground mb-6 leading-relaxed">
-                    Building products at the intersection of design and technology. Passionate about creating experiences that matter.
+                    Share your unique story, expertise, and the value you bring. Make every word count.
                   </p>
 
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {["Product Design", "Brand Strategy", "Startup Advisor"].map((tag) => (
+                    {["Your Skills", "Your Expertise", "Your Focus"].map((tag) => (
                       <span 
                         key={tag}
                         className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary"
@@ -167,11 +167,11 @@ export default function PersonalBrand() {
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <Globe className="h-4 w-4" />
-                      janedoe.com
+                      yoursite.com
                     </div>
                     <div className="flex items-center gap-2">
                       <Mail className="h-4 w-4" />
-                      hello@janedoe.com
+                      you@email.com
                     </div>
                   </div>
                 </div>
