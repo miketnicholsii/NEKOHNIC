@@ -3,8 +3,8 @@ import { Instagram } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 
-const INSTAGRAM_URL = "https://www.instagram.com/hellneko.co";
-const INSTAGRAM_HANDLE = "@hellneko.co";
+const INSTAGRAM_URL = "https://www.instagram.com/helloneko.co";
+const INSTAGRAM_HANDLE = "@helloneko.co";
 
 interface InstagramData {
   followers: number | null;
