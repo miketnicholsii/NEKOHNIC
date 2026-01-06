@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/hooks/use-auth";
 
 // Public pages
@@ -14,6 +15,7 @@ import Pricing from "./pages/Pricing";
 import GetStarted from "./pages/GetStarted";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import PublicProfile from "./pages/PublicProfile";
 
 // Auth pages
 import Login from "./pages/Login";
@@ -46,15 +48,16 @@ import AdminAnnouncements from "./pages/admin/AdminAnnouncements";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<Index />} />
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <AuthProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              {/* Public routes */}
+              <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/personal-brand" element={<PersonalBrand />} />
@@ -92,6 +95,9 @@ const App = () => (
               <Route path="announcements" element={<AdminAnnouncements />} />
             </Route>
             
+            {/* Public profile route */}
+            <Route path="/p/:slug" element={<PublicProfile />} />
+            
             {/* Fallback */}
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -99,6 +105,6 @@ const App = () => (
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
+  </HelmetProvider>
 );
-
 export default App;
