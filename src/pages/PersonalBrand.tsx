@@ -108,7 +108,7 @@ export default function PersonalBrand() {
       {/* What is a Digital CV */}
       <section className="py-20 lg:py-32 bg-muted/30">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="max-w-3xl">
             <AnimatedSection direction="left">
               <SectionHeading
                 label="What is a Digital CV?"
@@ -136,50 +136,6 @@ export default function PersonalBrand() {
             </AnimatedSection>
 
             {/* Preview Card */}
-            <AnimatedSection direction="right" delay={0.2}>
-              <div className="relative">
-                <div className="p-8 rounded-2xl bg-card border border-border shadow-lg">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-display font-bold text-xl">
-                      <User className="h-8 w-8" />
-                    </div>
-                    <div>
-                      <h3 className="font-display font-bold text-lg">Your Name</h3>
-                      <p className="text-sm text-muted-foreground">Your Title & Role</p>
-                    </div>
-                  </div>
-                  
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
-                    Share your unique story, expertise, and the value you bring. Make every word count.
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {["Your Skills", "Your Expertise", "Your Focus"].map((tag) => (
-                      <span 
-                        key={tag}
-                        className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <Globe className="h-4 w-4" />
-                      yoursite.com
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Mail className="h-4 w-4" />
-                      you@email.com
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/10 rounded-2xl -z-10" />
-                <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-secondary/10 rounded-2xl -z-10" />
-              </div>
-            </AnimatedSection>
           </div>
         </div>
       </section>
