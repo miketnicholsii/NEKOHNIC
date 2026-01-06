@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Navbar } from "@/components/Navbar";
+import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Button } from "@/components/ui/button";
@@ -33,7 +33,7 @@ const values = [
 export default function About() {
   return (
     <main className="min-h-screen">
-      <Navbar />
+      <EccentricNavbar />
 
       {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-center justify-center bg-gradient-hero overflow-hidden">

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Navbar } from "@/components/Navbar";
+import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { FeatureCard } from "@/components/FeatureCard";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -90,7 +90,7 @@ export default function Index() {
 
   return (
     <main className="min-h-screen overflow-x-hidden">
-      <Navbar />
+      <EccentricNavbar />
       
       {/* Hero Section */}
       <section className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-16 sm:pt-0 sm:pb-0">

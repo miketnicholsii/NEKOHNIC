@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Navbar } from "@/components/Navbar";
+import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Button } from "@/components/ui/button";
@@ -79,7 +79,7 @@ const benefits = [
 export default function PersonalBrand() {
   return (
     <main className="min-h-screen bg-background">
-      <Navbar />
+      <EccentricNavbar />
 
       {/* Hero */}
       <section className="pt-32 pb-20 bg-background">

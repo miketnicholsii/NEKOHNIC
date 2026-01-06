@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/Navbar";
+import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
 
@@ -104,7 +104,7 @@ Email: hello@helloneko.co`,
 export default function Terms() {
   return (
     <main className="min-h-screen bg-background">
-      <Navbar />
+      <EccentricNavbar />
 
       {/* Hero */}
       <section className="pt-28 sm:pt-32 pb-8 sm:pb-12 bg-muted/30">

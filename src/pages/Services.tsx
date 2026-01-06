@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Navbar } from "@/components/Navbar";
+import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
 import { TierCard } from "@/components/TierCard";
@@ -114,7 +114,7 @@ const legitimacySteps = [
 export default function Services() {
   return (
     <main className="min-h-screen bg-background">
-      <Navbar />
+      <EccentricNavbar />
 
       {/* Hero */}
       <section className="pt-32 pb-20 bg-background">

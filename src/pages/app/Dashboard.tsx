@@ -6,12 +6,12 @@ import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ProductOverview from "@/components/dashboard/ProductOverview";
 import NextSteps from "@/components/dashboard/NextSteps";
 import TaskManager from "@/components/dashboard/TaskManager";
 import TrelloIntegration from "@/components/dashboard/TrelloIntegration";
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import TierProgress from "@/components/dashboard/TierProgress";
+import FullProductSuite from "@/components/dashboard/FullProductSuite";
 import {
   ArrowRight,
   Crown,
@@ -19,6 +19,7 @@ import {
   ListChecks,
   BookOpen,
   BarChart3,
+  Sparkles,
 } from "lucide-react";
 
 export default function Dashboard() {
@@ -125,18 +126,13 @@ export default function Dashboard() {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="mt-0 space-y-6">
-          <div className="grid lg:grid-cols-[1fr_360px] gap-6">
-            {/* Main Content */}
-            <div className="space-y-6">
-              <ProductOverview />
-            </div>
-
-            {/* Sidebar */}
-            <div className="space-y-6">
-              <TierProgress />
-              <NextSteps />
-              <TrelloIntegration />
-            </div>
+          <FullProductSuite />
+          
+          {/* Sidebar content for additional info */}
+          <div className="grid lg:grid-cols-3 gap-6">
+            <TierProgress />
+            <NextSteps />
+            <TrelloIntegration />
           </div>
         </TabsContent>
 
