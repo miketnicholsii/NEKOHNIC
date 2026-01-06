@@ -82,13 +82,18 @@ export const PricingCard = memo(function PricingCard({
 
     setIsLoading(true);
     try {
+      // Get promo code from localStorage if available
+      const promoCode = localStorage.getItem("appliedPromoCode");
+      
       const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { tier: tierKey },
+        body: { tier: tierKey, promoCode: promoCode || undefined },
       });
       
       if (error) throw error;
       
       if (data?.url) {
+        // Clear promo code after successful checkout initiation
+        localStorage.removeItem("appliedPromoCode");
         window.open(data.url, "_blank");
       }
     } catch {
