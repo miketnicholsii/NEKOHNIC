@@ -1,6 +1,5 @@
 import { useState, useEffect, memo } from "react";
 import { Instagram } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 
@@ -73,7 +72,7 @@ export const InstagramSection = memo(function InstagramSection() {
 
   return (
     <motion.div 
-      className="flex flex-col items-start gap-4"
+      className="flex flex-col items-start gap-2"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
@@ -104,21 +103,6 @@ export const InstagramSection = memo(function InstagramSection() {
           </motion.span>
         ) : null}
       </a>
-
-      <Button
-        asChild
-        variant="outline"
-        size="sm"
-        className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
-      >
-        <a
-          href={INSTAGRAM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Follow
-        </a>
-      </Button>
     </motion.div>
   );
 });
