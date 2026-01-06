@@ -98,84 +98,115 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen bg-muted/30 flex">
+      {/* Skip to main content link for accessibility */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg"
+      >
+        Skip to main content
+      </a>
+
       {/* Sidebar */}
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transform transition-transform duration-300 lg:translate-x-0 lg:static",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
+        role="navigation"
+        aria-label="Main navigation"
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-6 border-b border-border">
             <div className="flex items-center justify-between">
-              <Link to="/app" className="font-display text-xl font-bold tracking-display text-foreground">
+              <Link 
+                to="/app" 
+                className="font-display text-xl font-bold tracking-display text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded"
+                aria-label="NÈKO Dashboard Home"
+              >
                 NÈKO.
               </Link>
               <button
                 onClick={() => setSidebarOpen(false)}
-                className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
+                className="lg:hidden p-2 text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                aria-label="Close navigation menu"
               >
-                <X className="h-5 w-5" />
+                <X className="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
           </div>
 
           {/* Nav */}
-          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setSidebarOpen(false)}
-                className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                  isActive(item.href, item.exact)
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                )}
-              >
-                <item.icon className="h-5 w-5" />
-                {item.label}
-              </Link>
-            ))}
+          <nav className="flex-1 p-4 space-y-1 overflow-y-auto" aria-label="Primary navigation">
+            <ul role="list">
+              {navItems.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    to={item.href}
+                    onClick={() => setSidebarOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring",
+                      isActive(item.href, item.exact)
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    )}
+                    aria-current={isActive(item.href, item.exact) ? "page" : undefined}
+                    aria-label={item.label}
+                  >
+                    <item.icon className="h-5 w-5" aria-hidden="true" />
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
             
             {/* Admin link if user is admin */}
             {isAdmin && (
-              <Link
-                to="/admin"
-                onClick={() => setSidebarOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted mt-4 border-t border-border pt-4"
-              >
-                <Crown className="h-5 w-5" />
-                Admin Panel
-              </Link>
+              <div className="mt-4 pt-4 border-t border-border">
+                <Link
+                  to="/admin"
+                  onClick={() => setSidebarOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring"
+                  aria-label="Admin Panel"
+                >
+                  <Crown className="h-5 w-5" aria-hidden="true" />
+                  Admin Panel
+                </Link>
+              </div>
             )}
           </nav>
 
           {/* Bottom Nav */}
           <div className="p-4 space-y-1 border-t border-border">
-            {bottomNavItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setSidebarOpen(false)}
-                className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                  isActive(item.href)
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                )}
-              >
-                <item.icon className="h-5 w-5" />
-                {item.label}
-              </Link>
-            ))}
+            <nav aria-label="Secondary navigation">
+              <ul role="list">
+                {bottomNavItems.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      to={item.href}
+                      onClick={() => setSidebarOpen(false)}
+                      className={cn(
+                        "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring",
+                        isActive(item.href)
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      )}
+                      aria-current={isActive(item.href) ? "page" : undefined}
+                      aria-label={item.label}
+                    >
+                      <item.icon className="h-5 w-5" aria-hidden="true" />
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted w-full"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted w-full focus:outline-none focus:ring-2 focus:ring-ring"
+              aria-label="Sign out of your account"
             >
-              <LogOut className="h-5 w-5" />
+              <LogOut className="h-5 w-5" aria-hidden="true" />
               Sign Out
             </button>
           </div>
@@ -187,29 +218,36 @@ export default function AppLayout() {
         <div
           className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
+          role="button"
+          tabIndex={0}
+          aria-label="Close navigation menu"
+          onKeyDown={(e) => e.key === 'Escape' && setSidebarOpen(false)}
         />
       )}
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Top Bar */}
-        <header className="sticky top-0 z-30 bg-card/80 backdrop-blur-xl border-b border-border">
+        <header className="sticky top-0 z-30 bg-card/80 backdrop-blur-xl border-b border-border" role="banner">
           <div className="flex items-center justify-between px-4 sm:px-6 h-16">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
+                className="lg:hidden p-2 text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                aria-label="Open navigation menu"
+                aria-expanded={sidebarOpen}
+                aria-controls="sidebar-navigation"
               >
-                <Menu className="h-5 w-5" />
+                <Menu className="h-5 w-5" aria-hidden="true" />
               </button>
               
               {/* Breadcrumb */}
-              <nav className="hidden sm:flex items-center gap-1 text-sm text-muted-foreground">
+              <nav className="hidden sm:flex items-center gap-1 text-sm text-muted-foreground" aria-label="Breadcrumb">
                 <span>Dashboard</span>
                 {location.pathname !== "/app" && (
                   <>
-                    <ChevronRight className="h-4 w-4" />
-                    <span className="text-foreground font-medium">
+                    <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                    <span className="text-foreground font-medium" aria-current="page">
                       {navItems.find((item) => isActive(item.href, item.exact))?.label ||
                         bottomNavItems.find((item) => isActive(item.href))?.label ||
                         "Page"}
@@ -223,9 +261,10 @@ export default function AppLayout() {
               {/* Plan Badge */}
               <Link 
                 to="/app/account"
-                className={cn("px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 hover:opacity-80 transition-opacity", currentPlan.color)}
+                className={cn("px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-ring", currentPlan.color)}
+                aria-label={`Current plan: ${SUBSCRIPTION_TIERS[subscription.tier].name}. Click to manage subscription.`}
               >
-                <PlanIcon className="h-3.5 w-3.5" />
+                <PlanIcon className="h-3.5 w-3.5" aria-hidden="true" />
                 {SUBSCRIPTION_TIERS[subscription.tier].name}
               </Link>
 
@@ -237,8 +276,12 @@ export default function AppLayout() {
                   </p>
                   <p className="text-xs text-muted-foreground">{user.email}</p>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-sm font-semibold text-primary">
+                <div 
+                  className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center"
+                  role="img"
+                  aria-label={`Avatar for ${user.user_metadata?.full_name || user.email}`}
+                >
+                  <span className="text-sm font-semibold text-primary" aria-hidden="true">
                     {(user.user_metadata?.full_name?.[0] || user.email?.[0] || "U").toUpperCase()}
                   </span>
                 </div>
@@ -248,7 +291,7 @@ export default function AppLayout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+        <main id="main-content" className="flex-1 p-4 sm:p-6 lg:p-8" tabIndex={-1}>
           <Outlet />
         </main>
       </div>

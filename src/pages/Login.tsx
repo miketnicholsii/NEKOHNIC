@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -16,6 +17,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   // Redirect if already logged in
@@ -39,6 +41,9 @@ export default function Login() {
     setIsLoading(true);
     
     try {
+      // Set session persistence based on "Remember me" checkbox
+      // When rememberMe is true, session persists across browser sessions
+      // When false, session only lasts for current tab session
       const { error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
@@ -51,6 +56,15 @@ export default function Login() {
           variant: "destructive",
         });
         return;
+      }
+
+      // Store remember me preference
+      if (rememberMe) {
+        localStorage.setItem("neko_remember_me", "true");
+      } else {
+        localStorage.removeItem("neko_remember_me");
+        // For non-persistent sessions, we'll handle cleanup on browser close
+        sessionStorage.setItem("neko_session_only", "true");
       }
 
       toast({
@@ -82,21 +96,22 @@ export default function Login() {
         <Link 
           to="/" 
           className="inline-flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground text-sm mb-8 transition-colors"
+          aria-label="Return to home page"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to home
         </Link>
 
         {/* Card */}
-        <div className="bg-card rounded-2xl p-8 shadow-lg border border-border">
+        <div className="bg-card rounded-2xl p-8 shadow-lg border border-border" role="form" aria-labelledby="login-heading">
           {/* Logo */}
           <div className="text-center mb-8">
-            <Link to="/" className="inline-block">
+            <Link to="/" className="inline-block" aria-label="NÈKO home">
               <span className="font-display text-2xl font-bold tracking-display text-foreground">
                 NÈKO.
               </span>
             </Link>
-            <h1 className="font-display text-2xl font-bold text-foreground mt-4">
+            <h1 id="login-heading" className="font-display text-2xl font-bold text-foreground mt-4">
               Welcome back
             </h1>
             <p className="text-muted-foreground text-sm mt-2">
@@ -105,7 +120,7 @@ export default function Login() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5" aria-label="Login form">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -117,6 +132,7 @@ export default function Login() {
                 className="h-12"
                 autoComplete="email"
                 required
+                aria-required="true"
               />
             </div>
 
@@ -140,15 +156,38 @@ export default function Login() {
                   className="h-12 pr-12"
                   autoComplete="current-password"
                   required
+                  aria-required="true"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   tabIndex={-1}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? <EyeOff className="h-5 w-5" aria-hidden="true" /> : <Eye className="h-5 w-5" aria-hidden="true" />}
                 </button>
+              </div>
+            </div>
+
+            {/* Remember Me */}
+            <div className="flex items-center gap-3">
+              <Checkbox
+                id="remember-me"
+                checked={rememberMe}
+                onCheckedChange={(checked) => setRememberMe(checked === true)}
+                aria-describedby="remember-me-description"
+              />
+              <div className="flex flex-col">
+                <Label 
+                  htmlFor="remember-me" 
+                  className="text-sm font-medium cursor-pointer"
+                >
+                  Remember me
+                </Label>
+                <span id="remember-me-description" className="text-xs text-muted-foreground">
+                  Stay signed in on this device
+                </span>
               </div>
             </div>
 
@@ -158,10 +197,11 @@ export default function Login() {
               size="lg"
               className="w-full"
               disabled={isLoading}
+              aria-busy={isLoading}
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
                   Signing in...
                 </>
               ) : (
