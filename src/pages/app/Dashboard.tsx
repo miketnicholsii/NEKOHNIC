@@ -12,6 +12,7 @@ import TrelloIntegration from "@/components/dashboard/TrelloIntegration";
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import TierProgress from "@/components/dashboard/TierProgress";
 import FullProductSuite from "@/components/dashboard/FullProductSuite";
+import AchievementsPreview from "@/components/dashboard/AchievementsPreview";
 import {
   ArrowRight,
   Crown,
@@ -19,7 +20,7 @@ import {
   ListChecks,
   BookOpen,
   BarChart3,
-  Sparkles,
+  Trophy,
 } from "lucide-react";
 
 export default function Dashboard() {
@@ -128,8 +129,9 @@ export default function Dashboard() {
         <TabsContent value="overview" className="mt-0 space-y-6">
           <FullProductSuite />
           
-          {/* Sidebar content for additional info */}
-          <div className="grid lg:grid-cols-3 gap-6">
+          {/* Bottom cards grid */}
+          <div className="grid lg:grid-cols-4 gap-6">
+            <AchievementsPreview />
             <TierProgress />
             <NextSteps />
             <TrelloIntegration />
