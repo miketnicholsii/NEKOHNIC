@@ -43,7 +43,7 @@ const planBadges: Record<string, { label: string; color: string; icon?: typeof S
 export default function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, isLoading, subscription, isAdmin, signOut } = useAuth();
+  const { user, isLoading, profile, subscription, isAdmin, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -51,6 +51,19 @@ export default function AppLayout() {
       navigate("/login");
     }
   }, [isLoading, user, navigate]);
+
+  // Redirect to onboarding if not completed (but not if already on onboarding page)
+  useEffect(() => {
+    if (
+      !isLoading && 
+      user && 
+      profile !== null && 
+      !profile.onboarding_completed && 
+      location.pathname !== "/app/onboarding"
+    ) {
+      navigate("/app/onboarding");
+    }
+  }, [isLoading, user, profile, location.pathname, navigate]);
 
   const handleSignOut = async () => {
     await signOut();
