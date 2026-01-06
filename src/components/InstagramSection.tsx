@@ -3,6 +3,7 @@ import { Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
+import { motion } from "framer-motion";
 
 const INSTAGRAM_URL = "https://www.instagram.com/hellneko.co";
 const INSTAGRAM_HANDLE = "@hellneko.co";
@@ -39,16 +40,21 @@ export function InstagramSection() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <motion.div 
+      className="flex flex-col items-start gap-4"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
       <a
         href={INSTAGRAM_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex flex-col items-center gap-3 transition-opacity hover:opacity-80"
+        className="group flex flex-col items-start gap-2 transition-opacity hover:opacity-80"
       >
         <div className="flex items-center gap-3">
           <Instagram className="h-5 w-5 text-primary-foreground/80" />
-          <span className="font-display text-lg tracking-wide text-primary-foreground">
+          <span className="font-display text-base tracking-wide text-primary-foreground">
             {INSTAGRAM_HANDLE}
           </span>
         </div>
@@ -56,9 +62,14 @@ export function InstagramSection() {
         {loading ? (
           <Skeleton className="h-4 w-20 bg-primary-foreground/10" />
         ) : data?.formatted ? (
-          <span className="text-sm text-primary-foreground/50">
+          <motion.span 
+            className="text-sm text-primary-foreground/50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
             {data.formatted} followers
-          </span>
+          </motion.span>
         ) : null}
       </a>
 
@@ -66,7 +77,7 @@ export function InstagramSection() {
         asChild
         variant="outline"
         size="sm"
-        className="mt-2 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+        className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
       >
         <a
           href={INSTAGRAM_URL}
@@ -76,7 +87,7 @@ export function InstagramSection() {
           Follow
         </a>
       </Button>
-    </div>
+    </motion.div>
   );
 }
 
