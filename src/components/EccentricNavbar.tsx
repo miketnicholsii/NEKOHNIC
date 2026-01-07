@@ -68,12 +68,20 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
         <div className={`absolute inset-0 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" : isHeroPage ? "bg-transparent" : "bg-background/90 backdrop-blur-lg border-b border-border/50"}`} />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-between h-11 lg:h-12">
-            <Link to="/" className="flex items-center relative z-10 flex-shrink-0">
-              <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
+            {/* Left side - Logo (fixed width to balance right side) */}
+            <div className="hidden lg:flex items-center w-56 flex-shrink-0">
+              <Link to="/" className="flex items-center relative z-10">
+                <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
+              </Link>
+            </div>
+            
+            {/* Mobile logo */}
+            <Link to="/" className="flex lg:hidden items-center relative z-10 flex-shrink-0">
+              <span className={`font-display text-xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
             </Link>
 
             {/* Centered navigation */}
-            <div className="hidden lg:flex items-center justify-center flex-1">
+            <div className="hidden lg:flex items-center justify-center">
               <div className="flex items-center gap-0.5 px-1.5 py-1 rounded-full" style={{ background: showDarkText ? "hsl(var(--muted) / 0.5)" : "hsl(0 0% 100% / 0.1)", backdropFilter: "blur(8px)" }}>
                 {navLinks.map((link) => (
                   <NavPill key={link.href} href={link.href} label={link.label} isActive={location.pathname === link.href} showDarkText={showDarkText} />
@@ -81,7 +89,8 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
               </div>
             </div>
 
-            <div className="hidden lg:flex items-center gap-3 relative z-10 flex-shrink-0">
+            {/* Right side - CTAs (fixed width to balance left side) */}
+            <div className="hidden lg:flex items-center justify-end gap-4 min-w-fit flex-shrink-0 relative z-10">
               {user ? (
                 <Link to="/app">
                   <Button variant="cta" size="default" className="shadow-md">
@@ -94,12 +103,12 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                 <>
                   <Link 
                     to="/login" 
-                    className={`text-sm font-medium transition-colors hover:opacity-80 ${showDarkText ? "text-muted-foreground hover:text-foreground" : "text-white/70 hover:text-white"}`}
+                    className={`text-sm font-medium whitespace-nowrap transition-colors hover:opacity-80 ${showDarkText ? "text-muted-foreground hover:text-foreground" : "text-white/70 hover:text-white"}`}
                   >
                     Member Login
                   </Link>
                   <Link to="/contact">
-                    <Button variant="cta" size="default" className="shadow-md">
+                    <Button variant="cta" size="default" className="shadow-md whitespace-nowrap">
                       <span className="flex items-center gap-1.5">
                         <Sparkles className="h-4 w-4" /> Get in Touch
                       </span>
