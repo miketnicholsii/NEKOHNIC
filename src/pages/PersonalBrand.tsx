@@ -243,18 +243,18 @@ export default function PersonalBrand() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 lg:py-28 bg-tertiary">
+      <section className="py-20 lg:py-24 bg-tertiary">
         <div className="container mx-auto px-6 lg:px-8 text-center">
           <AnimatedSection>
             <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
               Hello, NÈKO.
             </h2>
-            <p className="text-lg text-primary-foreground/60 mb-10 max-w-xl mx-auto">
-              The moment where intent becomes action.
+            <p className="text-lg text-primary-foreground/60 mb-10 max-w-md mx-auto">
+              Ready to start? All you have to do is say hello.
             </p>
             <Link to="/contact">
               <Button variant="hero" size="xl" className="group">
-                Start Your Journey
+                Say Hello
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>

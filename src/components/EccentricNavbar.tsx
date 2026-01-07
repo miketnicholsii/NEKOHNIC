@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, memo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 
@@ -109,9 +109,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                   </Link>
                   <Link to="/contact">
                     <Button variant="cta" size="default" className="shadow-md whitespace-nowrap">
-                      <span className="flex items-center gap-1.5">
-                        <Sparkles className="h-4 w-4" /> Get in Touch
-                      </span>
+                      Say Hello
                     </Button>
                   </Link>
                 </>
@@ -146,7 +144,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                   ) : (
                     <>
                       <Link to="/contact" onClick={closeMenu}>
-                        <Button variant="cta" size="lg" className="w-full">Get in Touch</Button>
+                        <Button variant="cta" size="lg" className="w-full">Say Hello</Button>
                       </Link>
                       <Link 
                         to="/login" 
