@@ -213,19 +213,19 @@ export default function Login() {
           {/* Footer */}
           <p className="text-center text-sm text-muted-foreground mt-6">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-primary font-medium hover:underline">
-              Sign up
+            <Link to="/contact" className="text-primary font-medium hover:underline">
+              Request an Invite
             </Link>
           </p>
         </div>
 
-        {/* Demo hint */}
+        {/* Invite hint */}
         <div className="mt-6 p-4 rounded-xl bg-primary-foreground/5 border border-primary-foreground/10 backdrop-blur-sm">
           <p className="text-xs text-primary-foreground/60 text-center mb-2 font-medium">
-            Want to test the platform?
+            NÈKO is invite-only
           </p>
           <p className="text-xs text-primary-foreground/50 text-center">
-            Create a free account to explore. Auto-confirm is enabled for easy testing.
+            Get in touch to learn more about our services and request access.
           </p>
         </div>
       </motion.div>
