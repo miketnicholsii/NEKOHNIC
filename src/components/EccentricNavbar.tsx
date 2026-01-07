@@ -60,8 +60,6 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
   const closeMenu = useCallback(() => setIsOpen(false), []);
 
   const isHeroPage = location.pathname === "/" || location.pathname === "/about";
-  const ctaHref = user ? "/app" : "/signup";
-  const ctaLabel = user ? "Dashboard" : "Get Started";
   const showDarkText = !isHeroPage || isScrolled;
 
   return (
@@ -81,18 +79,23 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
             </div>
 
             <div className="hidden lg:flex items-center gap-2.5 relative z-10">
-              {!user && (
+              {!user ? (
                 <Link to="/login">
-                  <Button variant="ghost" size="sm" className={`transition-colors duration-200 ${!showDarkText ? "text-white hover:text-white hover:bg-white/10" : ""}`}>Log In</Button>
+                  <Button variant="cta" size="default" className="shadow-md">
+                    <span className="flex items-center gap-1.5">
+                      <Sparkles className="h-4 w-4" /> Member Access
+                    </span>
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/app">
+                  <Button variant="cta" size="default" className="shadow-md">
+                    <span className="flex items-center gap-1.5">
+                      Dashboard <ArrowRight className="h-4 w-4" />
+                    </span>
+                  </Button>
                 </Link>
               )}
-              <Link to={ctaHref}>
-                <Button variant="cta" size="default" className="shadow-md">
-                  <span className="flex items-center gap-1.5">
-                    {user ? <>Dashboard <ArrowRight className="h-4 w-4" /></> : <><Sparkles className="h-4 w-4" /> Get Started</>}
-                  </span>
-                </Button>
-              </Link>
             </div>
 
             <button className={`lg:hidden p-2 rounded-lg transition-colors relative z-10 ${showDarkText ? "text-foreground hover:bg-muted" : "text-white hover:bg-white/10"}`} onClick={toggleMenu} aria-label="Toggle menu" aria-expanded={isOpen}>
@@ -116,14 +119,15 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                   ))}
                 </nav>
                 <div className="space-y-2.5 pt-4 border-t border-border">
-                  {!user && (
+                  {!user ? (
                     <Link to="/login" onClick={closeMenu}>
-                      <Button variant="outline" size="lg" className="w-full">Log In</Button>
+                      <Button variant="cta" size="lg" className="w-full">Member Access</Button>
+                    </Link>
+                  ) : (
+                    <Link to="/app" onClick={closeMenu}>
+                      <Button variant="cta" size="lg" className="w-full">Dashboard</Button>
                     </Link>
                   )}
-                  <Link to={ctaHref} onClick={closeMenu}>
-                    <Button variant="cta" size="lg" className="w-full">{ctaLabel}</Button>
-                  </Link>
                 </div>
               </div>
             </motion.div>
