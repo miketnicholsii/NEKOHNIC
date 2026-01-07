@@ -12,9 +12,7 @@ import {
   Link2, 
   FileText, 
   Layout,
-  Sparkles,
   CheckCircle2,
-  Globe,
   Mail
 } from "lucide-react";
 
@@ -22,22 +20,22 @@ const brandElements = [
   {
     icon: User,
     title: "Your Story",
-    description: "Tell your journey — where you've been, what you've learned, and where you're going.",
+    description: "Where you've been, what you've learned, where you're going.",
   },
   {
     icon: Briefcase,
     title: "Your Skills",
-    description: "Showcase what you bring to the table — your expertise, experience, and unique abilities.",
+    description: "What you bring to the table. Expertise, experience, ability.",
   },
   {
     icon: FileText,
     title: "Your Goals",
-    description: "Share your vision — what you're building and the impact you want to make.",
+    description: "What you're building. The impact you want to make.",
   },
   {
     icon: Link2,
     title: "Your Links",
-    description: "Connect your work — portfolio, projects, social profiles, and contact information.",
+    description: "Portfolio, projects, profiles. Everything in one place.",
   },
 ];
 
@@ -45,35 +43,35 @@ const presencePages = [
   {
     icon: Layout,
     title: "Landing Page",
-    description: "First impressions matter. A clear, compelling introduction to who you are and what you offer.",
+    description: "A clear introduction to who you are and what you offer.",
     template: true,
   },
   {
     icon: User,
     title: "About Page",
-    description: "Your story in depth. Background, journey, values, and what drives you forward.",
+    description: "Your story in depth. Background, journey, values.",
     template: true,
   },
   {
     icon: Briefcase,
     title: "Services Page",
-    description: "What you offer. Clear descriptions of your services, process, and how to work with you.",
+    description: "What you offer. Process. How to work with you.",
     template: true,
   },
   {
     icon: Mail,
     title: "Contact Page",
-    description: "Make it easy. Clear calls-to-action and simple ways for people to reach you.",
+    description: "Clear calls-to-action. Simple ways to reach you.",
     template: true,
   },
 ];
 
 const benefits = [
   "Stand out to clients, partners, and opportunities",
-  "Control your narrative — tell your story your way",
-  "Create a professional first impression online",
-  "Connect all your work and profiles in one place",
-  "Build long-term credibility as you grow",
+  "Control your narrative",
+  "Create a professional first impression",
+  "Connect your work in one place",
+  "Build credibility as you grow",
 ];
 
 export default function PersonalBrand() {
@@ -95,11 +93,9 @@ export default function PersonalBrand() {
             </span>
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tightest text-foreground mb-6">
               Your Digital CV.
-              <br />
-              <span className="text-muted-foreground">Your Story. Your Brand.</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Create a professional personal brand page that showcases your story, work, and credibility — designed to open doors.
+              A professional page that tells your story, showcases your work, and builds credibility.
             </p>
           </motion.div>
         </div>
@@ -112,30 +108,28 @@ export default function PersonalBrand() {
             <AnimatedSection direction="left">
               <SectionHeading
                 label="What is a Digital CV?"
-                title="More than a resume. A professional brand artifact."
-                description="Your Digital CV is a visually appealing, shareable page that tells your story, showcases your skills, and connects people to your work."
+                title="More than a resume."
+                description="A shareable page that tells your story, showcases your skills, and connects people to your work."
               />
 
               <div className="mt-8 space-y-4">
                 <p className="text-muted-foreground leading-relaxed">
-                  This isn't a social network or a generic portfolio template. It's an intentional, modern representation of who you are professionally — designed to build credibility and open doors.
+                  Not a social network. Not a generic template. An intentional representation of who you are professionally.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Whether you're a freelancer pitching clients, a founder seeking partners, or a creator building an audience — your Digital CV is your professional home base.
+                  Whether you're a freelancer, founder, or creator — this is your professional home base.
                 </p>
               </div>
 
               <div className="mt-8">
-                <Link to="/signup">
+                <Link to="/contact">
                   <Button variant="cta" size="lg" className="group">
-                    Create Yours
+                    Get Started
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
               </div>
             </AnimatedSection>
-
-            {/* Preview Card */}
           </div>
         </div>
       </section>
@@ -146,8 +140,8 @@ export default function PersonalBrand() {
           <AnimatedSection>
             <SectionHeading
               label="What's Included"
-              title="Everything your brand needs."
-              description="Your Digital CV brings together the essential elements of a professional personal brand."
+              title="The essentials."
+              description="Everything your professional brand needs in one place."
               centered
               className="mb-16"
             />
@@ -178,7 +172,7 @@ export default function PersonalBrand() {
             <SectionHeading
               label="Web Presence"
               title="Structure for your digital home."
-              description="Beyond your Digital CV, NÈKO provides guidance and templates for building a complete web presence."
+              description="Guidance and templates for building a complete web presence."
               className="mb-12"
             />
           </AnimatedSection>
@@ -210,15 +204,10 @@ export default function PersonalBrand() {
 
           <AnimatedSection delay={0.3} className="mt-10">
             <div className="p-6 rounded-2xl bg-card border border-border max-w-4xl">
-              <div className="flex items-start gap-4">
-                <Sparkles className="h-6 w-6 text-primary flex-shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground mb-2">Structure, Not CMS</p>
-                  <p className="text-muted-foreground leading-relaxed">
-                    NÈKO provides structure, templates, and educational guidance for your web presence — not a full content management system. We help you understand what you need and how to build it.
-                  </p>
-                </div>
-              </div>
+              <p className="font-medium text-foreground mb-2">Structure, not CMS</p>
+              <p className="text-muted-foreground leading-relaxed">
+                We provide templates and guidance — not a full content management system. We help you understand what you need and how to build it.
+              </p>
             </div>
           </AnimatedSection>
         </div>
@@ -254,20 +243,18 @@ export default function PersonalBrand() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 lg:py-32 bg-tertiary">
+      <section className="py-20 lg:py-28 bg-tertiary">
         <div className="container mx-auto px-6 lg:px-8 text-center">
           <AnimatedSection>
-            <SectionHeading
-              label="Ready to Build?"
-              title="Create your Digital CV today."
-              description="Start with our templates and build a professional personal brand that grows with you."
-              centered
-              light
-              className="mb-10"
-            />
-            <Link to="/signup">
+            <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
+              Hello, NÈKO.
+            </h2>
+            <p className="text-lg text-primary-foreground/60 mb-10 max-w-xl mx-auto">
+              The moment where intent becomes action.
+            </p>
+            <Link to="/contact">
               <Button variant="hero" size="xl" className="group">
-                Get Started
+                Start Your Journey
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
