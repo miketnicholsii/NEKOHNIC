@@ -81,7 +81,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
               </div>
             </div>
 
-            <div className="hidden lg:flex items-center gap-2.5 relative z-10 flex-shrink-0">
+            <div className="hidden lg:flex items-center gap-3 relative z-10 flex-shrink-0">
               {user ? (
                 <Link to="/app">
                   <Button variant="cta" size="default" className="shadow-md">
@@ -91,13 +91,21 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                   </Button>
                 </Link>
               ) : (
-                <Link to="/contact">
-                  <Button variant="cta" size="default" className="shadow-md">
-                    <span className="flex items-center gap-1.5">
-                      <Sparkles className="h-4 w-4" /> Get in Touch
-                    </span>
-                  </Button>
-                </Link>
+                <>
+                  <Link 
+                    to="/login" 
+                    className={`text-sm font-medium transition-colors hover:opacity-80 ${showDarkText ? "text-muted-foreground hover:text-foreground" : "text-white/70 hover:text-white"}`}
+                  >
+                    Member Login
+                  </Link>
+                  <Link to="/contact">
+                    <Button variant="cta" size="default" className="shadow-md">
+                      <span className="flex items-center gap-1.5">
+                        <Sparkles className="h-4 w-4" /> Get in Touch
+                      </span>
+                    </Button>
+                  </Link>
+                </>
               )}
             </div>
 
@@ -127,9 +135,18 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                       <Button variant="cta" size="lg" className="w-full">Dashboard</Button>
                     </Link>
                   ) : (
-                    <Link to="/contact" onClick={closeMenu}>
-                      <Button variant="cta" size="lg" className="w-full">Get in Touch</Button>
-                    </Link>
+                    <>
+                      <Link to="/contact" onClick={closeMenu}>
+                        <Button variant="cta" size="lg" className="w-full">Get in Touch</Button>
+                      </Link>
+                      <Link 
+                        to="/login" 
+                        onClick={closeMenu}
+                        className="block text-center text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+                      >
+                        Member Login
+                      </Link>
+                    </>
                   )}
                 </div>
               </div>
