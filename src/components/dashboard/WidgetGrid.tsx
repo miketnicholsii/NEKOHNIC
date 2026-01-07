@@ -30,7 +30,6 @@ import StreakTracker from "./StreakTracker";
 import AchievementsPreview from "./AchievementsPreview";
 import TierProgress from "./TierProgress";
 import NextSteps from "./NextSteps";
-import TrelloIntegration from "./TrelloIntegration";
 import QuickActions from "./QuickActions";
 import {
   Sheet,
@@ -61,8 +60,6 @@ function renderWidget(widgetId: string) {
       return <TierProgress />;
     case "next-steps":
       return <NextSteps />;
-    case "trello":
-      return <TrelloIntegration />;
     case "quick-actions":
       return <QuickActions />;
     default:

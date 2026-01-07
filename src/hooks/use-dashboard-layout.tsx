@@ -63,13 +63,6 @@ export const DASHBOARD_WIDGETS: WidgetConfig[] = [
     minWidth: "sm",
   },
   {
-    id: "trello",
-    title: "Trello Integration",
-    description: "Connect with your Trello boards",
-    defaultVisible: true,
-    minWidth: "full",
-  },
-  {
     id: "quick-actions",
     title: "Quick Actions",
     description: "Shortcuts to common tasks",
