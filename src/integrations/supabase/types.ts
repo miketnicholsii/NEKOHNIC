@@ -642,7 +642,69 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_digital_cv: {
+        Row: {
+          bio: string | null
+          contact_email: string | null
+          created_at: string | null
+          goals: string | null
+          headline: string | null
+          id: string | null
+          is_published: boolean | null
+          links: Json | null
+          projects: Json | null
+          seo_description: string | null
+          seo_title: string | null
+          show_email_publicly: boolean | null
+          skills: string[] | null
+          slug: string | null
+          social_image_url: string | null
+          template: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          bio?: string | null
+          contact_email?: never
+          created_at?: string | null
+          goals?: string | null
+          headline?: string | null
+          id?: string | null
+          is_published?: boolean | null
+          links?: Json | null
+          projects?: Json | null
+          seo_description?: string | null
+          seo_title?: string | null
+          show_email_publicly?: boolean | null
+          skills?: string[] | null
+          slug?: string | null
+          social_image_url?: string | null
+          template?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          bio?: string | null
+          contact_email?: never
+          created_at?: string | null
+          goals?: string | null
+          headline?: string | null
+          id?: string | null
+          is_published?: boolean | null
+          links?: Json | null
+          projects?: Json | null
+          seo_description?: string | null
+          seo_title?: string | null
+          show_email_publicly?: boolean | null
+          skills?: string[] | null
+          slug?: string | null
+          social_image_url?: string | null
+          template?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {

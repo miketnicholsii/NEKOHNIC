@@ -75,9 +75,10 @@ export default function PublicProfile() {
       }
 
       try {
+        // Query public CVs - email exposure is controlled by show_email_publicly flag
         const { data, error } = await supabase
           .from("digital_cv")
-          .select("*")
+          .select("id, slug, headline, bio, goals, skills, links, projects, template, is_published, show_email_publicly, contact_email, seo_title, seo_description, social_image_url, created_at, updated_at")
           .eq("slug", slug)
           .eq("is_published", true)
           .maybeSingle();
@@ -91,6 +92,8 @@ export default function PublicProfile() {
             ...data,
             projects,
             links,
+            // Only expose contact_email if user explicitly consented
+            contact_email: data.show_email_publicly ? data.contact_email : null,
             show_email_publicly: data.show_email_publicly ?? false,
           });
         } else {
