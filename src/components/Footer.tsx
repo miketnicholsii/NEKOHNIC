@@ -11,11 +11,12 @@ const footerLinks = {
   ],
   company: [
     { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" },
+    { href: "/contact", label: "Get in Touch" },
+    { href: "/login", label: "Member Login" },
   ],
   legal: [
-    { href: "/legal/privacy", label: "Privacy Policy" },
-    { href: "/legal/terms", label: "Terms of Service" },
+    { href: "/legal/privacy", label: "Privacy" },
+    { href: "/legal/terms", label: "Terms" },
   ],
 };
 
@@ -36,12 +37,11 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               </span>
             </Link>
             <p className="text-primary-foreground/60 text-sm leading-relaxed max-w-sm mb-6">
-              Your guided operating system for building businesses and personal brands — from idea to scale.
+              A guided operating system for building legitimate businesses and personal brands.
             </p>
-            <div className="flex items-center gap-2 text-xs text-primary-foreground/40 tracking-wider uppercase">
-              <span className="w-8 h-px bg-primary-foreground/20" />
-              Business · Tech · Strategy
-            </div>
+            <p className="text-primary-foreground/40 text-xs leading-relaxed max-w-sm">
+              Structure. Education. Clarity.
+            </p>
           </div>
 
           {/* Platform Links */}
@@ -81,14 +81,15 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                   </Link>
                 </li>
               ))}
+            </ul>
+            <ul className="space-y-3.5 mt-6 pt-6 border-t border-primary-foreground/10">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="group inline-flex items-center gap-1 text-sm text-primary-foreground/60 hover:text-primary transition-colors duration-300"
+                    className="group inline-flex items-center gap-1 text-xs text-primary-foreground/40 hover:text-primary transition-colors duration-300"
                   >
                     {link.label}
-                    <ArrowUpRight className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </Link>
                 </li>
               ))}
@@ -110,11 +111,9 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             <p className="text-xs text-primary-foreground/40 tracking-wide">
               © {new Date().getFullYear()} NÈKO. All rights reserved.
             </p>
-            <div className="flex items-center gap-6">
-              <span className="text-xs text-primary-foreground/40 tracking-wide">
-                Built for founders, by founders.
-              </span>
-            </div>
+            <p className="text-xs text-primary-foreground/40 tracking-wide">
+              Hello, NÈKO.
+            </p>
           </div>
         </div>
       </div>
