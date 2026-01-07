@@ -92,40 +92,47 @@ export default function Index() {
     <main className="min-h-screen overflow-x-hidden">
       <EccentricNavbar />
       
-      {/* Hero Section */}
+      {/* Hero Section - Enhanced with layered depth */}
       <section className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-16 sm:pt-0 sm:pb-0">
         {/* Mesh gradient overlay */}
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
         
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-          {/* Floating orbs */}
-          <div className="absolute top-1/4 left-1/5 w-72 sm:w-96 lg:w-[500px] h-72 sm:h-96 lg:h-[500px] bg-primary-foreground/5 rounded-full blur-3xl motion-safe:animate-float opacity-40 sm:opacity-60" />
-          <div 
-            className="absolute bottom-1/4 right-1/5 w-64 sm:w-80 lg:w-[400px] h-64 sm:h-80 lg:h-[400px] bg-primary-foreground/5 rounded-full blur-3xl motion-safe:animate-float-delayed opacity-40 sm:opacity-60" 
-          />
+        {/* Animated background elements - GPU optimized */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none contain-paint" aria-hidden="true">
+          {/* Primary floating orb */}
+          <div className="absolute top-1/4 left-1/5 w-72 sm:w-96 lg:w-[500px] h-72 sm:h-96 lg:h-[500px] bg-primary-foreground/5 rounded-full blur-3xl motion-safe:animate-float opacity-40 sm:opacity-60 gpu-accelerated" />
           
-          {/* Concentric circles */}
-          <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] lg:w-[700px] h-[500px] lg:h-[700px] border border-primary-foreground/10 rounded-full" />
+          {/* Secondary floating orb */}
+          <div className="absolute bottom-1/4 right-1/5 w-64 sm:w-80 lg:w-[400px] h-64 sm:h-80 lg:h-[400px] bg-primary-foreground/5 rounded-full blur-3xl motion-safe:animate-float-delayed opacity-40 sm:opacity-60 gpu-accelerated" />
+          
+          {/* Subtle morphing shape */}
+          <div className="hidden md:block absolute top-1/3 right-1/4 w-48 lg:w-64 h-48 lg:h-64 bg-primary/10 motion-safe:animate-morph motion-safe:animate-breathe blur-2xl opacity-30" />
+          
+          {/* Concentric circles with subtle pulse */}
+          <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] lg:w-[700px] h-[500px] lg:h-[700px] border border-primary-foreground/10 rounded-full motion-safe:animate-pulse-glow" />
           <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] lg:w-[900px] h-[700px] lg:h-[900px] border border-primary-foreground/5 rounded-full" />
           <div className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1100px] h-[1100px] border border-primary-foreground/[0.03] rounded-full" />
+          
+          {/* Accent glow spots */}
+          <div className="absolute top-1/6 right-1/3 w-32 h-32 bg-primary/20 rounded-full blur-3xl motion-safe:animate-float-slow opacity-50" />
+          <div className="absolute bottom-1/3 left-1/4 w-40 h-40 bg-accent-gold/10 rounded-full blur-3xl motion-safe:animate-breathe opacity-40" />
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="max-w-4xl mx-auto">
-            {/* Badge */}
+            {/* Badge - enhanced entrance */}
             <motion.div 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0 }}
               className="mb-8 sm:mb-10"
             >
-              <span className="inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-primary-foreground/10 backdrop-blur-md border border-primary-foreground/10 text-primary-foreground text-xs sm:text-sm font-medium tracking-wide">
+              <span className="inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-primary-foreground/10 backdrop-blur-md border border-primary-foreground/10 text-primary-foreground text-xs sm:text-sm font-medium tracking-wide shimmer">
                 <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary-foreground/80" />
                 Your Operating System for Success
               </span>
             </motion.div>
 
-            {/* Headline */}
+            {/* Headline - optimized animations */}
             <motion.h1 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0.1 }}
@@ -133,7 +140,14 @@ export default function Index() {
             >
               Build Your Business.
               <br />
-              <span className="text-primary-foreground/70">Build Your Brand.</span>
+              <motion.span 
+                className="text-primary-foreground/70"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.7 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+              >
+                Build Your Brand.
+              </motion.span>
             </motion.h1>
 
             {/* Subheadline */}
@@ -145,53 +159,61 @@ export default function Index() {
               NÈKO is a guided platform for building legitimate businesses and personal brands — from zero to scale — with progress tracking at every step.
             </motion.p>
 
-            {/* CTAs */}
+            {/* CTAs - enhanced hover states */}
             <motion.div 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4 sm:px-0"
             >
               <Link to="/signup" className="w-full sm:w-auto">
-                <Button variant="hero" size="xl" className="w-full sm:w-auto group">
-                  Get Started Free
-                  <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                <Button variant="hero" size="xl" className="w-full sm:w-auto group relative overflow-hidden">
+                  <span className="relative z-10 flex items-center gap-2">
+                    Get Started Free
+                    <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
                 </Button>
               </Link>
               <Link to="/services" className="w-full sm:w-auto">
-                <Button variant="hero-outline" size="xl" className="w-full sm:w-auto">
+                <Button variant="hero-outline" size="xl" className="w-full sm:w-auto backdrop-blur-sm">
                   Explore Services
                 </Button>
               </Link>
             </motion.div>
 
-            {/* Trust indicators */}
+            {/* Trust indicators - staggered entrance */}
             <motion.div 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0.5 }}
               className="flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-8 gap-y-3 mt-12 sm:mt-16 px-4 sm:px-0"
             >
-              {trustIndicators.map((item) => (
-                <div key={item.label} className="flex items-center gap-2 text-primary-foreground/50 text-sm">
+              {trustIndicators.map((item, index) => (
+                <motion.div 
+                  key={item.label} 
+                  className="flex items-center gap-2 text-primary-foreground/50 text-sm"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 + index * 0.1, duration: 0.4 }}
+                >
                   <item.icon className="h-4 w-4 text-primary-foreground/60" />
                   <span className="font-medium">{item.label}</span>
-                </div>
+                </motion.div>
               ))}
             </motion.div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator - refined animation */}
         <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.8 }}
-          className="hidden sm:flex absolute bottom-8 sm:bottom-10 left-1/2 -translate-x-1/2 motion-safe:animate-pulse-soft"
+          className="hidden sm:flex absolute bottom-8 sm:bottom-10 left-1/2 -translate-x-1/2"
           aria-hidden="true"
         >
-          <div className="w-6 h-10 rounded-full border-2 border-primary-foreground/20 flex items-start justify-center p-2">
+          <div className="w-6 h-10 rounded-full border-2 border-primary-foreground/20 flex items-start justify-center p-2 backdrop-blur-sm">
             <motion.div 
               animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: [0.45, 0, 0.55, 1] }}
               className="w-1 h-2 bg-primary-foreground/40 rounded-full" 
             />
           </div>
@@ -236,26 +258,33 @@ export default function Index() {
             <AnimatedSection direction="right" delay={0.15} className="lg:pl-8">
               <div className="p-6 sm:p-8 rounded-3xl bg-card border border-border shadow-lg">
                 <h3 className="font-display font-bold text-lg sm:text-xl mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center glow-ring">
                     <Target className="h-5 w-5 text-primary" aria-hidden="true" />
                   </div>
                   Your Journey
                 </h3>
                 <div className="space-y-5">
                   {journeySteps.map((step, index) => (
-                    <div key={step.step} className="flex items-start gap-4 group">
-                      <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 transition-all duration-300 ${
+                    <motion.div 
+                      key={step.step} 
+                      className="flex items-start gap-4 group"
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1, duration: 0.4 }}
+                    >
+                      <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 transition-all duration-500 ${
                         index === 0 
                           ? "bg-primary text-primary-foreground shadow-glow" 
-                          : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
+                          : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary group-hover:scale-105"
                       }`}>
                         {step.step}
                       </div>
                       <div className="pt-0.5">
-                        <h4 className="font-semibold text-foreground text-sm sm:text-base">{step.title}</h4>
+                        <h4 className="font-semibold text-foreground text-sm sm:text-base transition-colors duration-300 group-hover:text-primary">{step.title}</h4>
                         <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">{step.description}</p>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -291,20 +320,25 @@ export default function Index() {
             ))}
           </AnimatedStagger>
 
-          {/* Additional feature pills */}
+          {/* Additional feature pills - enhanced with stagger */}
           <AnimatedSection delay={0.4} className="mt-14 flex flex-wrap justify-center gap-3">
             {[
               { icon: Globe, label: "Web Presence Guide" },
               { icon: Shield, label: "Legitimacy First" },
               { icon: TrendingUp, label: "Progress Tracking" },
-            ].map((item) => (
-              <div 
+            ].map((item, index) => (
+              <motion.div 
                 key={item.label} 
-                className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-card border border-border text-sm text-muted-foreground hover:border-primary/30 hover:text-foreground transition-all duration-300 cursor-default"
+                className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-card border border-border text-sm text-muted-foreground hover:border-primary/40 hover:text-foreground hover:shadow-md transition-all duration-400 cursor-default group glow-ring"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 + index * 0.1, duration: 0.4 }}
+                whileHover={{ y: -2 }}
               >
-                <item.icon className="h-4 w-4 text-primary" />
+                <item.icon className="h-4 w-4 text-primary transition-transform duration-300 group-hover:scale-110" />
                 <span className="font-medium">{item.label}</span>
-              </div>
+              </motion.div>
             ))}
           </AnimatedSection>
         </div>

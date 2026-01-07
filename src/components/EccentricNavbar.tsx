@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, memo } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Sparkles, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -84,12 +84,9 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
-  // Mouse follower effect
+  // Simplified mouse tracking - removed for performance
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 500, damping: 50 });
-  const springY = useSpring(mouseY, { stiffness: 500, damping: 50 });
-  const glowOpacity = useTransform(springY, [0, 100], [0.3, 0]);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -106,8 +103,16 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
   }, []);
 
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -115,12 +120,6 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
     
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-  }, [mouseX, mouseY]);
 
   const toggleMenu = useCallback(() => setIsOpen(prev => !prev), []);
   const closeMenu = useCallback(() => setIsOpen(false), []);
@@ -135,36 +134,23 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
       <motion.nav 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-        onMouseMove={handleMouseMove}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
           isScrolled 
             ? "py-2" 
             : "py-4"
         }`}
       >
-        {/* Background with animated gradient */}
-        <motion.div
-          className={`absolute inset-0 transition-all duration-500 ${
+        {/* Background - simplified for performance */}
+        <div
+          className={`absolute inset-0 transition-all duration-400 ${
             isScrolled 
-              ? "bg-background/80 backdrop-blur-2xl border-b border-border/50 shadow-md" 
+              ? "bg-background/85 backdrop-blur-xl border-b border-border/50 shadow-sm" 
               : isHeroPage 
                 ? "bg-transparent" 
-                : "bg-background/80 backdrop-blur-2xl border-b border-border/50"
+                : "bg-background/85 backdrop-blur-xl border-b border-border/50"
           }`}
-        >
-          {/* Animated glow effect on hover */}
-          <motion.div
-            className="absolute w-96 h-96 rounded-full pointer-events-none"
-            style={{
-              x: springX,
-              y: springY,
-              background: `radial-gradient(circle, hsl(var(--primary) / 0.08) 0%, transparent 70%)`,
-              opacity: showDarkText ? glowOpacity : 0,
-              transform: "translate(-50%, -50%)",
-            }}
-          />
-        </motion.div>
+        />
 
         <div className="container mx-auto px-6 lg:px-8 relative">
           <div className="flex items-center justify-between h-12 lg:h-14">
