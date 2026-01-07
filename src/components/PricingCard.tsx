@@ -45,13 +45,13 @@ export const PricingCard = memo(function PricingCard({
       if (user) {
         navigate("/app");
       } else {
-        navigate("/signup");
+        navigate("/contact");
       }
       return;
     }
 
     if (!user) {
-      navigate("/signup");
+      navigate("/contact");
       return;
     }
 
