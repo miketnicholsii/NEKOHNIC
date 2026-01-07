@@ -24,7 +24,7 @@ const pricingPlans = [
       "Limited progress tracking",
       "Preview personal brand page",
     ],
-    ctaText: "Start Free",
+    ctaText: "Request Access",
   },
   {
     name: "Start",
@@ -38,7 +38,7 @@ const pricingPlans = [
       "Basic personal brand page",
       "Email support",
     ],
-    ctaText: "Get Started",
+    ctaText: "Request Access",
   },
   {
     name: "Build",
@@ -55,7 +55,7 @@ const pricingPlans = [
       "Business identity guidance",
       "Priority email support",
     ],
-    ctaText: "Start Building",
+    ctaText: "Request Access",
   },
   {
     name: "Scale",
@@ -70,7 +70,7 @@ const pricingPlans = [
       "White-labeled brand pages",
       "Team collaboration (coming)",
     ],
-    ctaText: "Start Scaling",
+    ctaText: "Request Access",
   },
 ];
 
