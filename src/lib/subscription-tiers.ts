@@ -10,19 +10,19 @@ export const SUBSCRIPTION_TIERS = {
   },
   start: {
     name: "Start",
-    price: 19,
+    price: 29,
     product_id: "prod_TjrJr11KgRexld",
     price_id: "price_1SmNazLlRyOCUFRXg2YtsQvM",
   },
   build: {
     name: "Build",
-    price: 49,
+    price: 79,
     product_id: "prod_TjrJLggG2PAity",
     price_id: "price_1SmNbDLlRyOCUFRXfSntGFev",
   },
   scale: {
     name: "Scale",
-    price: 99,
+    price: 149,
     product_id: "prod_TjrKR20UBv3ksL",
     price_id: "price_1SmNbSLlRyOCUFRX2TKdwjJY",
   },

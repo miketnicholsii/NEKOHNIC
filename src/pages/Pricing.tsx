@@ -29,7 +29,7 @@ const pricingPlans = [
   {
     name: "Start",
     description: "Early-stage founders",
-    price: "$19",
+    price: "$29",
     features: [
       "Everything in Free",
       "Guided business setup flow",
@@ -43,7 +43,7 @@ const pricingPlans = [
   {
     name: "Build",
     description: "Serious builders",
-    price: "$49",
+    price: "$79",
     highlighted: true,
     badge: "Most Popular",
     features: [
@@ -60,7 +60,7 @@ const pricingPlans = [
   {
     name: "Scale",
     description: "Growth-ready businesses",
-    price: "$99",
+    price: "$149",
     features: [
       "Everything in Build",
       "Advanced progress analytics",
