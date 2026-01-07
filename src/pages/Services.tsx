@@ -65,7 +65,7 @@ const creditTiers = [
   {
     tier: 1,
     title: "Net-30 Vendors",
-    description: "Start building trade references with vendor accounts",
+    description: "Build trade references with vendor accounts",
     features: [
       "Vendor accounts (Uline, Quill, Grainger)",
       "Net-30 payment terms",
@@ -129,10 +129,10 @@ export default function Services() {
               Services
             </span>
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tightest text-foreground mb-6">
-              Start. Build. Scale.
+              The path forward.
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              A guided journey from idea to legitimate, credit-worthy business. Every step is structured, trackable, and built for long-term success.
+              From formation to credit to brand. Each step structured, trackable, and designed for sustainable progress.
             </p>
           </motion.div>
         </div>
@@ -144,9 +144,9 @@ export default function Services() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             <AnimatedSection direction="left">
               <SectionHeading
-                label="Step 1: Start"
-                title="Business Starter Flow"
-                description="A guided experience to properly form your business and establish legitimacy from day one."
+                label="Start"
+                title="Business Formation"
+                description="The foundation. A guided path to properly form your business and establish legitimacy from day one."
               />
 
               <div className="mt-8 space-y-4">
@@ -175,9 +175,9 @@ export default function Services() {
                   <div className="flex items-start gap-3">
                     <AlertCircle className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-medium text-foreground mb-2">Important: EIN is FREE</p>
+                      <p className="font-medium text-foreground mb-2">Your EIN is free</p>
                       <p className="text-sm text-muted-foreground mb-3">
-                        Your Employer Identification Number (EIN) is completely free directly from the IRS. NÈKO guides you to the official IRS website — we never charge for EIN filing.
+                        Directly from the IRS. We guide you to the official source — we never charge for EIN filing.
                       </p>
                       <a 
                         href="https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online"
@@ -185,7 +185,7 @@ export default function Services() {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
                       >
-                        Apply for EIN at IRS.gov
+                        Apply at IRS.gov
                         <ExternalLink className="h-3 w-3" />
                       </a>
                     </div>
@@ -198,9 +198,9 @@ export default function Services() {
               <div className="p-8 rounded-2xl bg-card border border-border shadow-md sticky top-28">
                 <h3 className="font-display font-bold text-lg mb-6">Your Progress</h3>
                 <ProgressTracker steps={businessStarterSteps} />
-                <Link to="/signup" className="block mt-6">
+                <Link to="/contact" className="block mt-6">
                   <Button variant="cta" size="lg" className="w-full group">
-                    Continue Setup
+                    Get Started
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
@@ -215,9 +215,9 @@ export default function Services() {
         <div className="container mx-auto px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
-              label="Step 2: Build"
-              title="Tiered Business Credit Builder"
-              description="Business credit is built in stages, not overnight. Each tier prepares you for the next, with emphasis on legitimacy and early payments."
+              label="Build"
+              title="Business Credit"
+              description="Credit is built in stages. Each tier prepares you for the next — with consistency and early payments as the foundation."
               className="mb-12"
             />
           </AnimatedSection>
@@ -241,9 +241,9 @@ export default function Services() {
               <div className="flex items-start gap-4">
                 <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0" />
                 <div>
-                  <p className="font-medium text-foreground mb-2">The Key to Business Credit</p>
+                  <p className="font-medium text-foreground mb-2">The principle is simple</p>
                   <p className="text-muted-foreground">
-                    Pay early, pay in full, and be consistent. Business credit bureaus (Dun & Bradstreet, Experian Business, Equifax Business) reward responsible payment behavior. There are no shortcuts — only smart, strategic steps.
+                    Pay early. Pay in full. Be consistent. Business credit bureaus reward responsible behavior. There are no shortcuts.
                   </p>
                 </div>
               </div>
@@ -263,20 +263,20 @@ export default function Services() {
                   <User className="h-6 w-6" />
                 </div>
                 <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-2">
-                  Step 3: Brand
+                  Brand
                 </span>
                 <h2 className="font-display text-2xl lg:text-3xl font-bold mb-4 text-foreground">
-                  Personal Brand Builder
+                  Personal Brand
                 </h2>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
-                  Create your Digital CV — a professional page that tells your story, showcases your skills, and positions you as a credible founder or creator.
+                  Your Digital CV. A professional page that tells your story, showcases your work, and positions you as credible.
                 </p>
                 <ul className="space-y-3 mb-8">
                   {[
                     "Professional personal brand page",
-                    "Digital CV that tells your story",
                     "Skills and goals showcase",
                     "Shareable, modern design",
+                    "Built for credibility",
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-3 text-foreground">
                       <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
@@ -300,20 +300,19 @@ export default function Services() {
                   <TrendingUp className="h-6 w-6" />
                 </div>
                 <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-2">
-                  Step 4: Scale
+                  Scale
                 </span>
                 <h2 className="font-display text-2xl lg:text-3xl font-bold mb-4 text-foreground">
-                  Growth & Scale
+                  Growth Tools
                 </h2>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
-                  Scaling is optional and should only happen when you're ready. These resources are supportive tools, not requirements.
+                  Scaling is optional. These resources exist when you're ready — not before.
                 </p>
                 <ul className="space-y-3 mb-8">
                   {[
                     "Advanced progress analytics",
                     "Growth readiness diagnostics",
-                    "Instagram & social strategies",
-                    "Professional business cards",
+                    "Social strategy guidance",
                     "Brand audits and upgrades",
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-3 text-foreground">
@@ -335,20 +334,18 @@ export default function Services() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 lg:py-32 bg-tertiary">
+      <section className="py-20 lg:py-28 bg-tertiary">
         <div className="container mx-auto px-6 lg:px-8 text-center">
           <AnimatedSection>
-            <SectionHeading
-              label="Ready to Begin?"
-              title="Your journey starts with one step."
-              description="Start with our free tier and progress at your own pace. No pressure, no hype — just clear guidance."
-              centered
-              light
-              className="mb-10"
-            />
-            <Link to="/signup">
+            <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
+              Hello, NÈKO.
+            </h2>
+            <p className="text-lg text-primary-foreground/60 mb-10 max-w-xl mx-auto">
+              The moment where intent becomes action.
+            </p>
+            <Link to="/contact">
               <Button variant="hero" size="xl" className="group">
-                Get Started Free
+                Start Your Journey
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
