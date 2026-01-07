@@ -12,13 +12,8 @@ import {
   Building2, 
   CreditCard, 
   User, 
-  Globe, 
-  TrendingUp,
-  Sparkles,
   Target,
-  Shield,
-  XCircle,
-  Zap
+  XCircle
 } from "lucide-react";
 
 const journeySteps = [
@@ -29,21 +24,15 @@ const journeySteps = [
 ];
 
 const features = [
-  { icon: Building2, title: "Business Formation", description: "Step-by-step guidance to properly form your LLC and establish your business with a legitimacy checklist." },
-  { icon: CreditCard, title: "Business Credit Roadmap", description: "A tiered approach to building business credit through vendor accounts, store credit, and revolving lines." },
-  { icon: User, title: "Personal Brand Builder", description: "Create your Digital CV — a professional page that tells your story, showcases your work, and builds credibility." },
+  { icon: Building2, title: "Business Formation", description: "Guided steps to form your LLC and establish legitimacy from day one." },
+  { icon: CreditCard, title: "Business Credit", description: "A structured path through vendor accounts, store credit, and revolving lines." },
+  { icon: User, title: "Personal Brand", description: "Build your Digital CV — a professional page that tells your story." },
 ];
 
 const notList = ["A credit repair service", "Legal or financial advice", "Get-rich-quick schemes", "A generic website builder"];
-const trustIndicators = [
-  { icon: Zap, label: "Guided Execution" },
-  { icon: Shield, label: "Structured Progress" },
-  { icon: TrendingUp, label: "Real Momentum" },
-];
 
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-// Memoized hero background for performance
 const HeroBackground = memo(function HeroBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none contain-paint" aria-hidden="true">
@@ -69,31 +58,26 @@ export default function Index() {
     <main className="min-h-screen overflow-x-hidden">
       <EccentricNavbar />
       
-      {/* Hero Section - Optimized */}
+      {/* Hero Section */}
       <section className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-16 sm:pt-0 sm:pb-0">
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
         <HeroBackground />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="max-w-4xl mx-auto">
-            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0 }} className="mb-6 sm:mb-8">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 backdrop-blur-md border border-primary-foreground/10 text-primary-foreground text-xs sm:text-sm font-medium">
-                <Sparkles className="h-3.5 w-3.5" />
-                Your Operating System for Success
-              </span>
-            </motion.div>
-
-            <motion.h1 {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.08 }} className="font-display font-bold tracking-tighter text-primary-foreground mb-5 sm:mb-6 text-[clamp(2rem,6.5vw,4.5rem)] leading-[1.1]">
-              Build Your Business.
-              <br />
-              <span className="text-primary-foreground/70">Build Your Brand.</span>
+            <motion.h1 {...fadeIn} transition={{ ...fadeIn.transition, delay: 0 }} className="font-display font-bold tracking-tighter text-primary-foreground mb-5 sm:mb-6 text-[clamp(2rem,6.5vw,4.5rem)] leading-[1.1]">
+              Hello, NÈKO.
             </motion.h1>
 
-            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.15 }} className="text-base sm:text-lg text-primary-foreground/60 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2 sm:px-0">
-              NÈKO is a guided platform for building legitimate businesses and personal brands — from zero to scale — with progress tracking at every step.
+            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.1 }} className="text-lg sm:text-xl text-primary-foreground/70 max-w-2xl mx-auto mb-4 leading-relaxed px-2 sm:px-0">
+              A guided operating system for building legitimate businesses and personal brands.
             </motion.p>
 
-            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.22 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
+            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.18 }} className="text-base text-primary-foreground/50 max-w-xl mx-auto mb-10 leading-relaxed px-2 sm:px-0">
+              From formation to credit to brand — with structure, education, and clarity at every step.
+            </motion.p>
+
+            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.26 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
               <Link to="/contact" className="w-full sm:w-auto">
                 <Button variant="hero" size="xl" className="w-full sm:w-auto group">
                   <span className="flex items-center gap-2">
@@ -103,17 +87,8 @@ export default function Index() {
                 </Button>
               </Link>
               <Link to="/services" className="w-full sm:w-auto">
-                <Button variant="hero-outline" size="xl" className="w-full sm:w-auto">Explore Services</Button>
+                <Button variant="hero-outline" size="xl" className="w-full sm:w-auto">Learn More</Button>
               </Link>
-            </motion.div>
-
-            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.35 }} className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-10 sm:mt-12">
-              {trustIndicators.map((item) => (
-                <div key={item.label} className="flex items-center gap-2 text-primary-foreground/50 text-sm">
-                  <item.icon className="h-4 w-4" />
-                  <span className="font-medium">{item.label}</span>
-                </div>
-              ))}
             </motion.div>
           </div>
         </div>
@@ -130,14 +105,17 @@ export default function Index() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <AnimatedSection direction="left">
-              <SectionHeading label="What is NÈKO?" title="Your guided path from idea to reality." description="NÈKO is a structured operating system for first-time founders, creators, freelancers, and side-hustlers. We reduce overwhelm by providing a clear roadmap with progress checkpoints at every stage." />
+              <SectionHeading label="What is NÈKO?" title="Structure for the space between idea and reality." description="For founders, creators, and side-hustlers navigating the gap between wanting to build something and actually running a legitimate business." />
               <p className="mt-6 text-muted-foreground text-sm sm:text-base leading-relaxed">
-                Starting a business shouldn't be overwhelming. NÈKO provides the roadmap, education, and structure you need.
+                That gap is where most people get stuck. Too many options. Too much noise. No clear path forward.
+              </p>
+              <p className="mt-4 text-muted-foreground text-sm sm:text-base leading-relaxed">
+                NÈKO provides the roadmap.
               </p>
               <div className="mt-6 p-4 sm:p-5 rounded-xl bg-muted/50 border border-border">
                 <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                   <XCircle className="h-4 w-4 text-muted-foreground" />
-                  NÈKO is NOT:
+                  NÈKO is not:
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {notList.map((point) => (
@@ -156,7 +134,7 @@ export default function Index() {
                   <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Target className="h-4 w-4 text-primary" />
                   </div>
-                  Your Journey
+                  The Path
                 </h3>
                 <div className="space-y-4">
                   {journeySteps.map((step, index) => (
@@ -181,7 +159,7 @@ export default function Index() {
       <section className="py-16 sm:py-20 lg:py-28 bg-muted/30 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <AnimatedSection>
-            <SectionHeading label="Platform Features" title="Everything you need to start, build, and grow." description="From business formation to personal branding, NÈKO provides the tools and guidance for every stage." centered className="mb-10 sm:mb-12" />
+            <SectionHeading label="What We Build" title="The tools to start, build, and grow." description="Business formation. Business credit. Personal brand. Each with structure and guidance." centered className="mb-10 sm:mb-12" />
           </AnimatedSection>
 
           <AnimatedStagger className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 max-w-5xl mx-auto">
@@ -191,19 +169,6 @@ export default function Index() {
               </motion.div>
             ))}
           </AnimatedStagger>
-
-          <AnimatedSection delay={0.3} className="mt-10 flex flex-wrap justify-center gap-2.5">
-            {[
-              { icon: Globe, label: "Web Presence Guide" },
-              { icon: Shield, label: "Legitimacy First" },
-              { icon: TrendingUp, label: "Progress Tracking" },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border text-sm text-muted-foreground hover:border-primary/40 hover:text-foreground transition-colors duration-200">
-                <item.icon className="h-4 w-4 text-primary" />
-                <span className="font-medium">{item.label}</span>
-              </div>
-            ))}
-          </AnimatedSection>
         </div>
       </section>
 
@@ -212,11 +177,16 @@ export default function Index() {
         <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>
-            <SectionHeading label="Ready to Start?" title="Begin your journey today." description="Join founders building businesses the right way — with NÈKO as their guide." centered light className="mb-8 sm:mb-10" />
+            <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
+              Hello, NÈKO.
+            </h2>
+            <p className="text-lg text-primary-foreground/60 mb-10 max-w-xl mx-auto">
+              The moment where intent becomes action.
+            </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
               <Link to="/contact" className="w-full sm:w-auto">
                 <Button variant="hero" size="xl" className="w-full sm:w-auto group">
-                  Request an Invite
+                  Start Your Journey
                   <ArrowRight className="h-5 w-5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               </Link>
