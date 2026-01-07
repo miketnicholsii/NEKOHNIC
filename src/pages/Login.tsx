@@ -68,8 +68,8 @@ export default function Login() {
       }
 
       toast({
-        title: "Welcome back!",
-        description: "You've been logged in successfully.",
+        title: "Hello again",
+        description: "You're in.",
       });
       
       navigate("/app");
@@ -112,10 +112,10 @@ export default function Login() {
               </span>
             </Link>
             <h1 id="login-heading" className="font-display text-2xl font-bold text-foreground mt-4">
-              Welcome back
+              Hello again
             </h1>
             <p className="text-muted-foreground text-sm mt-2">
-              Sign in to continue your journey
+              Sign in to continue
             </p>
           </div>
 
@@ -212,9 +212,9 @@ export default function Login() {
 
           {/* Footer */}
           <p className="text-center text-sm text-muted-foreground mt-6">
-            Don't have an account?{" "}
+            Not a member yet?{" "}
             <Link to="/contact" className="text-primary font-medium hover:underline">
-              Request an Invite
+              Say Hello
             </Link>
           </p>
         </div>
@@ -225,7 +225,7 @@ export default function Login() {
             NÈKO is invite-only
           </p>
           <p className="text-xs text-primary-foreground/50 text-center">
-            Get in touch to learn more about our services and request access.
+            All you have to do is say hello.
           </p>
         </div>
       </motion.div>
