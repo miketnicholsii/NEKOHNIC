@@ -1,14 +1,12 @@
-import { memo, useMemo, useRef } from "react";
+import { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { FeatureCard } from "@/components/FeatureCard";
 import { SectionHeading } from "@/components/SectionHeading";
 import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
-import { ConstellationBackground } from "@/components/ConstellationBackground";
-import { CursorGlow } from "@/components/CursorGlow";
 import { 
   ArrowRight, 
   Building2, 
@@ -49,89 +47,42 @@ const NekoLogo = memo(function NekoLogo() {
       {nekoLetters.map((letter, index) => (
         <motion.span
           key={index}
-          initial={{ opacity: 0, y: 40, rotateX: -90 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{
             duration: 0.8,
             delay: letter.delay + 0.3,
             ease: easeOutExpo,
           }}
           className="inline-block neko-letter"
-          style={{ 
-            transformStyle: "preserve-3d",
-            perspective: "1000px"
-          }}
         >
-          <motion.span
-            className="inline-block relative"
-            whileHover={{ 
-              scale: 1.05,
-              textShadow: "0 0 40px hsl(168 65% 50% / 0.4)"
-            }}
-            transition={{ duration: 0.2 }}
-          >
-            {letter.char}
-          </motion.span>
+          {letter.char}
         </motion.span>
       ))}
     </span>
   );
 });
 
-const HeroBackground = memo(function HeroBackground({ scrollY }: { scrollY: ReturnType<typeof useTransform> }) {
+// Simplified hero background - no scroll-based transforms
+const HeroBackground = memo(function HeroBackground() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none contain-paint" aria-hidden="true">
-      {/* Constellation particle effect */}
-      <div className="absolute inset-0 z-0">
-        <ConstellationBackground />
-      </div>
-      
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
       {/* Primary floating orb */}
-      <motion.div 
-        style={{ y: scrollY }}
-        className="absolute top-1/4 left-[10%] w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50 gpu-accelerated motion-safe:animate-float" 
-      />
+      <div className="absolute top-1/4 left-[10%] w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50" />
       {/* Secondary floating orb */}
-      <motion.div 
-        style={{ y: useTransform(scrollY, v => (v as number) * 0.6) }}
-        className="absolute bottom-1/4 right-[10%] w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50 gpu-accelerated motion-safe:animate-float-delayed" 
-      />
+      <div className="absolute bottom-1/4 right-[10%] w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50" />
       {/* Center ring */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.5, delay: 0.5, ease: easeOutExpo }}
-        className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] border border-primary-foreground/10 rounded-full" 
-      />
+      <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] border border-primary-foreground/10 rounded-full" />
       {/* Inner ring */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.6 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.8, delay: 0.7, ease: easeOutExpo }}
-        className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-primary-foreground/5 rounded-full" 
-      />
+      <div className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-primary-foreground/5 rounded-full" />
       {/* Subtle glow behind NEKO */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 2, delay: 0.8 }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] w-[300px] sm:w-[500px] h-[150px] sm:h-[200px] bg-gradient-to-b from-primary/10 via-primary/5 to-transparent blur-3xl rounded-full"
-      />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] w-[300px] sm:w-[500px] h-[150px] sm:h-[200px] bg-gradient-to-b from-primary/10 via-primary/5 to-transparent blur-3xl rounded-full" />
     </div>
   );
 });
 
 export default function Index() {
   const prefersReducedMotion = useReducedMotion();
-  const heroRef = useRef<HTMLElement>(null);
-  
-  // Hero parallax
-  const { scrollYProgress: heroScrollProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"]
-  });
-  const heroBackgroundY = useTransform(heroScrollProgress, [0, 1], [0, 150]);
-  const heroOpacity = useTransform(heroScrollProgress, [0, 0.8], [1, 0]);
   
   const fadeIn = useMemo(() => prefersReducedMotion 
     ? { initial: {}, animate: {}, transition: {} }
@@ -146,15 +97,11 @@ export default function Index() {
       <EccentricNavbar />
       
       {/* Hero Section */}
-      <section ref={heroRef} className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-16">
+      <section className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-16">
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
-        <HeroBackground scrollY={heroBackgroundY} />
-        <CursorGlow />
+        <HeroBackground />
 
-        <motion.div 
-          style={{ opacity: prefersReducedMotion ? 1 : heroOpacity }}
-          className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10 text-center"
-        >
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="max-w-4xl mx-auto">
             {/* Pre-headline */}
             <motion.p 
@@ -196,7 +143,7 @@ export default function Index() {
               </Link>
             </motion.div>
           </div>
-        </motion.div>
+        </div>
 
         <div className="hidden sm:flex absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2" aria-hidden="true">
           <motion.div 
