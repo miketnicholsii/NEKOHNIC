@@ -1,13 +1,12 @@
-import { memo, useMemo, lazy, Suspense } from "react";
+import { memo, useMemo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
-import { PricingCard } from "@/components/PricingCard";
 import { Button } from "@/components/ui/button";
 import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
-import { CheckCircle2, HelpCircle, ArrowRight } from "lucide-react";
+import { CheckCircle2, HelpCircle, ArrowRight, Building2, User, Sparkles } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -17,7 +16,6 @@ import {
 
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-// Memoized hero background with contain for layout performance
 const HeroBackground = memo(function HeroBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none contain-paint" aria-hidden="true">
@@ -27,67 +25,118 @@ const HeroBackground = memo(function HeroBackground() {
   );
 });
 
-const pricingPlans = [
+// Business Enablement packages
+const businessPackages = [
   {
-    name: "Free",
-    description: "Explore the path",
-    price: "Free",
-    features: [
-      "Business starter checklist",
-      "EIN guidance & IRS links",
-      "High-level credit roadmap",
-      "Limited progress tracking",
-      "Preview personal brand page",
-    ],
-  },
-  {
-    name: "Start",
-    description: "Early-stage founders",
+    name: "Foundations",
+    description: "Get set up correctly",
     price: "$29",
+    period: "/month",
     features: [
-      "Everything in Free",
-      "Guided business setup",
-      "Editable progress tracking",
-      "Tier-1 credit education",
-      "Basic personal brand page",
-      "Email support",
+      "Guided LLC formation walkthrough",
+      "EIN application guidance & links",
+      "Business bank account setup checklist",
+      "Business phone & email setup",
+      "Legitimacy checklist & tracker",
+      "Progress tracking dashboard",
     ],
+    highlighted: false,
   },
   {
-    name: "Build",
-    description: "Serious builders",
+    name: "Foundations + Credit",
+    description: "Build business credit",
     price: "$79",
-    highlighted: true,
-    badge: "Popular",
+    period: "/month",
     features: [
-      "Everything in Start",
+      "Everything in Foundations",
       "Full tiered credit roadmap",
-      "Visual milestone tracking",
-      "Vendor guidance & resources",
-      "Expanded personal brand page",
-      "Business identity guidance",
+      "Vendor recommendations by tier",
+      "Application guidance & templates",
+      "Credit score tracking (D&B, Experian, Equifax)",
+      "Tradeline management dashboard",
       "Priority support",
     ],
+    highlighted: true,
+    badge: "Most Popular",
   },
   {
-    name: "Scale",
-    description: "Growth-ready",
+    name: "Growth",
+    description: "Scale your business",
     price: "$149",
+    period: "/month",
     features: [
-      "Everything in Build",
-      "Advanced analytics",
-      "Growth diagnostics",
-      "Optional growth tools",
-      "White-labeled brand pages",
-      "Team collaboration (coming)",
+      "Everything in Foundations + Credit",
+      "Advanced credit analytics",
+      "Growth diagnostics & planning",
+      "Higher-tier credit strategies",
+      "Team collaboration (coming soon)",
+      "Dedicated support",
     ],
+    highlighted: false,
   },
 ];
 
+// Personal Branding packages
+const brandingPackages = [
+  {
+    name: "Digital CV",
+    description: "Your professional presence",
+    price: "$19",
+    period: "/month",
+    features: [
+      "Custom public profile page",
+      "Unique shareable URL",
+      "Skills & experience showcase",
+      "Link aggregation",
+      "Basic SEO optimization",
+      "Professional templates",
+    ],
+    highlighted: false,
+  },
+  {
+    name: "Digital CV Pro",
+    description: "Stand out professionally",
+    price: "$39",
+    period: "/month",
+    features: [
+      "Everything in Digital CV",
+      "Advanced customization",
+      "Portfolio/project showcase",
+      "Analytics & visitor insights",
+      "Priority placement in directory",
+      "Custom domain support",
+    ],
+    highlighted: true,
+    badge: "Best Value",
+  },
+];
+
+// Combined packages
+const combinedPackage = {
+  name: "Complete",
+  description: "Business + Brand together",
+  price: "$99",
+  period: "/month",
+  features: [
+    "Foundations + Credit (full package)",
+    "Digital CV Pro (full package)",
+    "Unified dashboard experience",
+    "Connected business & personal brand",
+    "Priority support across all services",
+    "Save $19/month vs. separate packages",
+  ],
+  highlighted: true,
+  badge: "Best for Founders",
+};
+
 const faqs = [
   {
-    question: "How do I get started?",
-    answer: "Just say hello. Request access through our contact page and we'll be in touch within 24 hours to get you set up with the right plan for your journey.",
+    question: "Can I start with just one track?",
+    answer: "Absolutely. Business Enablement and Personal Branding are independent tracks. Start with what you need now, and add the other later if it makes sense for you.",
+  },
+  {
+    question: "What's the difference between the tracks?",
+    answer: "Business Enablement focuses on setting up your business correctly — formation, banking, and building business credit. Personal Branding is about your professional identity — your Digital CV, online presence, and credibility as an individual.",
   },
   {
     question: "Is this a credit repair service?",
@@ -98,54 +147,69 @@ const faqs = [
     answer: "Never. Your EIN is free directly from the IRS. We provide guidance and links to the official IRS website. Be wary of any service that charges for this.",
   },
   {
-    question: "Is NÈKO a get-rich-quick program?",
-    answer: "No. Building a legitimate business takes time, effort, and patience. NÈKO provides structure and education — not shortcuts.",
+    question: "Can I cancel anytime?",
+    answer: "Yes. All plans are month-to-month with no long-term commitment. Cancel anytime from your account settings.",
   },
   {
-    question: "Can I cancel anytime?",
-    answer: "Yes. All paid plans are month-to-month with no long-term commitment. You can cancel anytime from your account settings.",
+    question: "How do the tracks work together?",
+    answer: "They complement each other. Your personal brand can stand alone, or it can amplify your business — establishing you as credible alongside your company. Many founders use both.",
   },
 ];
 
-const comparisonFeatures = [
-  { feature: "Business starter checklist", free: true, start: true, build: true, scale: true },
-  { feature: "EIN guidance & IRS links", free: true, start: true, build: true, scale: true },
-  { feature: "High-level credit roadmap", free: true, start: true, build: true, scale: true },
-  { feature: "Progress tracking", free: "Limited", start: true, build: true, scale: "Advanced" },
-  { feature: "Personal brand page", free: "Preview", start: "Basic", build: "Expanded", scale: "White-label" },
-  { feature: "Guided business setup", free: false, start: true, build: true, scale: true },
-  { feature: "Full credit roadmap", free: false, start: false, build: true, scale: true },
-  { feature: "Vendor guidance", free: false, start: false, build: true, scale: true },
-  { feature: "Growth tools", free: false, start: false, build: false, scale: true },
-  { feature: "Priority support", free: false, start: false, build: true, scale: true },
-];
-
-// Memoized table cell component for performance
-const TableCell = memo(function TableCell({ value, highlight = false }: { value: boolean | string; highlight?: boolean }) {
-  if (typeof value === "boolean") {
-    return value ? (
-      <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary mx-auto" />
-    ) : (
-      <span className="text-muted-foreground/40">—</span>
-    );
-  }
-  return <span className="text-[10px] sm:text-xs text-muted-foreground">{value}</span>;
-});
-
-// Memoized comparison row for better performance
-const ComparisonRow = memo(function ComparisonRow({ row, isLast }: { row: typeof comparisonFeatures[0]; isLast: boolean }) {
+// Package card component
+const PackageCard = memo(function PackageCard({ 
+  name, 
+  description, 
+  price, 
+  period,
+  features, 
+  highlighted = false,
+  badge
+}: { 
+  name: string; 
+  description: string; 
+  price: string; 
+  period: string;
+  features: string[]; 
+  highlighted?: boolean;
+  badge?: string;
+}) {
   return (
-    <tr className={!isLast ? "border-b border-border" : ""}>
-      <td className="p-3 sm:p-4 text-xs sm:text-sm text-foreground">{row.feature}</td>
-      <td className="text-center p-2 sm:p-4"><TableCell value={row.free} /></td>
-      <td className="text-center p-2 sm:p-4"><TableCell value={row.start} /></td>
-      <td className="text-center p-2 sm:p-4 bg-primary/5"><TableCell value={row.build} highlight /></td>
-      <td className="text-center p-2 sm:p-4"><TableCell value={row.scale} /></td>
-    </tr>
+    <div className={`relative p-5 sm:p-6 rounded-2xl border transition-all duration-300 h-full flex flex-col ${
+      highlighted 
+        ? "bg-card border-primary shadow-lg scale-[1.02]" 
+        : "bg-card border-border hover:border-primary/30 hover:shadow-md"
+    }`}>
+      {badge && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+          <span className="px-3 py-1 text-xs font-semibold bg-primary text-primary-foreground rounded-full">
+            {badge}
+          </span>
+        </div>
+      )}
+      
+      <div className="mb-4">
+        <h3 className="font-display font-bold text-lg text-foreground">{name}</h3>
+        <p className="text-sm text-muted-foreground">{description}</p>
+      </div>
+      
+      <div className="mb-5">
+        <span className="font-display text-3xl sm:text-4xl font-bold text-foreground">{price}</span>
+        <span className="text-muted-foreground text-sm">{period}</span>
+      </div>
+      
+      <ul className="space-y-2.5 flex-1">
+        {features.map((feature) => (
+          <li key={feature} className="flex items-start gap-2.5">
+            <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+            <span className="text-sm text-foreground">{feature}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 });
 
-// Memoized FAQ item for performance
 const FAQItem = memo(function FAQItem({ faq, index }: { faq: typeof faqs[0]; index: number }) {
   return (
     <AccordionItem 
@@ -189,88 +253,105 @@ export default function Pricing() {
             className="max-w-2xl mx-auto"
           >
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tightest text-foreground mb-4 sm:mb-6">
-              Say hello.
+              Choose your path.
             </h1>
             <p className="text-base sm:text-lg text-muted-foreground px-2 sm:px-0">
-              All it takes to start is a simple hello. Choose your path and we'll guide you from there.
+              Start with business, brand, or both. Each track is designed to get you where you need to go.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Pricing Cards */}
-      <section className="py-8 sm:py-12 bg-background">
+      {/* Business Enablement Track */}
+      <section className="py-8 sm:py-12 lg:py-16 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 items-stretch">
-            {pricingPlans.map((plan) => (
-              <motion.div key={plan.name} variants={staggerItem} className="flex">
-                <PricingCard
-                  name={plan.name}
-                  description={plan.description}
-                  price={plan.price}
-                  features={plan.features}
-                  highlighted={plan.highlighted}
-                  badge={plan.badge}
-                  className="w-full"
-                />
+          <AnimatedSection>
+            <div className="flex items-center gap-3 mb-6 justify-center">
+              <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
+                <Building2 className="h-5 w-5" />
+              </div>
+              <div className="text-center">
+                <h2 className="font-display font-bold text-xl sm:text-2xl text-foreground">Business Enablement</h2>
+                <p className="text-sm text-muted-foreground">Setup, legitimacy, and credit building</p>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          <AnimatedStagger className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 max-w-5xl mx-auto">
+            {businessPackages.map((pkg) => (
+              <motion.div key={pkg.name} variants={staggerItem} className="flex">
+                <PackageCard {...pkg} />
               </motion.div>
             ))}
           </AnimatedStagger>
-          
-          {/* Single CTA below cards */}
-          <AnimatedSection delay={0.3}>
-            <div className="text-center mt-8 sm:mt-10">
+        </div>
+      </section>
+
+      {/* Personal Branding Track */}
+      <section className="py-8 sm:py-12 lg:py-16 bg-muted/30">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="flex items-center gap-3 mb-6 justify-center">
+              <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
+                <User className="h-5 w-5" />
+              </div>
+              <div className="text-center">
+                <h2 className="font-display font-bold text-xl sm:text-2xl text-foreground">Personal Branding</h2>
+                <p className="text-sm text-muted-foreground">Your professional identity and presence</p>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          <AnimatedStagger className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 max-w-3xl mx-auto">
+            {brandingPackages.map((pkg) => (
+              <motion.div key={pkg.name} variants={staggerItem} className="flex">
+                <PackageCard {...pkg} />
+              </motion.div>
+            ))}
+          </AnimatedStagger>
+        </div>
+      </section>
+
+      {/* Combined Package */}
+      <section className="py-8 sm:py-12 lg:py-16 bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="flex items-center gap-3 mb-6 justify-center">
+              <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div className="text-center">
+                <h2 className="font-display font-bold text-xl sm:text-2xl text-foreground">Both Tracks Together</h2>
+                <p className="text-sm text-muted-foreground">For founders building business and personal brand</p>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.1}>
+            <div className="max-w-md mx-auto">
+              <PackageCard {...combinedPackage} />
+            </div>
+          </AnimatedSection>
+
+          {/* Single CTA */}
+          <AnimatedSection delay={0.2}>
+            <div className="text-center mt-10 sm:mt-12">
               <Link to="/contact">
                 <Button variant="cta" size="lg" className="group w-full sm:w-auto">
-                  Say Hello
+                  Get Started
                   <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               </Link>
               <p className="text-xs sm:text-sm text-muted-foreground mt-3">
-                Request access to get started with any plan
+                Tell us about your goals and we'll help you choose the right path
               </p>
             </div>
           </AnimatedSection>
         </div>
       </section>
 
-      {/* Comparison Table */}
-      <section className="py-12 sm:py-16 lg:py-28 bg-muted/30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection>
-            <SectionHeading
-              label="Compare"
-              title="Find the right fit."
-              centered
-              className="mb-8 sm:mb-12"
-            />
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.2}>
-            <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-2">
-              <table className="w-full max-w-5xl mx-auto bg-card rounded-xl border border-border overflow-hidden min-w-[560px]">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left p-3 sm:p-4 font-medium text-muted-foreground text-xs sm:text-sm">Feature</th>
-                    <th className="text-center p-2 sm:p-4 font-display font-bold text-foreground text-xs sm:text-sm">Free</th>
-                    <th className="text-center p-2 sm:p-4 font-display font-bold text-foreground text-xs sm:text-sm">Start</th>
-                    <th className="text-center p-2 sm:p-4 font-display font-bold text-primary text-xs sm:text-sm bg-primary/5">Build</th>
-                    <th className="text-center p-2 sm:p-4 font-display font-bold text-foreground text-xs sm:text-sm">Scale</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparisonFeatures.map((row, index) => (
-                    <ComparisonRow key={row.feature} row={row} isLast={index === comparisonFeatures.length - 1} />
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
       {/* FAQ */}
-      <section className="py-12 sm:py-16 lg:py-28 bg-background">
+      <section className="py-12 sm:py-16 lg:py-28 bg-muted/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
@@ -298,15 +379,18 @@ export default function Pricing() {
         <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>
+            <p className="text-sm font-medium tracking-widest uppercase text-primary-foreground/40 mb-4">
+              Ready?
+            </p>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-3 sm:mb-4">
-              Hello, NÈKO.
+              Let's get you set up.
             </h2>
             <p className="text-base sm:text-lg text-primary-foreground/60 mb-8 sm:mb-10 max-w-md mx-auto px-2">
-              Ready to start? All you have to do is say hello.
+              Whether it's your business, your brand, or both — we're here to help.
             </p>
             <Link to="/contact" className="inline-block w-full sm:w-auto">
               <Button variant="hero" size="lg" className="group w-full sm:w-auto">
-                Say Hello
+                Get Started
                 <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
             </Link>
