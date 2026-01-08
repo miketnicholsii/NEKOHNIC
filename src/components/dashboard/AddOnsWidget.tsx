@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,9 @@ import {
   Sparkles,
   ArrowRight,
   ExternalLink,
+  FileText,
+  Palette,
+  Building2,
 } from "lucide-react";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
 import { useAuth } from "@/hooks/use-auth";
@@ -38,6 +41,17 @@ import {
   HYBRID_SERVICES,
 } from "@/lib/addons";
 
+// Purchased addon type from the edge function
+interface PurchasedAddon {
+  active: boolean;
+  type: "recurring" | "one_time" | "hybrid";
+  name: string;
+  subscription_id?: string;
+  subscription_end?: string;
+  purchased_at?: string;
+  cancel_at_period_end?: boolean;
+}
+
 // Icon mapping for add-ons
 function getAddOnIcon(id: string) {
   switch (id) {
@@ -50,6 +64,13 @@ function getAddOnIcon(id: string) {
       return HeadphonesIcon;
     case "compliance_monitoring":
       return Shield;
+    case "digital_cv_build":
+    case "resume_rewrite":
+      return FileText;
+    case "brand_page_build":
+      return Palette;
+    case "business_formation_docs":
+      return Building2;
     default:
       return Sparkles;
   }
@@ -67,12 +88,12 @@ interface AddOnCardProps {
   isLocked: boolean;
   onPurchase: (addonId: string) => void;
   isPurchasing: boolean;
-  purchasedAddons: string[];
+  purchasedAddonIds: string[];
 }
 
-function AddOnCard({ addon, isLocked, onPurchase, isPurchasing, purchasedAddons }: AddOnCardProps) {
+function AddOnCard({ addon, isLocked, onPurchase, isPurchasing, purchasedAddonIds }: AddOnCardProps) {
   const Icon = getAddOnIcon(addon.id);
-  const isPurchased = purchasedAddons.includes(addon.id);
+  const isPurchased = purchasedAddonIds.includes(addon.id);
 
   return (
     <motion.div
@@ -157,10 +178,50 @@ export default function AddOnsWidget() {
   const { user } = useAuth();
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [purchasingId, setPurchasingId] = useState<string | null>(null);
-  const [purchasedAddons, setPurchasedAddons] = useState<string[]>([]);
+  const [purchasedAddons, setPurchasedAddons] = useState<Record<string, PurchasedAddon>>({});
+  const [isLoadingAddons, setIsLoadingAddons] = useState(true);
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const { available, locked } = getServicesForTier(tier);
+  
+  // Fetch purchased add-ons from Stripe via edge function
+  useEffect(() => {
+    async function fetchPurchasedAddons() {
+      if (!user) {
+        setIsLoadingAddons(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase.functions.invoke("check-addons");
+        
+        if (error) {
+          console.error("Error fetching add-ons:", error);
+          return;
+        }
+
+        if (data?.addons) {
+          setPurchasedAddons(data.addons);
+        }
+      } catch (err) {
+        console.error("Failed to fetch add-ons:", err);
+      } finally {
+        setIsLoadingAddons(false);
+      }
+    }
+
+    fetchPurchasedAddons();
+  }, [user]);
+
+  // Helper to check if an addon is purchased
+  const isAddonPurchased = (addonId: string): boolean => {
+    return purchasedAddons[addonId]?.active === true;
+  };
+
+  // Get list of active addon IDs for the card component
+  const activeAddonIds = Object.entries(purchasedAddons)
+    .filter(([_, addon]) => addon.active)
+    .map(([id]) => id);
   
   // Get featured add-ons for the widget
   const featuredAddons = ALL_SERVICES.filter((a) =>
@@ -240,7 +301,7 @@ export default function AddOnsWidget() {
                           isLocked={isLocked}
                           onPurchase={handlePurchase}
                           isPurchasing={isPurchasing && purchasingId === addon.id}
-                          purchasedAddons={purchasedAddons}
+                          purchasedAddonIds={activeAddonIds}
                         />
                       );
                     })}
@@ -256,7 +317,7 @@ export default function AddOnsWidget() {
                           isLocked={isLocked}
                           onPurchase={handlePurchase}
                           isPurchasing={isPurchasing && purchasingId === addon.id}
-                          purchasedAddons={purchasedAddons}
+                          purchasedAddonIds={activeAddonIds}
                         />
                       );
                     })}
@@ -272,7 +333,7 @@ export default function AddOnsWidget() {
                           isLocked={isLocked}
                           onPurchase={handlePurchase}
                           isPurchasing={isPurchasing && purchasingId === addon.id}
-                          purchasedAddons={purchasedAddons}
+                          purchasedAddonIds={activeAddonIds}
                         />
                       );
                     })}
@@ -285,7 +346,7 @@ export default function AddOnsWidget() {
                           isLocked={isLocked}
                           onPurchase={handlePurchase}
                           isPurchasing={isPurchasing && purchasingId === addon.id}
-                          purchasedAddons={purchasedAddons}
+                          purchasedAddonIds={activeAddonIds}
                         />
                       );
                     })}
@@ -297,10 +358,15 @@ export default function AddOnsWidget() {
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
-        {featuredAddons.slice(0, 3).map((addon) => {
-          const Icon = getAddOnIcon(addon.id);
-          const isLocked = locked.some((l) => l.id === addon.id);
-          const isPurchased = purchasedAddons.includes(addon.id);
+        {isLoadingAddons ? (
+          <div className="flex items-center justify-center py-4">
+            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          featuredAddons.slice(0, 3).map((addon) => {
+            const Icon = getAddOnIcon(addon.id);
+            const isLocked = locked.some((l) => l.id === addon.id);
+            const isPurchased = isAddonPurchased(addon.id);
 
           return (
             <div
@@ -352,7 +418,8 @@ export default function AddOnsWidget() {
               )}
             </div>
           );
-        })}
+          })
+        )}
         
         <Button
           variant="outline"
