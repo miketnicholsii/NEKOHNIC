@@ -135,17 +135,17 @@ export default function Pricing() {
       <EccentricNavbar />
 
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-background relative">
+      <section className="pt-24 sm:pt-28 lg:pt-32 pb-12 sm:pb-16 bg-background relative">
         <HeroBackground />
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative">
           <motion.div
             {...fadeIn}
             className="max-w-2xl mx-auto"
           >
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tightest text-foreground mb-6">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tightest text-foreground mb-4 sm:mb-6">
               Say hello.
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base sm:text-lg text-muted-foreground px-2 sm:px-0">
               All it takes to start is a simple hello. Choose your path and we'll guide you from there.
             </p>
           </motion.div>
@@ -153,9 +153,9 @@ export default function Pricing() {
       </section>
 
       {/* Pricing Cards */}
-      <section className="py-12 bg-background">
+      <section className="py-8 sm:py-12 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedStagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 items-stretch">
+          <AnimatedStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 items-stretch">
             {pricingPlans.map((plan) => (
               <motion.div key={plan.name} variants={staggerItem} className="flex">
                 <PricingCard
@@ -173,14 +173,14 @@ export default function Pricing() {
           
           {/* Single CTA below cards */}
           <AnimatedSection delay={0.3}>
-            <div className="text-center mt-10">
+            <div className="text-center mt-8 sm:mt-10">
               <Link to="/contact">
-                <Button variant="cta" size="xl" className="group">
+                <Button variant="cta" size="lg" className="group w-full sm:w-auto">
                   Say Hello
                   <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               </Link>
-              <p className="text-sm text-muted-foreground mt-3">
+              <p className="text-xs sm:text-sm text-muted-foreground mt-3">
                 Request access to get started with any plan
               </p>
             </div>
@@ -189,75 +189,75 @@ export default function Pricing() {
       </section>
 
       {/* Comparison Table */}
-      <section className="py-16 sm:py-20 lg:py-28 bg-muted/30">
+      <section className="py-12 sm:py-16 lg:py-28 bg-muted/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
               label="Compare"
               title="Find the right fit."
               centered
-              className="mb-12"
+              className="mb-8 sm:mb-12"
             />
           </AnimatedSection>
 
           <AnimatedSection delay={0.2}>
-            <div className="overflow-x-auto -mx-4 sm:mx-0">
-              <table className="w-full max-w-5xl mx-auto bg-card rounded-xl border border-border overflow-hidden min-w-[600px]">
+            <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-2">
+              <table className="w-full max-w-5xl mx-auto bg-card rounded-xl border border-border overflow-hidden min-w-[560px]">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="text-left p-4 font-medium text-muted-foreground text-sm">Feature</th>
-                    <th className="text-center p-4 font-display font-bold text-foreground text-sm">Free</th>
-                    <th className="text-center p-4 font-display font-bold text-foreground text-sm">Start</th>
-                    <th className="text-center p-4 font-display font-bold text-primary text-sm bg-primary/5">Build</th>
-                    <th className="text-center p-4 font-display font-bold text-foreground text-sm">Scale</th>
+                    <th className="text-left p-3 sm:p-4 font-medium text-muted-foreground text-xs sm:text-sm">Feature</th>
+                    <th className="text-center p-2 sm:p-4 font-display font-bold text-foreground text-xs sm:text-sm">Free</th>
+                    <th className="text-center p-2 sm:p-4 font-display font-bold text-foreground text-xs sm:text-sm">Start</th>
+                    <th className="text-center p-2 sm:p-4 font-display font-bold text-primary text-xs sm:text-sm bg-primary/5">Build</th>
+                    <th className="text-center p-2 sm:p-4 font-display font-bold text-foreground text-xs sm:text-sm">Scale</th>
                   </tr>
                 </thead>
                 <tbody>
                   {comparisonFeatures.map((row, index) => (
                     <tr key={row.feature} className={index < comparisonFeatures.length - 1 ? "border-b border-border" : ""}>
-                      <td className="p-4 text-sm text-foreground">{row.feature}</td>
-                      <td className="text-center p-4">
+                      <td className="p-3 sm:p-4 text-xs sm:text-sm text-foreground">{row.feature}</td>
+                      <td className="text-center p-2 sm:p-4">
                         {typeof row.free === "boolean" ? (
                           row.free ? (
-                            <CheckCircle2 className="h-4 w-4 text-primary mx-auto" />
+                            <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary mx-auto" />
                           ) : (
                             <span className="text-muted-foreground/40">—</span>
                           )
                         ) : (
-                          <span className="text-xs text-muted-foreground">{row.free}</span>
+                          <span className="text-[10px] sm:text-xs text-muted-foreground">{row.free}</span>
                         )}
                       </td>
-                      <td className="text-center p-4">
+                      <td className="text-center p-2 sm:p-4">
                         {typeof row.start === "boolean" ? (
                           row.start ? (
-                            <CheckCircle2 className="h-4 w-4 text-primary mx-auto" />
+                            <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary mx-auto" />
                           ) : (
                             <span className="text-muted-foreground/40">—</span>
                           )
                         ) : (
-                          <span className="text-xs text-muted-foreground">{row.start}</span>
+                          <span className="text-[10px] sm:text-xs text-muted-foreground">{row.start}</span>
                         )}
                       </td>
-                      <td className="text-center p-4 bg-primary/5">
+                      <td className="text-center p-2 sm:p-4 bg-primary/5">
                         {typeof row.build === "boolean" ? (
                           row.build ? (
-                            <CheckCircle2 className="h-4 w-4 text-primary mx-auto" />
+                            <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary mx-auto" />
                           ) : (
                             <span className="text-muted-foreground/40">—</span>
                           )
                         ) : (
-                          <span className="text-xs text-muted-foreground">{row.build}</span>
+                          <span className="text-[10px] sm:text-xs text-muted-foreground">{row.build}</span>
                         )}
                       </td>
-                      <td className="text-center p-4">
+                      <td className="text-center p-2 sm:p-4">
                         {typeof row.scale === "boolean" ? (
                           row.scale ? (
-                            <CheckCircle2 className="h-4 w-4 text-primary mx-auto" />
+                            <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary mx-auto" />
                           ) : (
                             <span className="text-muted-foreground/40">—</span>
                           )
                         ) : (
-                          <span className="text-xs text-muted-foreground">{row.scale}</span>
+                          <span className="text-[10px] sm:text-xs text-muted-foreground">{row.scale}</span>
                         )}
                       </td>
                     </tr>
@@ -270,33 +270,33 @@ export default function Pricing() {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 sm:py-20 lg:py-28 bg-background">
+      <section className="py-12 sm:py-16 lg:py-28 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
               label="FAQ"
               title="Common questions."
               centered
-              className="mb-12"
+              className="mb-8 sm:mb-12"
             />
           </AnimatedSection>
 
           <AnimatedSection delay={0.2}>
             <div className="max-w-2xl mx-auto">
-              <Accordion type="single" collapsible className="space-y-3">
+              <Accordion type="single" collapsible className="space-y-2 sm:space-y-3">
                 {faqs.map((faq, index) => (
                   <AccordionItem 
                     key={index} 
                     value={`faq-${index}`}
-                    className="bg-card border border-border rounded-lg px-5 data-[state=open]:shadow-sm transition-shadow"
+                    className="bg-card border border-border rounded-lg px-4 sm:px-5 data-[state=open]:shadow-sm transition-shadow"
                   >
-                    <AccordionTrigger className="text-left font-medium hover:no-underline py-4 text-sm">
-                      <div className="flex items-center gap-3">
-                        <HelpCircle className="h-4 w-4 text-primary flex-shrink-0" />
-                        {faq.question}
+                    <AccordionTrigger className="text-left font-medium hover:no-underline py-3 sm:py-4 text-sm">
+                      <div className="flex items-start sm:items-center gap-2 sm:gap-3">
+                        <HelpCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5 sm:mt-0" />
+                        <span className="pr-2">{faq.question}</span>
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground pb-4 pl-7 text-sm">
+                    <AccordionContent className="text-muted-foreground pb-3 sm:pb-4 pl-6 sm:pl-7 text-xs sm:text-sm leading-relaxed">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -308,18 +308,18 @@ export default function Pricing() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-tertiary relative overflow-hidden">
+      <section className="py-12 sm:py-16 lg:py-24 bg-tertiary relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>
-            <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-3 sm:mb-4">
               Hello, NÈKO.
             </h2>
-            <p className="text-lg text-primary-foreground/60 mb-10 max-w-md mx-auto">
+            <p className="text-base sm:text-lg text-primary-foreground/60 mb-8 sm:mb-10 max-w-md mx-auto px-2">
               Ready to start? All you have to do is say hello.
             </p>
-            <Link to="/contact">
-              <Button variant="hero" size="xl" className="group">
+            <Link to="/contact" className="inline-block w-full sm:w-auto">
+              <Button variant="hero" size="lg" className="group w-full sm:w-auto">
                 Say Hello
                 <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>

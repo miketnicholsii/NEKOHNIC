@@ -146,14 +146,14 @@ export default function Index() {
       <EccentricNavbar />
       
       {/* Hero Section */}
-      <section ref={heroRef} className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-16 sm:pt-0 sm:pb-0">
+      <section ref={heroRef} className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-16">
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
         <HeroBackground scrollY={heroBackgroundY} />
         <CursorGlow />
 
         <motion.div 
           style={{ opacity: prefersReducedMotion ? 1 : heroOpacity }}
-          className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center"
+          className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10 text-center"
         >
           <div className="max-w-4xl mx-auto">
             {/* Pre-headline */}
@@ -161,44 +161,44 @@ export default function Index() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1, ease: easeOutExpo }}
-              className="text-sm font-medium tracking-[0.3em] uppercase text-primary-foreground/40 mb-6"
+              className="text-xs sm:text-sm font-medium tracking-[0.25em] sm:tracking-[0.3em] uppercase text-primary-foreground/40 mb-4 sm:mb-6"
             >
               Hello
             </motion.p>
             
             {/* NEKO Logo */}
             <motion.h1 
-              className="font-display font-bold tracking-tight text-primary-foreground mb-6 text-[clamp(3.5rem,12vw,8rem)] leading-[0.9] neko-title"
+              className="font-display font-bold tracking-tight text-primary-foreground mb-4 sm:mb-6 text-[clamp(3rem,11vw,8rem)] leading-[0.9] neko-title"
             >
               <NekoLogo />
               <span className="neko-dot">.</span>
             </motion.h1>
 
-            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.5 }} className="text-lg sm:text-xl text-primary-foreground/70 max-w-2xl mx-auto mb-4 leading-relaxed px-2 sm:px-0">
+            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.5 }} className="text-base sm:text-lg md:text-xl text-primary-foreground/70 max-w-2xl mx-auto mb-3 sm:mb-4 leading-relaxed px-2 sm:px-0">
               A guided operating system for building legitimate businesses and personal brands.
             </motion.p>
 
-            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.6 }} className="text-base text-primary-foreground/50 max-w-xl mx-auto mb-10 leading-relaxed px-2 sm:px-0">
+            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.6 }} className="text-sm sm:text-base text-primary-foreground/50 max-w-xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2 sm:px-0">
               From formation to credit to brand — with structure, education, and clarity at every step.
             </motion.p>
 
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.7 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
               <Link to="/contact" className="w-full sm:w-auto">
-                <Button variant="hero" size="xl" className="w-full sm:w-auto group">
+                <Button variant="hero" size="lg" className="w-full sm:w-auto group">
                   <span className="flex items-center gap-2">
                     Say Hello
-                    <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                   </span>
                 </Button>
               </Link>
               <Link to="/services" className="w-full sm:w-auto">
-                <Button variant="hero-outline" size="xl" className="w-full sm:w-auto">Learn More</Button>
+                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto">Learn More</Button>
               </Link>
             </motion.div>
           </div>
         </motion.div>
 
-        <div className="hidden sm:flex absolute bottom-8 left-1/2 -translate-x-1/2" aria-hidden="true">
+        <div className="hidden sm:flex absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2" aria-hidden="true">
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -211,25 +211,25 @@ export default function Index() {
       </section>
 
       {/* What is NEKO Section */}
-      <section className="py-16 sm:py-20 lg:py-28 bg-background relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <section className="py-12 sm:py-16 lg:py-28 bg-background relative">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             <AnimatedSection direction="left">
               <SectionHeading label="What is NÈKO?" title="Structure for the space between idea and reality." description="For founders, creators, and side-hustlers navigating the gap between wanting to build something and actually running a legitimate business." />
-              <p className="mt-6 text-muted-foreground text-sm sm:text-base leading-relaxed">
+              <p className="mt-4 sm:mt-6 text-muted-foreground text-sm sm:text-base leading-relaxed">
                 That gap is where most people get stuck. Too many options. Too much noise. No clear path forward.
               </p>
-              <p className="mt-4 text-muted-foreground text-sm sm:text-base leading-relaxed">
+              <p className="mt-3 sm:mt-4 text-muted-foreground text-sm sm:text-base leading-relaxed">
                 NÈKO provides the roadmap.
               </p>
-              <div className="mt-6 p-4 sm:p-5 rounded-xl bg-muted/50 border border-border">
-                <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <XCircle className="h-4 w-4 text-muted-foreground" />
+              <div className="mt-5 sm:mt-6 p-4 sm:p-5 rounded-xl bg-muted/50 border border-border">
+                <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3 flex items-center gap-2">
+                  <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground" />
                   NÈKO is not:
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
                   {notList.map((point) => (
-                    <div key={point} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div key={point} className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                       <span className="w-1 h-1 rounded-full bg-muted-foreground/50 flex-shrink-0" />
                       {point}
                     </div>
@@ -239,22 +239,22 @@ export default function Index() {
             </AnimatedSection>
 
             <AnimatedSection direction="right" delay={0.1} className="lg:pl-6">
-              <div className="p-5 sm:p-6 rounded-2xl bg-card border border-border shadow-md">
-                <h3 className="font-display font-bold text-lg mb-5 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Target className="h-4 w-4 text-primary" />
+              <div className="p-4 sm:p-5 md:p-6 rounded-2xl bg-card border border-border shadow-md">
+                <h3 className="font-display font-bold text-base sm:text-lg mb-4 sm:mb-5 flex items-center gap-2 sm:gap-3">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
                   </div>
                   The Path
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {journeySteps.map((step, index) => (
-                    <div key={step.step} className="flex items-start gap-3 group">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0 transition-colors duration-300 ${index === 0 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"}`}>
+                    <div key={step.step} className="flex items-start gap-2.5 sm:gap-3 group">
+                      <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-xs sm:text-sm font-bold flex-shrink-0 transition-colors duration-300 ${index === 0 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"}`}>
                         {step.step}
                       </div>
                       <div className="pt-0.5">
-                        <h4 className="font-semibold text-foreground text-sm transition-colors duration-200 group-hover:text-primary">{step.title}</h4>
-                        <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
+                        <h4 className="font-semibold text-foreground text-xs sm:text-sm transition-colors duration-200 group-hover:text-primary">{step.title}</h4>
+                        <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5">{step.description}</p>
                       </div>
                     </div>
                   ))}
@@ -266,13 +266,13 @@ export default function Index() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 sm:py-20 lg:py-28 bg-muted/30 relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <section className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative">
           <AnimatedSection>
-            <SectionHeading label="What We Build" title="The tools to start, build, and grow." description="Business formation. Business credit. Personal brand. Each with structure and guidance." centered className="mb-10 sm:mb-12" />
+            <SectionHeading label="What We Build" title="The tools to start, build, and grow." description="Business formation. Business credit. Personal brand. Each with structure and guidance." centered className="mb-8 sm:mb-10 md:mb-12" />
           </AnimatedSection>
 
-          <AnimatedStagger className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 max-w-5xl mx-auto">
+          <AnimatedStagger className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 max-w-5xl mx-auto">
             {features.map((feature) => (
               <motion.div key={feature.title} variants={staggerItem}>
                 <FeatureCard icon={feature.icon} title={feature.title} description={feature.description} />
@@ -283,25 +283,25 @@ export default function Index() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-tertiary relative overflow-hidden">
+      <section className="py-12 sm:py-16 lg:py-24 bg-tertiary relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>
-            <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-3 sm:mb-4">
               Hello, NÈKO.
             </h2>
-            <p className="text-lg text-primary-foreground/60 mb-10 max-w-md mx-auto">
+            <p className="text-base sm:text-lg text-primary-foreground/60 mb-8 sm:mb-10 max-w-md mx-auto px-2">
               Ready to start? All you have to do is say hello.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
               <Link to="/contact" className="w-full sm:w-auto">
-                <Button variant="hero" size="xl" className="w-full sm:w-auto group">
+                <Button variant="hero" size="lg" className="w-full sm:w-auto group">
                   Say Hello
-                  <ArrowRight className="h-5 w-5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
+                  <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               </Link>
               <Link to="/pricing" className="w-full sm:w-auto">
-                <Button variant="hero-outline" size="xl" className="w-full sm:w-auto">View Pricing</Button>
+                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto">View Pricing</Button>
               </Link>
             </div>
           </AnimatedSection>

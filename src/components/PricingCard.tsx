@@ -59,17 +59,17 @@ export const PricingCard = memo(function PricingCard({
         </div>
       )}
 
-      <div className="relative p-6 flex flex-col flex-1">
+      <div className="relative p-5 sm:p-6 flex flex-col flex-1">
         {/* Header */}
-        <div className="mb-5">
+        <div className="mb-4 sm:mb-5">
           <h3 className={cn(
-            "text-sm font-display font-bold tracking-wider uppercase mb-1",
+            "text-xs sm:text-sm font-display font-bold tracking-wider uppercase mb-1",
             highlighted ? "text-primary" : "text-foreground"
           )}>
             {name}
           </h3>
           <p className={cn(
-            "text-xs",
+            "text-[11px] sm:text-xs",
             highlighted ? "text-tertiary-foreground/60" : "text-muted-foreground"
           )}>
             {description}
@@ -77,17 +77,17 @@ export const PricingCard = memo(function PricingCard({
         </div>
 
         {/* Price */}
-        <div className="mb-6">
+        <div className="mb-5 sm:mb-6">
           <div className="flex items-baseline gap-0.5">
             <span className={cn(
-              "text-4xl font-display font-bold tracking-tight",
+              "text-3xl sm:text-4xl font-display font-bold tracking-tight",
               highlighted ? "text-tertiary-foreground" : "text-foreground"
             )}>
               {price}
             </span>
             {price !== "Free" && (
               <span className={cn(
-                "text-sm font-medium",
+                "text-xs sm:text-sm font-medium",
                 highlighted ? "text-tertiary-foreground/50" : "text-muted-foreground"
               )}>
                 {period}
@@ -97,17 +97,17 @@ export const PricingCard = memo(function PricingCard({
         </div>
 
         {/* Features */}
-        <ul className="space-y-2.5 flex-1">
+        <ul className="space-y-2 sm:space-y-2.5 flex-1">
           {features.map((feature, index) => (
             <li
               key={index}
               className={cn(
-                "flex items-start gap-2.5 text-sm",
+                "flex items-start gap-2 sm:gap-2.5 text-xs sm:text-sm",
                 highlighted ? "text-tertiary-foreground/80" : "text-foreground"
               )}
             >
               <Check className={cn(
-                "h-4 w-4 flex-shrink-0 mt-0.5",
+                "h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0 mt-0.5",
                 highlighted ? "text-primary" : "text-primary"
               )} />
               <span className="leading-snug">{feature}</span>
