@@ -89,7 +89,13 @@ const NekoLogo = memo(function NekoLogo() {
             delay: letter.delay + 0.3,
             ease: easeOutExpo,
           }}
-          className="inline-block neko-letter"
+          whileHover={{ 
+            y: -8,
+            scale: 1.05,
+            color: "hsl(168, 65%, 50%)",
+            transition: { duration: 0.2, ease: "easeOut" }
+          }}
+          className="inline-block neko-letter cursor-default select-none"
         >
           {letter.char}
         </motion.span>
