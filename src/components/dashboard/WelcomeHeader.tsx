@@ -75,22 +75,32 @@ export default function WelcomeHeader() {
             </div>
           )}
 
-          {/* Subscription Badge */}
+          {/* Subscription Status */}
           {subscription.tier !== "free" ? (
             <Link 
               to="/app/account"
-              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/15 transition-colors"
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-colors ${
+                subscription.cancelAtPeriodEnd 
+                  ? "bg-amber-500/10 border-amber-500/20 hover:bg-amber-500/15" 
+                  : "bg-primary/10 border-primary/20 hover:bg-primary/15"
+              }`}
               aria-label={`${tierConfig.name} Plan - Click to manage`}
             >
-              <Crown className="h-4 w-4 text-primary" aria-hidden="true" />
-              <span className="text-sm font-medium text-primary">
-                {tierConfig.name}
-              </span>
-              {subscription.subscriptionEnd && (
-                <span className="text-xs text-muted-foreground hidden sm:inline">
-                  · Renews {format(new Date(subscription.subscriptionEnd), "MMM d")}
+              <Crown className={`h-4 w-4 ${subscription.cancelAtPeriodEnd ? "text-amber-500" : "text-primary"}`} aria-hidden="true" />
+              <div className="flex flex-col">
+                <span className={`text-sm font-medium ${subscription.cancelAtPeriodEnd ? "text-amber-600 dark:text-amber-400" : "text-primary"}`}>
+                  {tierConfig.name} Plan
                 </span>
-              )}
+                {subscription.subscriptionEnd && (
+                  <span className="text-xs text-muted-foreground">
+                    {subscription.cancelAtPeriodEnd 
+                      ? `Ends ${format(new Date(subscription.subscriptionEnd), "MMM d, yyyy")}`
+                      : `Renews ${format(new Date(subscription.subscriptionEnd), "MMM d, yyyy")}`
+                    }
+                  </span>
+                )}
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground ml-1" aria-hidden="true" />
             </Link>
           ) : (
             <Link to="/pricing">
