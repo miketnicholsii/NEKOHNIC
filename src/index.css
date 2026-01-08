@@ -324,6 +324,40 @@
     opacity: 0.03;
     pointer-events: none;
   }
+
+  /* NEKO Title Styling */
+  .neko-title {
+    letter-spacing: -0.02em;
+    text-shadow: 
+      0 0 80px hsl(168 65% 50% / 0.15),
+      0 0 40px hsl(168 65% 50% / 0.1);
+  }
+
+  .neko-letter {
+    display: inline-block;
+    transition: text-shadow 0.3s ease;
+  }
+
+  .neko-letter:hover {
+    text-shadow: 0 0 40px hsl(168 65% 50% / 0.4);
+  }
+
+  .neko-dot {
+    display: inline-block;
+    color: hsl(var(--primary));
+    animation: neko-dot-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes neko-dot-pulse {
+    0%, 100% {
+      opacity: 1;
+      text-shadow: 0 0 20px hsl(168 65% 50% / 0.5);
+    }
+    50% {
+      opacity: 0.7;
+      text-shadow: 0 0 40px hsl(168 65% 50% / 0.8);
+    }
+  }
 }
 
 @layer utilities {
