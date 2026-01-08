@@ -41,22 +41,8 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
 
-// Industry options
-const INDUSTRIES = [
-  "Technology",
-  "Healthcare",
-  "Finance",
-  "Real Estate",
-  "Retail",
-  "Food & Beverage",
-  "Professional Services",
-  "Construction",
-  "Manufacturing",
-  "Transportation",
-  "Education",
-  "Entertainment",
-  "Other",
-];
+// Import centralized constants
+import { INDUSTRIES, VALIDATION_LIMITS } from "@/lib/constants";
 
 // Add-on status interface
 interface AddonStatus {
@@ -512,7 +498,7 @@ export default function Account() {
                       value={formData.full_name}
                       onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                       placeholder="Enter your full name"
-                      maxLength={100}
+                      maxLength={VALIDATION_LIMITS.NAME_MAX}
                     />
                   ) : (
                     <Input value={profile?.full_name || "Not set"} disabled className="bg-muted" />
@@ -526,7 +512,7 @@ export default function Account() {
                       value={formData.business_name}
                       onChange={(e) => setFormData({ ...formData, business_name: e.target.value })}
                       placeholder="Enter your business name"
-                      maxLength={150}
+                      maxLength={VALIDATION_LIMITS.BUSINESS_NAME_MAX}
                     />
                   ) : (
                     <Input value={profile?.business_name || "Not set"} disabled className="bg-muted" />

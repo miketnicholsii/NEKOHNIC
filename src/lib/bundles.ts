@@ -65,19 +65,35 @@ export function getBundleById(id: string): Bundle | undefined {
 }
 
 // Get bundles available for a tier
-export function getBundlesForTier(tier: SubscriptionTier): {
+// Defensive: handles null/undefined/unknown tiers safely (per engineering standards)
+export function getBundlesForTier(
+  tier: SubscriptionTier | string | null | undefined
+): {
   available: Bundle[];
   locked: Bundle[];
 } {
   const tierOrder: SubscriptionTier[] = ["free", "starter", "pro", "elite"];
-  const tierIndex = tierOrder.indexOf(tier);
+  
+  // Defensive: handle null/undefined/unknown tiers safely
+  if (!tier || typeof tier !== "string") {
+    return { available: [], locked: [...BUNDLES] };
+  }
+
+  const lowerTier = tier.toLowerCase() as SubscriptionTier;
+  const tierIndex = tierOrder.indexOf(lowerTier);
+  
+  // If tier is unknown/invalid, return empty available, all locked
+  if (tierIndex === -1) {
+    console.warn(`getBundlesForTier: Unknown tier "${tier}", failing safe`);
+    return { available: [], locked: [...BUNDLES] };
+  }
 
   const available: Bundle[] = [];
   const locked: Bundle[] = [];
 
   BUNDLES.forEach((bundle) => {
     const requiredIndex = tierOrder.indexOf(bundle.requiredTier);
-    if (tierIndex >= requiredIndex) {
+    if (requiredIndex === -1 || tierIndex >= requiredIndex) {
       available.push(bundle);
     } else {
       locked.push(bundle);
