@@ -144,3 +144,57 @@ export const slideInFromBottom = {
     },
   },
 };
+
+// Blur-in animation for hero sections
+export const blurIn = {
+  hidden: { opacity: 0, filter: "blur(10px)", y: 20 },
+  visible: {
+    opacity: 1,
+    filter: "blur(0px)",
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  },
+};
+
+// Slide up with rotation for cards
+export const slideUpRotate = {
+  hidden: { opacity: 0, y: 30, rotateX: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  },
+};
+
+// Gentle float animation
+export const gentleFloat = {
+  hidden: { opacity: 0, y: 15 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+// Scale from center
+export const scaleFromCenter = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.34, 1.56, 0.64, 1], // spring-like
+    },
+  },
+};
