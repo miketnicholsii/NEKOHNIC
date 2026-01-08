@@ -16,17 +16,49 @@ type AddonConfig = {
 };
 
 const ADDONS: Record<string, AddonConfig> = {
-  "advanced-reports": {
-    price_id: "price_1SnN67LlRyOCUFRXOdM4L4Vp",
-    product_id: "prod_TksrOOJnYbX8lY",
+  // One-time services
+  "digital_cv_build": {
+    price_id: "price_1SnN5uLlRyOCUFRXWcYqfH6O",
+    product_id: "prod_TksrjTEsUCR5bP",
+    type: "one_time",
+    name: "Digital CV Build",
+  },
+  "resume_rewrite": {
+    price_id: "price_1SnN6ELlRyOCUFRX2OQKCEgl",
+    product_id: "prod_TksrX8WrpcKVkW",
+    type: "one_time",
+    name: "Resume Rewrite",
+  },
+  "brand_page_build": {
+    price_id: "price_1SnN6PLlRyOCUFRXGGFIEGJ5",
+    product_id: "prod_TkssmTlIwHwi27",
+    type: "one_time",
+    name: "Brand Page Build",
+  },
+  "business_formation_docs": {
+    price_id: "price_1SnN6YLlRyOCUFRXddjmyVEZ",
+    product_id: "prod_Tkssy6h3TwA6q7",
+    type: "one_time",
+    name: "Business Formation Docs",
+  },
+  // Recurring services
+  "credit_monitoring": {
+    price_id: "price_1SnN9WLlRyOCUFRXGDFYHFrg",
+    product_id: "prod_TksvRSnMpyHdib",
+    type: "recurring",
+    name: "Business Credit Monitoring",
+  },
+  "compliance_monitoring": {
+    price_id: "price_1SnN9hLlRyOCUFRX477nYSKi",
+    product_id: "prod_Tksv2eRs9paI7I",
+    type: "recurring",
+    name: "Compliance Monitoring",
+  },
+  "advanced_reports": {
+    price_id: "price_1SnN9rLlRyOCUFRX4GMxvkrP",
+    product_id: "prod_TksvxCGn3MF1B8",
     type: "recurring",
     name: "Advanced Reports",
-  },
-  "credit-monitoring-setup": {
-    price_id: "price_1SnN6PLlRyOCUFRXOqBRSyxG",
-    product_id: "prod_TksrXDqr0EkDUB",
-    type: "one_time",
-    name: "Credit Monitoring Setup",
   },
 };
 
@@ -113,8 +145,8 @@ serve(async (req) => {
         },
       ],
       mode: mode,
-      success_url: `${origin}/app?addon_purchase=success&addon=${addonId}`,
-      cancel_url: `${origin}/app?addon_purchase=canceled`,
+      success_url: `${origin}/app/checkout-success?type=addon&addon=${encodeURIComponent(addon.name)}`,
+      cancel_url: `${origin}/app/account?addon_purchase=canceled`,
       metadata: {
         user_id: user.id,
         addon_id: addonId,

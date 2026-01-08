@@ -144,6 +144,9 @@ serve(async (req) => {
       }
     }
     
+    // Get tier display name for success page
+    const tierDisplayName = tier.charAt(0).toUpperCase() + tier.slice(1);
+    
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
@@ -154,7 +157,7 @@ serve(async (req) => {
         },
       ],
       mode: "subscription",
-      success_url: `${origin}/app?checkout=success`,
+      success_url: `${origin}/app/checkout-success?type=subscription&plan=${encodeURIComponent(tierDisplayName)}`,
       cancel_url: `${origin}/pricing?checkout=canceled`,
       metadata: {
         user_id: user.id,

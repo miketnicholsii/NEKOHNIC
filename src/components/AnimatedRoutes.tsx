@@ -36,6 +36,7 @@ const Account = lazy(() => import("@/pages/app/Account"));
 const Support = lazy(() => import("@/pages/app/Support"));
 const Analytics = lazy(() => import("@/pages/app/Analytics"));
 const Achievements = lazy(() => import("@/pages/app/Achievements"));
+const CheckoutSuccess = lazy(() => import("@/pages/app/CheckoutSuccess"));
 
 // Admin pages - lazy load
 const AdminLayout = lazy(() => import("@/pages/admin/AdminLayout"));
@@ -118,6 +119,7 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
             <Route path="support" element={<Support />} />
             <Route path="analytics" element={<Analytics />} />
             <Route path="achievements" element={<Achievements />} />
+            <Route path="checkout-success" element={<CheckoutSuccess />} />
           </Route>
           
           {/* Admin routes - no page transition on nested routes */}
