@@ -3,6 +3,7 @@ import { motion, useReducedMotion, useInView, useScroll, useTransform } from "fr
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
+import { SectionNav } from "@/components/SectionNav";
 import { TierCard } from "@/components/TierCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -335,6 +336,7 @@ export default function Services() {
   return (
     <main className="min-h-screen bg-background overflow-x-hidden">
       <EccentricNavbar />
+      <SectionNav />
 
       {/* Hero */}
       <section ref={heroRef} className="relative min-h-[70svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-16">
@@ -398,7 +400,7 @@ export default function Services() {
       </section>
 
       {/* Dashboard Preview - What You Get */}
-      <section className="py-16 sm:py-20 lg:py-28 bg-background">
+      <section id="dashboard" className="py-16 sm:py-20 lg:py-28 bg-background scroll-mt-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection direction="none">
             <div className="text-center mb-10">
@@ -422,7 +424,7 @@ export default function Services() {
       <SectionDivider />
 
       {/* Business Starter Flow */}
-      <section className="py-16 sm:py-20 lg:py-28 bg-muted/30">
+      <section id="formation" className="py-16 sm:py-20 lg:py-28 bg-muted/30 scroll-mt-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
             <AnimatedSection direction="left">
@@ -511,7 +513,7 @@ export default function Services() {
       <SectionDivider />
 
       {/* Business Credit Builder */}
-      <section className="py-16 sm:py-20 lg:py-28 bg-background">
+      <section id="credit" className="py-16 sm:py-20 lg:py-28 bg-background scroll-mt-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection direction="none">
             <motion.div 
@@ -590,7 +592,7 @@ export default function Services() {
       <SectionDivider />
 
       {/* Personal Brand & Scale */}
-      <section className="py-16 sm:py-20 lg:py-28 bg-muted/30">
+      <section id="brand" className="py-16 sm:py-20 lg:py-28 bg-muted/30 scroll-mt-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Personal Brand */}
