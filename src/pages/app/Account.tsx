@@ -9,16 +9,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   User,
   CreditCard,
@@ -26,7 +22,6 @@ import {
   Settings,
   ExternalLink,
   CheckCircle2,
-  AlertCircle,
   Loader2,
   Calendar,
   RefreshCw,
@@ -35,6 +30,9 @@ import {
   Shield,
   Sparkles,
   Package,
+  Save,
+  Pencil,
+  X,
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
@@ -42,6 +40,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
+
+// Industry options
+const INDUSTRIES = [
+  "Technology",
+  "Healthcare",
+  "Finance",
+  "Real Estate",
+  "Retail",
+  "Food & Beverage",
+  "Professional Services",
+  "Construction",
+  "Manufacturing",
+  "Transportation",
+  "Education",
+  "Entertainment",
+  "Other",
+];
 
 // Add-on status interface
 interface AddonStatus {
@@ -69,12 +84,32 @@ function getAddOnIcon(id: string) {
 }
 
 export default function Account() {
-  const { user, profile, subscription, refreshSubscription } = useAuth();
-  const { tier, actualTier, subscriptionEnd, cancelAtPeriodEnd } = useSubscriptionTier();
+  const { user, profile, subscription, refreshSubscription, refreshProfile } = useAuth();
+  const { tier, subscriptionEnd, cancelAtPeriodEnd } = useSubscriptionTier();
   const [addons, setAddons] = useState<Record<string, AddonStatus>>({});
   const [isLoadingAddons, setIsLoadingAddons] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isOpeningPortal, setIsOpeningPortal] = useState(false);
+  
+  // Profile editing state
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [formData, setFormData] = useState({
+    full_name: "",
+    business_name: "",
+    industry: "",
+  });
+
+  // Initialize form data when profile loads
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        full_name: profile.full_name || "",
+        business_name: profile.business_name || "",
+        industry: profile.industry || "",
+      });
+    }
+  }, [profile]);
 
   // Fetch add-ons on mount
   useEffect(() => {
@@ -122,6 +157,49 @@ export default function Account() {
       toast.error(error.message || "Failed to open billing portal");
     } finally {
       setIsOpeningPortal(false);
+    }
+  };
+
+  const handleEditProfile = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    // Reset form data to current profile values
+    if (profile) {
+      setFormData({
+        full_name: profile.full_name || "",
+        business_name: profile.business_name || "",
+        industry: profile.industry || "",
+      });
+    }
+    setIsEditing(false);
+  };
+
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    
+    setIsSaving(true);
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          full_name: formData.full_name.trim() || null,
+          business_name: formData.business_name.trim() || null,
+          industry: formData.industry || null,
+        })
+        .eq("user_id", user.id);
+
+      if (error) throw error;
+
+      await refreshProfile();
+      setIsEditing(false);
+      toast.success("Profile updated successfully");
+    } catch (error: any) {
+      console.error("Error updating profile:", error);
+      toast.error(error.message || "Failed to update profile");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -399,40 +477,101 @@ export default function Account() {
         <TabsContent value="profile" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5 text-primary" />
-                Profile Information
-              </CardTitle>
-              <CardDescription>
-                Your account details and business information
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <User className="h-5 w-5 text-primary" />
+                    Profile Information
+                  </CardTitle>
+                  <CardDescription>
+                    Your account details and business information
+                  </CardDescription>
+                </div>
+                {!isEditing && (
+                  <Button variant="outline" size="sm" onClick={handleEditProfile}>
+                    <Pencil className="h-4 w-4 mr-2" />
+                    Edit Profile
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label>Email</Label>
                   <Input value={user?.email || ""} disabled className="bg-muted" />
+                  <p className="text-xs text-muted-foreground">
+                    Email cannot be changed
+                  </p>
                 </div>
                 <div className="space-y-2">
-                  <Label>Full Name</Label>
-                  <Input value={profile?.full_name || ""} disabled className="bg-muted" />
+                  <Label htmlFor="full_name">Full Name</Label>
+                  {isEditing ? (
+                    <Input
+                      id="full_name"
+                      value={formData.full_name}
+                      onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                      placeholder="Enter your full name"
+                      maxLength={100}
+                    />
+                  ) : (
+                    <Input value={profile?.full_name || "Not set"} disabled className="bg-muted" />
+                  )}
                 </div>
                 <div className="space-y-2">
-                  <Label>Business Name</Label>
-                  <Input value={profile?.business_name || ""} disabled className="bg-muted" />
+                  <Label htmlFor="business_name">Business Name</Label>
+                  {isEditing ? (
+                    <Input
+                      id="business_name"
+                      value={formData.business_name}
+                      onChange={(e) => setFormData({ ...formData, business_name: e.target.value })}
+                      placeholder="Enter your business name"
+                      maxLength={150}
+                    />
+                  ) : (
+                    <Input value={profile?.business_name || "Not set"} disabled className="bg-muted" />
+                  )}
                 </div>
                 <div className="space-y-2">
-                  <Label>Industry</Label>
-                  <Input value={profile?.industry || ""} disabled className="bg-muted" />
+                  <Label htmlFor="industry">Industry</Label>
+                  {isEditing ? (
+                    <Select
+                      value={formData.industry}
+                      onValueChange={(value) => setFormData({ ...formData, industry: value })}
+                    >
+                      <SelectTrigger id="industry">
+                        <SelectValue placeholder="Select your industry" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {INDUSTRIES.map((industry) => (
+                          <SelectItem key={industry} value={industry}>
+                            {industry}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Input value={profile?.industry || "Not set"} disabled className="bg-muted" />
+                  )}
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-4">
-                <Button variant="outline" disabled>
-                  <Settings className="h-4 w-4 mr-2" />
-                  Edit Profile (Coming Soon)
-                </Button>
-              </div>
+              {isEditing && (
+                <div className="flex gap-3 pt-4">
+                  <Button onClick={handleSaveProfile} disabled={isSaving} className="gap-2">
+                    {isSaving ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Save className="h-4 w-4" />
+                    )}
+                    Save Changes
+                  </Button>
+                  <Button variant="outline" onClick={handleCancelEdit} disabled={isSaving}>
+                    <X className="h-4 w-4 mr-2" />
+                    Cancel
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
