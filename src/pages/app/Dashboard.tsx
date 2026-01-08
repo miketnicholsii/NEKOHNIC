@@ -2,12 +2,14 @@ import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
+import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TaskManager from "@/components/dashboard/TaskManager";
 import WelcomeHeader from "@/components/dashboard/WelcomeHeader";
 import WidgetGrid from "@/components/dashboard/WidgetGrid";
+import { AdminPreviewPanel } from "@/components/admin/AdminPreviewPanel";
 import {
   ArrowRight,
   Crown,
@@ -18,7 +20,8 @@ import {
 } from "lucide-react";
 
 export default function Dashboard() {
-  const { subscription, refreshSubscription } = useAuth();
+  const { refreshSubscription, isAdmin } = useAuth();
+  const { tier, isPreviewMode } = useSubscriptionTier();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("overview");
@@ -36,6 +39,9 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6" role="main" aria-label="Dashboard">
+      {/* Admin Preview Panel */}
+      {isAdmin && <AdminPreviewPanel />}
+
       {/* Personalized Welcome Header */}
       <WelcomeHeader />
 
@@ -157,7 +163,7 @@ export default function Dashboard() {
       </Tabs>
 
       {/* Upgrade CTA for free users */}
-      {subscription.tier === "free" && (
+      {tier === "free" && (
         <motion.section
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}

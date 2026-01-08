@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/hooks/use-auth";
-import { SUBSCRIPTION_TIERS, SubscriptionTier, normalizeTier } from "@/lib/subscription-tiers";
+import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
+import { SUBSCRIPTION_TIERS, SubscriptionTier } from "@/lib/subscription-tiers";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronRight, Sparkles } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Check, ChevronRight, Sparkles, Eye } from "lucide-react";
 
 const TIER_ORDER: SubscriptionTier[] = ["free", "starter", "pro", "elite"];
 
@@ -15,18 +16,27 @@ const TIER_FEATURES: Record<SubscriptionTier, string[]> = {
 };
 
 export default function TierProgress() {
-  const { subscription } = useAuth();
-  const currentTier = normalizeTier(subscription?.tier);
+  const { tier: currentTier, isPreviewMode, actualTier } = useSubscriptionTier();
   const currentIndex = TIER_ORDER.indexOf(currentTier);
 
   return (
     <div className="bg-card border border-border rounded-xl overflow-hidden">
       <div className="p-5 border-b border-border">
-        <h3 className="font-display text-lg font-bold text-foreground">Your Plan</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="font-display text-lg font-bold text-foreground">Your Plan</h3>
+          {isPreviewMode && (
+            <Badge variant="outline" className="gap-1 text-amber-500 border-amber-500/30">
+              <Eye className="h-3 w-3" />
+              Preview
+            </Badge>
+          )}
+        </div>
         <p className="text-sm text-muted-foreground mt-1">
-          {currentTier === "elite" 
-            ? "You have access to all features!" 
-            : "Upgrade to unlock more features"
+          {isPreviewMode 
+            ? `Previewing as ${currentTier} (actual: ${actualTier})`
+            : currentTier === "elite" 
+              ? "You have access to all features!" 
+              : "Upgrade to unlock more features"
           }
         </p>
       </div>
