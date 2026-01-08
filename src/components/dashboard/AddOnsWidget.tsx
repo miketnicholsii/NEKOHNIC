@@ -87,13 +87,16 @@ interface AddOnCardProps {
   addon: AddOnService;
   isLocked: boolean;
   onPurchase: (addonId: string) => void;
+  onManage: () => void;
   isPurchasing: boolean;
+  isManaging: boolean;
   purchasedAddonIds: string[];
 }
 
-function AddOnCard({ addon, isLocked, onPurchase, isPurchasing, purchasedAddonIds }: AddOnCardProps) {
+function AddOnCard({ addon, isLocked, onPurchase, onManage, isPurchasing, isManaging, purchasedAddonIds }: AddOnCardProps) {
   const Icon = getAddOnIcon(addon.id);
   const isPurchased = purchasedAddonIds.includes(addon.id);
+  const isRecurring = addon.pricingType === "recurring" || addon.pricingType === "hybrid";
 
   return (
     <motion.div
@@ -151,7 +154,21 @@ function AddOnCard({ addon, isLocked, onPurchase, isPurchasing, purchasedAddonId
                 </span>
               )}
             </div>
-            {!isLocked && !isPurchased && (
+            {!isLocked && isPurchased && isRecurring ? (
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={onManage}
+                disabled={isManaging}
+                className="text-xs h-7"
+              >
+                {isManaging ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : (
+                  "Manage"
+                )}
+              </Button>
+            ) : !isLocked && !isPurchased ? (
               <Button
                 size="sm"
                 variant="outline"
@@ -165,7 +182,7 @@ function AddOnCard({ addon, isLocked, onPurchase, isPurchasing, purchasedAddonId
                   "Get"
                 )}
               </Button>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
@@ -178,6 +195,7 @@ export default function AddOnsWidget() {
   const { user } = useAuth();
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [purchasingId, setPurchasingId] = useState<string | null>(null);
+  const [isManaging, setIsManaging] = useState(false);
   const [purchasedAddons, setPurchasedAddons] = useState<Record<string, PurchasedAddon>>({});
   const [isLoadingAddons, setIsLoadingAddons] = useState(true);
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -257,6 +275,31 @@ export default function AddOnsWidget() {
     }
   };
 
+  const handleManageSubscription = async () => {
+    if (!user) {
+      toast.error("Please sign in to manage subscriptions");
+      return;
+    }
+
+    setIsManaging(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("customer-portal");
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.open(data.url, "_blank");
+        toast.success("Opening subscription management...");
+      }
+    } catch (error: any) {
+      console.error("Portal error:", error);
+      toast.error(error.message || "Failed to open subscription portal");
+    } finally {
+      setIsManaging(false);
+    }
+  };
+
   return (
     <Card className="border-border bg-card/50">
       <CardHeader className="pb-3">
@@ -300,7 +343,9 @@ export default function AddOnsWidget() {
                           addon={addon}
                           isLocked={isLocked}
                           onPurchase={handlePurchase}
+                          onManage={handleManageSubscription}
                           isPurchasing={isPurchasing && purchasingId === addon.id}
+                          isManaging={isManaging}
                           purchasedAddonIds={activeAddonIds}
                         />
                       );
@@ -316,7 +361,9 @@ export default function AddOnsWidget() {
                           addon={addon}
                           isLocked={isLocked}
                           onPurchase={handlePurchase}
+                          onManage={handleManageSubscription}
                           isPurchasing={isPurchasing && purchasingId === addon.id}
+                          isManaging={isManaging}
                           purchasedAddonIds={activeAddonIds}
                         />
                       );
@@ -332,7 +379,9 @@ export default function AddOnsWidget() {
                           addon={addon}
                           isLocked={isLocked}
                           onPurchase={handlePurchase}
+                          onManage={handleManageSubscription}
                           isPurchasing={isPurchasing && purchasingId === addon.id}
+                          isManaging={isManaging}
                           purchasedAddonIds={activeAddonIds}
                         />
                       );
@@ -345,7 +394,9 @@ export default function AddOnsWidget() {
                           addon={addon}
                           isLocked={isLocked}
                           onPurchase={handlePurchase}
+                          onManage={handleManageSubscription}
                           isPurchasing={isPurchasing && purchasingId === addon.id}
+                          isManaging={isManaging}
                           purchasedAddonIds={activeAddonIds}
                         />
                       );
@@ -367,57 +418,72 @@ export default function AddOnsWidget() {
             const Icon = getAddOnIcon(addon.id);
             const isLocked = locked.some((l) => l.id === addon.id);
             const isPurchased = isAddonPurchased(addon.id);
+            const isRecurring = addon.pricingType === "recurring" || addon.pricingType === "hybrid";
 
-          return (
-            <div
-              key={addon.id}
-              className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
-                isLocked ? "opacity-60" : "hover:bg-muted/50"
-              }`}
-            >
+            return (
               <div
-                className={`p-1.5 rounded-md ${
-                  isLocked ? "bg-muted" : "bg-primary/10"
+                key={addon.id}
+                className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                  isLocked ? "opacity-60" : "hover:bg-muted/50"
                 }`}
               >
-                <Icon
-                  className={`h-4 w-4 ${
-                    isLocked ? "text-muted-foreground" : "text-primary"
+                <div
+                  className={`p-1.5 rounded-md ${
+                    isLocked ? "bg-muted" : "bg-primary/10"
                   }`}
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{addon.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {addon.pricingType === "recurring"
-                    ? `$${addon.recurringPrice}/mo`
-                    : `$${addon.price}`}
-                </p>
-              </div>
-              {isLocked ? (
-                <Lock className="h-4 w-4 text-muted-foreground" />
-              ) : isPurchased ? (
-                <CheckCircle2 className="h-4 w-4 text-primary" />
-              ) : (
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="h-7 text-xs"
-                  onClick={() => handlePurchase(addon.id)}
-                  disabled={isPurchasing && purchasingId === addon.id}
                 >
-                  {isPurchasing && purchasingId === addon.id ? (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  ) : (
-                    <>
-                      Get
-                      <ExternalLink className="h-3 w-3 ml-1" />
-                    </>
-                  )}
-                </Button>
-              )}
-            </div>
-          );
+                  <Icon
+                    className={`h-4 w-4 ${
+                      isLocked ? "text-muted-foreground" : "text-primary"
+                    }`}
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{addon.name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {addon.pricingType === "recurring"
+                      ? `$${addon.recurringPrice}/mo`
+                      : `$${addon.price}`}
+                  </p>
+                </div>
+                {isLocked ? (
+                  <Lock className="h-4 w-4 text-muted-foreground" />
+                ) : isPurchased && isRecurring ? (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 text-xs"
+                    onClick={handleManageSubscription}
+                    disabled={isManaging}
+                  >
+                    {isManaging ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      "Manage"
+                    )}
+                  </Button>
+                ) : isPurchased ? (
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 text-xs"
+                    onClick={() => handlePurchase(addon.id)}
+                    disabled={isPurchasing && purchasingId === addon.id}
+                  >
+                    {isPurchasing && purchasingId === addon.id ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <>
+                        Get
+                        <ExternalLink className="h-3 w-3 ml-1" />
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
+            );
           })
         )}
         
