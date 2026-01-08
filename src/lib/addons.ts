@@ -1,7 +1,7 @@
 // NEKO Add-Ons & Services Configuration
 // Defines one-time, recurring, and hybrid add-on services
 
-import { SubscriptionTier } from "./subscription-tiers";
+import { SubscriptionTier, normalizeTier } from "./subscription-tiers";
 
 // Pricing types
 export type PricingType = "one_time" | "recurring" | "hybrid";
@@ -156,11 +156,7 @@ export function getServicesForTier(
   tier: SubscriptionTier | string,
   services: AddOnService[] = ALL_SERVICES
 ): { available: AddOnService[]; locked: AddOnService[] } {
-  // Import the normalizer inline to avoid circular deps
   const tierOrder: SubscriptionTier[] = ["free", "starter", "pro", "elite"];
-  
-  // Normalize the tier (handles legacy names like "start" -> "starter")
-  const { normalizeTier } = require("./subscription-tiers");
   const normalizedTier = normalizeTier(tier);
   const tierIndex = tierOrder.indexOf(normalizedTier);
 
