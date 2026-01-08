@@ -6,9 +6,9 @@ import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/hooks/use-auth";
 import { AdminPreviewProvider } from "@/hooks/use-admin-preview";
+import { UpgradeModalProvider } from "@/components/UpgradeModalProvider";
 import { AdminPreviewIndicator } from "@/components/admin/AdminPreviewPanel";
 import { AnimatedRoutes } from "@/components/AnimatedRoutes";
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -26,12 +26,14 @@ const App = () => (
       <TooltipProvider>
         <AuthProvider>
           <AdminPreviewProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <AnimatedRoutes />
-              <AdminPreviewIndicator />
-            </BrowserRouter>
+            <UpgradeModalProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <AnimatedRoutes />
+                <AdminPreviewIndicator />
+              </BrowserRouter>
+            </UpgradeModalProvider>
           </AdminPreviewProvider>
         </AuthProvider>
       </TooltipProvider>
