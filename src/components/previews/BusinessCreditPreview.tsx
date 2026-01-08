@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Lock, TrendingUp, Star, AlertCircle, ArrowUpRight } from "lucide-react";
+import { CheckCircle2, Lock, TrendingUp, Star, AlertCircle, ArrowUpRight, CreditCard, Shield, Award } from "lucide-react";
 import { PreviewWrapper } from "./PreviewWrapper";
 
 const tiers = [
@@ -32,56 +32,93 @@ const tiers = [
 ];
 
 const tradelines = [
-  { vendor: "Uline", limit: "$1,000", status: "Active", reporting: true },
-  { vendor: "Quill", limit: "$750", status: "Active", reporting: true },
-  { vendor: "Grainger", limit: "Pending", status: "Applied", reporting: false },
+  { vendor: "Uline", limit: "$1,000", status: "Active", reporting: true, color: "from-primary/20 to-primary/5" },
+  { vendor: "Quill", limit: "$750", status: "Active", reporting: true, color: "from-secondary/20 to-secondary/5" },
+  { vendor: "Grainger", limit: "Pending", status: "Applied", reporting: false, color: "from-muted to-muted/50" },
 ];
 
 const expandedTradelines = [
-  { vendor: "Uline", limit: "$1,000", status: "Active", reporting: true, bureau: "D&B", opened: "Nov 2024" },
-  { vendor: "Quill", limit: "$750", status: "Active", reporting: true, bureau: "D&B, Experian", opened: "Oct 2024" },
-  { vendor: "Grainger", limit: "Pending", status: "Applied", reporting: false, bureau: "D&B", opened: "-" },
-  { vendor: "Summa Office", limit: "$500", status: "Approved", reporting: false, bureau: "D&B", opened: "Dec 2024" },
+  { vendor: "Uline", limit: "$1,000", status: "Active", reporting: true, bureau: "D&B", opened: "Nov 2024", color: "from-primary/20 to-primary/5" },
+  { vendor: "Quill", limit: "$750", status: "Active", reporting: true, bureau: "D&B, Experian", opened: "Oct 2024", color: "from-secondary/20 to-secondary/5" },
+  { vendor: "Grainger", limit: "Pending", status: "Applied", reporting: false, bureau: "D&B", opened: "-", color: "from-muted to-muted/50" },
+  { vendor: "Summa Office", limit: "$500", status: "Approved", reporting: false, bureau: "D&B", opened: "Dec 2024", color: "from-accent/20 to-accent/5" },
 ];
 
 const creditScores = [
-  { bureau: "Dun & Bradstreet", score: "72", label: "PAYDEX", change: "+5" },
-  { bureau: "Experian", score: "48", label: "Intelliscore", change: "+12" },
-  { bureau: "Equifax", score: "--", label: "Credit Risk", change: null },
+  { bureau: "Dun & Bradstreet", score: "72", label: "PAYDEX", change: "+5", icon: Shield, color: "text-primary" },
+  { bureau: "Experian Business", score: "48", label: "Intelliscore", change: "+12", icon: Award, color: "text-secondary" },
+  { bureau: "Equifax", score: "--", label: "Credit Risk", change: null, icon: CreditCard, color: "text-muted-foreground" },
 ];
+
+const staggerItem = {
+  hidden: { opacity: 0, scale: 0.95 },
+  show: { opacity: 1, scale: 1 }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 }
+  }
+};
 
 function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card via-card to-muted/30 shadow-lg">
+    <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card via-card to-muted/20 shadow-xl">
       {showOverlay && (
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background via-background/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-background via-background/90 to-transparent z-10 pointer-events-none" />
       )}
       
       <div className="p-5 sm:p-6">
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <h3 className="font-display text-base font-bold text-foreground">Business Credit Builder</h3>
-            <p className="text-xs text-muted-foreground">Tier 1 in progress</p>
+        {/* Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between mb-6"
+        >
+          <div className="flex items-center gap-3">
+            <motion.div 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
+              className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center"
+            >
+              <CreditCard className="h-5 w-5 text-primary" />
+            </motion.div>
+            <div>
+              <h3 className="font-display text-base font-bold text-foreground">Business Credit Builder</h3>
+              <p className="text-xs text-muted-foreground">Tier 1 in progress</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary">
-            <TrendingUp className="h-3.5 w-3.5" />
-            <span className="text-xs font-semibold">Building</span>
-          </div>
-        </div>
+          <motion.div 
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20"
+          >
+            <TrendingUp className="h-3.5 w-3.5 text-primary" />
+            <span className="text-xs font-semibold text-primary">Building</span>
+          </motion.div>
+        </motion.div>
 
-        <div className="grid grid-cols-4 gap-2 mb-5">
-          {tiers.map((tier, index) => (
+        {/* Tier Cards */}
+        <motion.div 
+          variants={staggerContainer}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-4 gap-2 mb-5"
+        >
+          {tiers.map((tier) => (
             <motion.div
               key={tier.tier}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-              className={`relative p-3 rounded-xl text-center ${
+              variants={staggerItem}
+              whileHover={{ scale: 1.03, y: -2 }}
+              className={`relative p-3 rounded-xl text-center transition-all ${
                 tier.status === "complete" 
-                  ? "bg-primary/10 border border-primary/30" 
+                  ? "bg-primary/10 border-2 border-primary/40" 
                   : tier.status === "active"
-                    ? "bg-card border-2 border-primary"
-                    : "bg-muted/30 border border-border opacity-60"
+                    ? "bg-card border-2 border-primary shadow-lg shadow-primary/10"
+                    : "bg-muted/30 border border-border opacity-50"
               }`}
             >
               <div className={`text-lg font-bold mb-0.5 ${
@@ -97,42 +134,51 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               </div>
               <p className="text-[10px] text-muted-foreground truncate">{tier.name}</p>
               {tier.status === "active" && (
-                <div className="mt-2 h-1 bg-muted rounded-full overflow-hidden">
+                <div className="mt-2 h-1.5 bg-muted rounded-full overflow-hidden">
                   <motion.div 
                     initial={{ width: 0 }}
-                    whileInView={{ width: `${tier.progress}%` }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                    className="h-full bg-primary"
+                    animate={{ width: `${tier.progress}%` }}
+                    transition={{ duration: 1, delay: 0.4 }}
+                    className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full"
                   />
                 </div>
               )}
               {tier.status === "complete" && (
-                <CheckCircle2 className="absolute top-2 right-2 h-3 w-3 text-primary" />
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.3, type: "spring" }}
+                >
+                  <CheckCircle2 className="absolute top-2 right-2 h-3.5 w-3.5 text-primary" />
+                </motion.div>
               )}
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
+        {/* Tradelines Table */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-card border border-border rounded-xl overflow-hidden"
+          className="bg-card border border-border rounded-xl overflow-hidden shadow-sm"
         >
-          <div className="px-4 py-3 border-b border-border bg-muted/30">
+          <div className="px-4 py-3 border-b border-border bg-gradient-to-r from-muted/50 to-transparent flex items-center justify-between">
             <h4 className="text-xs font-semibold text-foreground">Active Tradelines</h4>
+            <span className="text-[10px] text-muted-foreground px-2 py-0.5 bg-muted rounded-full">{tradelines.length} accounts</span>
           </div>
           <div className="divide-y divide-border">
             {tradelines.map((line, index) => (
               <motion.div
                 key={line.vendor}
                 initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + index * 0.1 }}
-                className="flex items-center justify-between px-4 py-2.5"
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 + index * 0.08 }}
+                whileHover={{ backgroundColor: "hsl(var(--muted) / 0.3)" }}
+                className="flex items-center justify-between px-4 py-3 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-xs font-bold text-muted-foreground">
+                  <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${line.color} flex items-center justify-center text-xs font-bold text-foreground`}>
                     {line.vendor[0]}
                   </div>
                   <div>
@@ -143,7 +189,9 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                 <div className="text-right">
                   <p className="text-xs font-semibold text-foreground">{line.limit}</p>
                   {line.reporting && (
-                    <p className="text-[10px] text-primary">Reporting ✓</p>
+                    <p className="text-[10px] text-primary flex items-center gap-1 justify-end">
+                      <Star className="h-2.5 w-2.5 fill-current" /> Reporting
+                    </p>
                   )}
                 </div>
               </motion.div>
@@ -159,47 +207,71 @@ function ExpandedContent() {
   return (
     <div className="space-y-6">
       {/* Credit Scores Overview */}
-      <div className="grid grid-cols-3 gap-4">
+      <motion.div 
+        variants={staggerContainer}
+        initial="hidden"
+        animate="show"
+        className="grid grid-cols-3 gap-4"
+      >
         {creditScores.map((score, index) => (
           <motion.div
             key={score.bureau}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="p-4 rounded-xl bg-card border border-border text-center"
+            variants={staggerItem}
+            whileHover={{ scale: 1.02, y: -2 }}
+            className="p-5 rounded-2xl bg-card border border-border text-center relative overflow-hidden group"
           >
-            <p className="text-xs text-muted-foreground mb-2">{score.bureau}</p>
-            <p className="text-3xl font-bold text-foreground">{score.score}</p>
-            <p className="text-xs text-muted-foreground">{score.label}</p>
-            {score.change && (
-              <div className="flex items-center justify-center gap-1 mt-2 text-primary">
-                <ArrowUpRight className="h-3 w-3" />
-                <span className="text-xs font-semibold">{score.change}</span>
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <score.icon className={`h-4 w-4 ${score.color}`} />
+                <p className="text-xs text-muted-foreground">{score.bureau}</p>
               </div>
-            )}
+              <p className="text-4xl font-bold text-foreground mb-1">{score.score}</p>
+              <p className="text-xs text-muted-foreground">{score.label}</p>
+              {score.change && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
+                  className="flex items-center justify-center gap-1 mt-3 text-primary"
+                >
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                  <span className="text-sm font-semibold">{score.change}</span>
+                </motion.div>
+              )}
+            </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Tier Progress */}
-      <div className="bg-card border border-border rounded-xl p-6">
-        <h4 className="font-display font-bold text-lg text-foreground mb-4">Credit Building Tiers</h4>
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="bg-card border border-border rounded-2xl p-6"
+      >
+        <div className="flex items-center gap-2 mb-5">
+          <CreditCard className="h-5 w-5 text-primary" />
+          <h4 className="font-display font-bold text-lg text-foreground">Credit Building Tiers</h4>
+        </div>
         <div className="grid grid-cols-4 gap-4">
           {tiers.map((tier, index) => (
             <motion.div
               key={tier.tier}
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-              className={`relative p-4 rounded-xl text-center ${
+              transition={{ delay: 0.2 + index * 0.08 }}
+              whileHover={{ scale: 1.03, y: -3 }}
+              className={`relative p-5 rounded-xl text-center transition-all cursor-pointer ${
                 tier.status === "complete" 
                   ? "bg-primary/10 border-2 border-primary" 
                   : tier.status === "active"
-                    ? "bg-card border-2 border-primary shadow-lg"
-                    : "bg-muted/30 border border-border opacity-70"
+                    ? "bg-card border-2 border-primary shadow-xl shadow-primary/15"
+                    : "bg-muted/30 border border-border opacity-60"
               }`}
             >
-              <div className={`text-2xl font-bold mb-1 ${
+              <div className={`text-2xl font-bold mb-1.5 ${
                 tier.status === "complete" || tier.status === "active" 
                   ? "text-primary" 
                   : "text-muted-foreground"
@@ -212,31 +284,42 @@ function ExpandedContent() {
               </div>
               <p className="text-sm text-muted-foreground">{tier.name}</p>
               {tier.status === "active" && (
-                <div className="mt-3">
+                <div className="mt-4">
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
                       animate={{ width: `${tier.progress}%` }}
                       transition={{ duration: 0.8, delay: 0.3 }}
-                      className="h-full bg-primary rounded-full"
+                      className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full"
                     />
                   </div>
-                  <p className="text-xs text-primary mt-1">{tier.progress}% complete</p>
+                  <p className="text-xs text-primary mt-2 font-medium">{tier.progress}% complete</p>
                 </div>
               )}
               {tier.status === "complete" && (
-                <CheckCircle2 className="absolute top-3 right-3 h-5 w-5 text-primary" />
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.4, type: "spring" }}
+                >
+                  <CheckCircle2 className="absolute top-3 right-3 h-5 w-5 text-primary" />
+                </motion.div>
               )}
             </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* Full Tradeline Table */}
-      <div className="bg-card border border-border rounded-xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-border bg-muted/30 flex items-center justify-between">
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="bg-card border border-border rounded-2xl overflow-hidden"
+      >
+        <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-muted/50 to-transparent flex items-center justify-between">
           <h4 className="font-semibold text-foreground">Tradeline Tracker</h4>
-          <span className="text-xs text-muted-foreground">{expandedTradelines.length} accounts</span>
+          <span className="text-xs text-muted-foreground px-3 py-1 bg-muted rounded-full">{expandedTradelines.length} accounts</span>
         </div>
         <div className="divide-y divide-border">
           {expandedTradelines.map((line, index) => (
@@ -244,11 +327,12 @@ function ExpandedContent() {
               key={line.vendor}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.08 }}
-              className="flex items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors"
+              transition={{ delay: 0.3 + index * 0.06 }}
+              whileHover={{ backgroundColor: "hsl(var(--muted) / 0.3)" }}
+              className="flex items-center justify-between px-6 py-4 transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-sm font-bold text-muted-foreground">
+                <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${line.color} flex items-center justify-center text-sm font-bold text-foreground`}>
                   {line.vendor[0]}
                 </div>
                 <div>
@@ -256,7 +340,7 @@ function ExpandedContent() {
                   <p className="text-xs text-muted-foreground">Opened {line.opened}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-8">
                 <div className="text-center">
                   <p className="text-xs text-muted-foreground">Limit</p>
                   <p className="font-semibold text-foreground">{line.limit}</p>
@@ -267,14 +351,14 @@ function ExpandedContent() {
                 </div>
                 <div className="text-center">
                   <p className="text-xs text-muted-foreground">Status</p>
-                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
                     line.status === "Active" 
                       ? "bg-primary/10 text-primary" 
                       : line.status === "Approved"
                         ? "bg-secondary/10 text-secondary"
                         : "bg-muted text-muted-foreground"
                   }`}>
-                    {line.reporting && <Star className="h-3 w-3" />}
+                    {line.reporting && <Star className="h-3 w-3 fill-current" />}
                     {line.status}
                   </span>
                 </div>
@@ -282,18 +366,25 @@ function ExpandedContent() {
             </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
-      {/* Tips */}
-      <div className="flex items-start gap-3 p-4 rounded-xl bg-primary/5 border border-primary/20">
-        <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+      {/* Pro Tip */}
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="flex items-start gap-4 p-5 rounded-2xl bg-gradient-to-r from-primary/5 via-primary/5 to-transparent border border-primary/20"
+      >
+        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+          <AlertCircle className="h-5 w-5 text-primary" />
+        </div>
         <div>
-          <p className="font-medium text-foreground text-sm">Pro Tip</p>
-          <p className="text-sm text-muted-foreground">
-            Apply to 2-3 Net-30 vendors per month to steadily build your credit profile without appearing too aggressive.
+          <p className="font-semibold text-foreground">Pro Tip</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            Apply to 2-3 Net-30 vendors per month to steadily build your credit profile without appearing too aggressive. Pay early and in full for maximum impact.
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

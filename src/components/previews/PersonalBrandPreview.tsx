@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Globe, Linkedin, Instagram, Mail, Eye, MousePointer, Share2, Settings } from "lucide-react";
+import { ExternalLink, Globe, Linkedin, Instagram, Mail, Eye, MousePointer, Share2, Settings, User, Sparkles, Palette } from "lucide-react";
 import { PreviewWrapper } from "./PreviewWrapper";
 
 const profile = {
@@ -8,65 +8,106 @@ const profile = {
   headline: "Founder & Creative Director",
   bio: "Building brands that resonate. Helping startups tell their story with clarity and purpose.",
   skills: ["Brand Strategy", "Visual Design", "Content Creation", "Web Development"],
+  initials: "AR"
 };
 
 const links = [
-  { icon: Globe, label: "Website", url: "alexrivera.co" },
-  { icon: Linkedin, label: "LinkedIn", url: "linkedin.com/in/alexrivera" },
-  { icon: Instagram, label: "Instagram", url: "@alexrivera.studio" },
+  { icon: Globe, label: "Website", url: "alexrivera.co", color: "text-primary" },
+  { icon: Linkedin, label: "LinkedIn", url: "linkedin.com/in/alexrivera", color: "text-[#0A66C2]" },
+  { icon: Instagram, label: "Instagram", url: "@alexrivera.studio", color: "text-[#E4405F]" },
 ];
 
 const projects = [
-  { title: "Noma Collective", type: "Brand Identity", color: "bg-primary/20" },
-  { title: "Vertex Labs", type: "Web Design", color: "bg-secondary/20" },
+  { title: "Noma Collective", type: "Brand Identity", color: "from-primary/30 to-primary/10" },
+  { title: "Vertex Labs", type: "Web Design", color: "from-secondary/30 to-secondary/10" },
 ];
 
 const expandedProjects = [
-  { title: "Noma Collective", type: "Brand Identity", color: "bg-primary/20", description: "Complete rebrand for sustainable fashion collective" },
-  { title: "Vertex Labs", type: "Web Design", color: "bg-secondary/20", description: "Landing page and product showcase for AI startup" },
-  { title: "Bloom Studio", type: "Visual Identity", color: "bg-accent/20", description: "Logo and brand guidelines for wellness brand" },
-  { title: "TechFlow", type: "UI/UX Design", color: "bg-muted", description: "Dashboard redesign for SaaS platform" },
+  { title: "Noma Collective", type: "Brand Identity", color: "from-primary/30 to-primary/10", description: "Complete rebrand for sustainable fashion collective" },
+  { title: "Vertex Labs", type: "Web Design", color: "from-secondary/30 to-secondary/10", description: "Landing page and product showcase for AI startup" },
+  { title: "Bloom Studio", type: "Visual Identity", color: "from-accent/30 to-accent/10", description: "Logo and brand guidelines for wellness brand" },
+  { title: "TechFlow", type: "UI/UX Design", color: "from-muted to-muted/50", description: "Dashboard redesign for SaaS platform" },
 ];
 
 const analytics = [
-  { label: "Profile Views", value: "1,247", change: "+23%" },
-  { label: "Link Clicks", value: "342", change: "+18%" },
-  { label: "Shares", value: "56", change: "+8%" },
+  { label: "Profile Views", value: "1,247", change: "+23%", icon: Eye },
+  { label: "Link Clicks", value: "342", change: "+18%", icon: MousePointer },
+  { label: "Shares", value: "56", change: "+8%", icon: Share2 },
 ];
+
+const staggerItem = {
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0 }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06, delayChildren: 0.1 }
+  }
+};
 
 function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card via-card to-muted/30 shadow-lg">
+    <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card via-card to-muted/20 shadow-xl">
       {showOverlay && (
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background via-background/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-background via-background/90 to-transparent z-10 pointer-events-none" />
       )}
       
       <div className="p-5 sm:p-6">
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <h3 className="font-display text-base font-bold text-foreground">Personal Brand Builder</h3>
-            <p className="text-xs text-muted-foreground">Your Digital CV</p>
+        {/* Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between mb-6"
+        >
+          <div className="flex items-center gap-3">
+            <motion.div 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
+              className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center"
+            >
+              <User className="h-5 w-5 text-primary" />
+            </motion.div>
+            <div>
+              <h3 className="font-display text-base font-bold text-foreground">Personal Brand Builder</h3>
+              <p className="text-xs text-muted-foreground">Your Digital CV</p>
+            </div>
           </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/30">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-            <span className="text-[10px] font-medium text-primary">Live</span>
-          </div>
-        </div>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20"
+          >
+            <motion.span 
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="w-2 h-2 rounded-full bg-primary"
+            />
+            <span className="text-[10px] font-semibold text-primary">Live</span>
+          </motion.div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Profile Card */}
           <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-card border border-border rounded-xl p-4"
+            className="bg-card border border-border rounded-xl p-4 shadow-sm"
           >
             <div className="flex items-start gap-3 mb-4">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center text-xl font-bold text-primary">
-                AR
-              </div>
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/30 via-primary/20 to-primary/5 flex items-center justify-center text-xl font-bold text-primary ring-2 ring-primary/20"
+              >
+                {profile.initials}
+              </motion.div>
               <div className="flex-1 min-w-0">
                 <h4 className="font-display font-bold text-foreground text-sm">{profile.name}</h4>
-                <p className="text-xs text-primary">{profile.headline}</p>
+                <p className="text-xs text-primary font-medium">{profile.headline}</p>
               </div>
             </div>
             
@@ -74,67 +115,84 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               {profile.bio}
             </p>
 
-            <div className="flex flex-wrap gap-1.5">
-              {profile.skills.map((skill, index) => (
+            <motion.div 
+              variants={staggerContainer}
+              initial="hidden"
+              animate="show"
+              className="flex flex-wrap gap-1.5"
+            >
+              {profile.skills.map((skill) => (
                 <motion.span
                   key={skill}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2 + index * 0.05 }}
-                  className="px-2 py-1 rounded-md bg-muted text-[10px] text-muted-foreground"
+                  variants={staggerItem}
+                  whileHover={{ scale: 1.05 }}
+                  className="px-2.5 py-1 rounded-lg bg-muted hover:bg-muted/80 text-[10px] text-muted-foreground transition-colors cursor-default"
                 >
                   {skill}
                 </motion.span>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
 
           <div className="space-y-3">
+            {/* Links Card */}
             <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-card border border-border rounded-xl p-4"
+              className="bg-card border border-border rounded-xl p-4 shadow-sm"
             >
-              <h5 className="text-xs font-semibold text-foreground mb-3">Links</h5>
-              <div className="space-y-2">
-                {links.map((link, index) => (
+              <h5 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Globe className="h-3.5 w-3.5 text-muted-foreground" />
+                Links
+              </h5>
+              <motion.div 
+                variants={staggerContainer}
+                initial="hidden"
+                animate="show"
+                className="space-y-2"
+              >
+                {links.map((link) => (
                   <motion.div
                     key={link.label}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + index * 0.08 }}
-                    className="flex items-center justify-between p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                    variants={staggerItem}
+                    whileHover={{ scale: 1.02, x: 3 }}
+                    className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50 hover:bg-muted transition-all cursor-pointer group"
                   >
-                    <div className="flex items-center gap-2">
-                      <link.icon className="h-3.5 w-3.5 text-primary" />
-                      <span className="text-xs text-foreground">{link.label}</span>
+                    <div className="flex items-center gap-2.5">
+                      <link.icon className={`h-4 w-4 ${link.color}`} />
+                      <span className="text-xs text-foreground font-medium">{link.label}</span>
                     </div>
-                    <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                    <ExternalLink className="h-3 w-3 text-muted-foreground group-hover:text-primary transition-colors" />
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </motion.div>
 
+            {/* Projects Card */}
             <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-card border border-border rounded-xl p-4"
+              className="bg-card border border-border rounded-xl p-4 shadow-sm"
             >
-              <h5 className="text-xs font-semibold text-foreground mb-3">Projects</h5>
-              <div className="space-y-2">
+              <h5 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Palette className="h-3.5 w-3.5 text-muted-foreground" />
+                Projects
+              </h5>
+              <div className="space-y-2.5">
                 {projects.map((project, index) => (
                   <motion.div
                     key={project.title}
                     initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.4 + index * 0.1 }}
-                    className="flex items-center gap-3"
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 + index * 0.08 }}
+                    whileHover={{ scale: 1.02, x: 3 }}
+                    className="flex items-center gap-3 cursor-pointer group"
                   >
-                    <div className={`w-10 h-10 rounded-lg ${project.color}`} />
+                    <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${project.color} group-hover:shadow-md transition-shadow`} />
                     <div>
-                      <p className="text-xs font-medium text-foreground">{project.title}</p>
+                      <p className="text-xs font-medium text-foreground group-hover:text-primary transition-colors">{project.title}</p>
                       <p className="text-[10px] text-muted-foreground">{project.type}</p>
                     </div>
                   </motion.div>
@@ -152,43 +210,60 @@ function ExpandedContent() {
   return (
     <div className="space-y-6">
       {/* Analytics Overview */}
-      <div className="grid grid-cols-3 gap-4">
-        {analytics.map((stat, index) => (
+      <motion.div 
+        variants={staggerContainer}
+        initial="hidden"
+        animate="show"
+        className="grid grid-cols-3 gap-4"
+      >
+        {analytics.map((stat) => (
           <motion.div
             key={stat.label}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="p-4 rounded-xl bg-card border border-border text-center"
+            variants={staggerItem}
+            whileHover={{ scale: 1.02, y: -2 }}
+            className="p-5 rounded-2xl bg-card border border-border text-center relative overflow-hidden group"
           >
-            <div className="flex items-center justify-center gap-2 mb-2">
-              {stat.label === "Profile Views" && <Eye className="h-4 w-4 text-muted-foreground" />}
-              {stat.label === "Link Clicks" && <MousePointer className="h-4 w-4 text-muted-foreground" />}
-              {stat.label === "Shares" && <Share2 className="h-4 w-4 text-muted-foreground" />}
-              <p className="text-xs text-muted-foreground">{stat.label}</p>
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <stat.icon className="h-4 w-4 text-muted-foreground" />
+                <p className="text-xs text-muted-foreground">{stat.label}</p>
+              </div>
+              <p className="text-3xl font-bold text-foreground">{stat.value}</p>
+              <p className="text-xs text-primary mt-1 font-medium">{stat.change} this month</p>
             </div>
-            <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-            <p className="text-xs text-primary">{stat.change} this month</p>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Full Profile Preview */}
-      <div className="bg-card border border-border rounded-xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-border bg-muted/30 flex items-center justify-between">
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="bg-card border border-border rounded-2xl overflow-hidden"
+      >
+        <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-muted/50 to-transparent flex items-center justify-between">
           <h4 className="font-semibold text-foreground">Profile Preview</h4>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-xs text-primary">Live at alexrivera.co</span>
+            <motion.span 
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="w-2 h-2 rounded-full bg-primary"
+            />
+            <span className="text-xs text-primary font-medium">Live at alexrivera.co</span>
           </div>
         </div>
         
         <div className="p-6">
           <div className="flex items-start gap-5 mb-6">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center text-3xl font-bold text-primary">
-              AR
-            </div>
-            <div>
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/30 via-primary/20 to-primary/5 flex items-center justify-center text-3xl font-bold text-primary ring-4 ring-primary/20"
+            >
+              {profile.initials}
+            </motion.div>
+            <div className="flex-1">
               <h3 className="font-display text-2xl font-bold text-foreground">{profile.name}</h3>
               <p className="text-primary font-medium">{profile.headline}</p>
               <p className="text-muted-foreground mt-2 max-w-md">{profile.bio}</p>
@@ -197,35 +272,51 @@ function ExpandedContent() {
 
           <div className="flex flex-wrap gap-2 mb-6">
             {profile.skills.map((skill) => (
-              <span key={skill} className="px-3 py-1.5 rounded-lg bg-muted text-sm text-muted-foreground">
+              <motion.span 
+                key={skill} 
+                whileHover={{ scale: 1.05 }}
+                className="px-3.5 py-1.5 rounded-lg bg-muted hover:bg-muted/80 text-sm text-muted-foreground transition-colors cursor-default"
+              >
                 {skill}
-              </span>
+              </motion.span>
             ))}
           </div>
 
           {/* Links */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
-            {links.map((link) => (
-              <div
+          <div className="grid grid-cols-3 gap-3">
+            {links.map((link, index) => (
+              <motion.div
                 key={link.label}
-                className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + index * 0.08 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                className="flex items-center gap-3 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-all cursor-pointer group"
               >
-                <link.icon className="h-5 w-5 text-primary" />
+                <link.icon className={`h-5 w-5 ${link.color}`} />
                 <div>
-                  <p className="text-sm font-medium text-foreground">{link.label}</p>
+                  <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{link.label}</p>
                   <p className="text-xs text-muted-foreground">{link.url}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Projects Grid */}
-      <div className="bg-card border border-border rounded-xl p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h4 className="font-semibold text-foreground">Featured Projects</h4>
-          <button className="text-xs text-primary hover:underline">Edit Projects</button>
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="bg-card border border-border rounded-2xl p-6"
+      >
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-primary" />
+            <h4 className="font-semibold text-foreground">Featured Projects</h4>
+          </div>
+          <button className="text-xs text-primary hover:underline font-medium">Edit Projects</button>
         </div>
         <div className="grid grid-cols-2 gap-4">
           {expandedProjects.map((project, index) => (
@@ -233,38 +324,50 @@ function ExpandedContent() {
               key={project.title}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
+              transition={{ delay: 0.3 + index * 0.08 }}
+              whileHover={{ scale: 1.02, y: -3 }}
+              className="p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all cursor-pointer group border border-transparent hover:border-border"
             >
-              <div className={`w-full h-24 rounded-lg ${project.color} mb-3`} />
-              <h5 className="font-medium text-foreground">{project.title}</h5>
+              <div className={`w-full h-24 rounded-lg bg-gradient-to-br ${project.color} mb-3 group-hover:shadow-md transition-shadow`} />
+              <h5 className="font-medium text-foreground group-hover:text-primary transition-colors">{project.title}</h5>
               <p className="text-xs text-muted-foreground">{project.type}</p>
-              <p className="text-xs text-muted-foreground mt-1">{project.description}</p>
+              <p className="text-xs text-muted-foreground mt-1.5">{project.description}</p>
             </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* Settings Quick Access */}
-      <div className="flex items-center justify-between p-4 rounded-xl bg-muted/30 border border-border">
-        <div className="flex items-center gap-3">
-          <Settings className="h-5 w-5 text-muted-foreground" />
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="flex items-center justify-between p-5 rounded-2xl bg-gradient-to-r from-muted/50 to-transparent border border-border"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center">
+            <Settings className="h-5 w-5 text-muted-foreground" />
+          </div>
           <div>
-            <p className="font-medium text-foreground text-sm">SEO Settings</p>
-            <p className="text-xs text-muted-foreground">Optimize your profile for search engines</p>
+            <p className="font-medium text-foreground">SEO Settings</p>
+            <p className="text-sm text-muted-foreground">Optimize your profile for search engines</p>
           </div>
         </div>
-        <button className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors">
+        <motion.button 
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
+          className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+        >
           Configure
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
     </div>
   );
 }
 
 export const PersonalBrandPreview = memo(function PersonalBrandPreview() {
   return (
-    <PreviewWrapper title="Personal Brand Builder" expandedContent={<ExpandedContent />}>
+    <PreviewWrapper title="Personal Brand Builder" expandedContent={<ExpandedContent />} accentColor="secondary">
       <PreviewContent />
     </PreviewWrapper>
   );
