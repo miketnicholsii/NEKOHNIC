@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { memo, useMemo } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
@@ -13,6 +14,17 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
+const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+const HeroBackground = memo(function HeroBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none contain-paint" aria-hidden="true">
+      <div className="absolute top-1/3 left-[20%] w-48 sm:w-64 h-48 sm:h-64 bg-primary/5 rounded-full blur-3xl opacity-50 gpu-accelerated" />
+      <div className="absolute bottom-1/4 right-[15%] w-40 sm:w-56 h-40 sm:h-56 bg-primary/5 rounded-full blur-3xl opacity-50 gpu-accelerated" />
+    </div>
+  );
+});
 
 const pricingPlans = [
   {
@@ -108,17 +120,26 @@ const comparisonFeatures = [
 ];
 
 export default function Pricing() {
+  const prefersReducedMotion = useReducedMotion();
+  
+  const fadeIn = useMemo(() => prefersReducedMotion 
+    ? { initial: {}, animate: {}, transition: {} }
+    : { 
+        initial: { opacity: 0, y: 16 }, 
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.5, ease: easeOutExpo }
+      }, [prefersReducedMotion]);
+
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background overflow-x-hidden">
       <EccentricNavbar />
 
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-background">
-        <div className="container mx-auto px-6 lg:px-8 text-center">
+      <section className="pt-32 pb-16 bg-background relative">
+        <HeroBackground />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            {...fadeIn}
             className="max-w-2xl mx-auto"
           >
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tightest text-foreground mb-6">
@@ -133,8 +154,8 @@ export default function Pricing() {
 
       {/* Pricing Cards */}
       <section className="py-12 bg-background">
-        <div className="container mx-auto px-6 lg:px-8">
-          <AnimatedStagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedStagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 items-stretch">
             {pricingPlans.map((plan) => (
               <motion.div key={plan.name} variants={staggerItem} className="flex">
                 <PricingCard
@@ -149,12 +170,27 @@ export default function Pricing() {
               </motion.div>
             ))}
           </AnimatedStagger>
+          
+          {/* Single CTA below cards */}
+          <AnimatedSection delay={0.3}>
+            <div className="text-center mt-10">
+              <Link to="/contact">
+                <Button variant="cta" size="xl" className="group">
+                  Say Hello
+                  <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                </Button>
+              </Link>
+              <p className="text-sm text-muted-foreground mt-3">
+                Request access to get started with any plan
+              </p>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* Comparison Table */}
-      <section className="py-20 lg:py-28 bg-muted/30">
-        <div className="container mx-auto px-6 lg:px-8">
+      <section className="py-16 sm:py-20 lg:py-28 bg-muted/30">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
               label="Compare"
@@ -165,8 +201,8 @@ export default function Pricing() {
           </AnimatedSection>
 
           <AnimatedSection delay={0.2}>
-            <div className="overflow-x-auto">
-              <table className="w-full max-w-5xl mx-auto bg-card rounded-xl border border-border overflow-hidden">
+            <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <table className="w-full max-w-5xl mx-auto bg-card rounded-xl border border-border overflow-hidden min-w-[600px]">
                 <thead>
                   <tr className="border-b border-border">
                     <th className="text-left p-4 font-medium text-muted-foreground text-sm">Feature</th>
@@ -234,8 +270,8 @@ export default function Pricing() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20 lg:py-28 bg-background">
-        <div className="container mx-auto px-6 lg:px-8">
+      <section className="py-16 sm:py-20 lg:py-28 bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
               label="FAQ"
@@ -272,8 +308,9 @@ export default function Pricing() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 lg:py-24 bg-tertiary">
-        <div className="container mx-auto px-6 lg:px-8 text-center">
+      <section className="py-16 sm:py-20 lg:py-24 bg-tertiary relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>
             <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
               Hello, NÈKO.
@@ -284,7 +321,7 @@ export default function Pricing() {
             <Link to="/contact">
               <Button variant="hero" size="xl" className="group">
                 Say Hello
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
             </Link>
           </AnimatedSection>

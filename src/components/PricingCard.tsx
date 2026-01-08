@@ -1,12 +1,8 @@
-import { useState, memo } from "react";
+import { memo } from "react";
 import { cn } from "@/lib/utils";
-import { Check, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Check } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import { SubscriptionTier, tierMeetsRequirement } from "@/lib/subscription-tiers";
+import { SubscriptionTier } from "@/lib/subscription-tiers";
 
 interface PricingCardProps {
   name: string;
@@ -29,86 +25,10 @@ export const PricingCard = memo(function PricingCard({
   badge,
   className,
 }: PricingCardProps) {
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const { user, subscription } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const { subscription } = useAuth();
   
   const tierKey = name.toLowerCase() as SubscriptionTier;
   const isCurrentPlan = subscription.tier === tierKey;
-  const isDowngrade = user && tierMeetsRequirement(subscription.tier, tierKey) && !isCurrentPlan;
-  
-  const handleClick = async () => {
-    if (tierKey === "free") {
-      if (user) {
-        navigate("/app");
-      } else {
-        navigate("/contact");
-      }
-      return;
-    }
-
-    if (!user) {
-      navigate("/contact");
-      return;
-    }
-
-    if (isCurrentPlan) {
-      navigate("/app");
-      return;
-    }
-
-    if (subscription.subscribed) {
-      setIsLoading(true);
-      try {
-        const { data, error } = await supabase.functions.invoke("customer-portal");
-        if (error) throw error;
-        if (data?.url) {
-          window.open(data.url, "_blank");
-        }
-      } catch {
-        toast({
-          title: "Error",
-          description: "Could not open billing portal. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const promoCode = localStorage.getItem("appliedPromoCode");
-      
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { tier: tierKey, promoCode: promoCode || undefined },
-      });
-      
-      if (error) throw error;
-      
-      if (data?.url) {
-        localStorage.removeItem("appliedPromoCode");
-        window.open(data.url, "_blank");
-      }
-    } catch {
-      toast({
-        title: "Error",
-        description: "Could not start checkout. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const getButtonText = () => {
-    if (isLoading) return "Loading...";
-    if (isCurrentPlan) return "Current Plan";
-    if (isDowngrade && subscription.subscribed) return "Manage Plan";
-    return "Say Hello";
-  };
 
   return (
     <div
@@ -121,10 +41,10 @@ export const PricingCard = memo(function PricingCard({
         className
       )}
     >
-      {/* Badge - Minimal */}
+      {/* Badge - Minimal corner tag */}
       {badge && !isCurrentPlan && (
         <div className="absolute top-0 right-0">
-          <span className="inline-block px-3 py-1 text-[10px] font-semibold tracking-wide uppercase rounded-bl-lg bg-primary text-primary-foreground">
+          <span className="inline-block px-2.5 py-0.5 text-[9px] font-semibold tracking-wide uppercase rounded-bl-md bg-primary text-primary-foreground">
             {badge}
           </span>
         </div>
@@ -132,8 +52,8 @@ export const PricingCard = memo(function PricingCard({
       
       {isCurrentPlan && (
         <div className="absolute top-0 right-0">
-          <span className="inline-flex items-center gap-1 px-3 py-1 text-[10px] font-semibold tracking-wide uppercase rounded-bl-lg bg-primary text-primary-foreground">
-            <Check className="h-2.5 w-2.5" />
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[9px] font-semibold tracking-wide uppercase rounded-bl-md bg-primary text-primary-foreground">
+            <Check className="h-2 w-2" />
             Current
           </span>
         </div>
@@ -177,7 +97,7 @@ export const PricingCard = memo(function PricingCard({
         </div>
 
         {/* Features */}
-        <ul className="space-y-2.5 mb-6 flex-1">
+        <ul className="space-y-2.5 flex-1">
           {features.map((feature, index) => (
             <li
               key={index}
@@ -194,22 +114,6 @@ export const PricingCard = memo(function PricingCard({
             </li>
           ))}
         </ul>
-
-        {/* CTA */}
-        <Button
-          variant={highlighted ? "hero" : isCurrentPlan ? "outline" : "outline"}
-          className={cn(
-            "w-full",
-            highlighted && "shadow-md",
-            !highlighted && !isCurrentPlan && "hover:bg-primary hover:text-primary-foreground"
-          )}
-          size="default"
-          onClick={handleClick}
-          disabled={isLoading || isCurrentPlan}
-        >
-          {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-          {getButtonText()}
-        </Button>
       </div>
     </div>
   );
