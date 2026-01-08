@@ -452,6 +452,48 @@
   .contain-paint {
     contain: paint;
   }
+
+  /* Touch-friendly tap targets */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Disable hover effects on touch devices for better performance */
+  @media (hover: none) {
+    .card-hover:hover {
+      transform: none;
+    }
+    
+    .hover\:-translate-y-1:hover {
+      transform: none;
+    }
+  }
+
+  /* Reduce motion for battery saving on mobile */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Mobile-specific optimizations */
+  @media (max-width: 640px) {
+    .animate-float,
+    .animate-float-delayed {
+      animation: none;
+    }
+    
+    /* Faster animations on mobile */
+    .animate-slide-up,
+    .animate-slide-in-left,
+    .animate-fade-in,
+    .animate-scale-in {
+      animation-duration: 0.4s;
+    }
+  }
 }
 
 /* Keyframes - GPU accelerated with will-change hints */

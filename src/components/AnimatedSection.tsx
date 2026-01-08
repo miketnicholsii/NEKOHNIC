@@ -11,14 +11,14 @@ interface AnimatedSectionProps {
 }
 
 const directionVariants = {
-  up: { y: 32, opacity: 0 },
-  down: { y: -32, opacity: 0 },
-  left: { x: 32, opacity: 0 },
-  right: { x: -32, opacity: 0 },
-  none: { opacity: 0, scale: 0.98 },
+  up: { y: 24, opacity: 0 },
+  down: { y: -24, opacity: 0 },
+  left: { x: 24, opacity: 0 },
+  right: { x: -24, opacity: 0 },
+  none: { opacity: 0 },
 };
 
-const visible = { x: 0, y: 0, opacity: 1, scale: 1 };
+const visible = { x: 0, y: 0, opacity: 1 };
 
 // Optimized easing curve for smooth animations
 const smoothEase = [0.25, 0.1, 0.25, 1] as const;
@@ -51,7 +51,7 @@ export const AnimatedSection = memo(function AnimatedSection({
       animate={isInView ? "visible" : "hidden"}
       variants={variants}
       transition={{
-        duration: 0.6,
+        duration: 0.5,
         delay,
         ease: smoothEase,
       }}
@@ -108,13 +108,12 @@ export const AnimatedStagger = memo(function AnimatedStagger({
 });
 
 export const staggerItem = {
-  hidden: { y: 24, opacity: 0, scale: 0.98 },
+  hidden: { y: 16, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
-    scale: 1,
     transition: {
-      duration: 0.5,
+      duration: 0.4,
       ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
     },
   },

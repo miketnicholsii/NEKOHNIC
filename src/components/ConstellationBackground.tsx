@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
 interface Particle {
@@ -16,16 +16,36 @@ const ConstellationBackground = memo(function ConstellationBackground() {
   const particlesRef = useRef<Particle[]>([]);
   const animationRef = useRef<number>();
   const mouseRef = useRef({ x: 0, y: 0, active: false });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if mobile on mount
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || prefersReducedMotion) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
+    let isVisible = true;
+
+    // Intersection Observer for performance - pause when not visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        isVisible = entries[0]?.isIntersecting ?? false;
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(canvas);
+
     const resizeCanvas = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
       const rect = canvas.getBoundingClientRect();
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
@@ -34,31 +54,49 @@ const ConstellationBackground = memo(function ConstellationBackground() {
 
     const createParticles = () => {
       const rect = canvas.getBoundingClientRect();
-      const particleCount = Math.min(Math.floor((rect.width * rect.height) / 15000), 60);
+      // Fewer particles on mobile for better performance
+      const baseDensity = isMobile ? 25000 : 15000;
+      const maxParticles = isMobile ? 30 : 50;
+      const particleCount = Math.min(Math.floor((rect.width * rect.height) / baseDensity), maxParticles);
       particlesRef.current = [];
 
       for (let i = 0; i < particleCount; i++) {
         particlesRef.current.push({
           x: Math.random() * rect.width,
           y: Math.random() * rect.height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
+          vx: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3),
+          vy: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3),
           radius: Math.random() * 1.5 + 0.5,
           opacity: Math.random() * 0.5 + 0.2,
         });
       }
     };
 
-    const drawParticles = () => {
+    let lastTime = 0;
+    const targetFPS = isMobile ? 30 : 60;
+    const frameInterval = 1000 / targetFPS;
+
+    const drawParticles = (currentTime: number) => {
+      animationRef.current = requestAnimationFrame(drawParticles);
+      
+      // Skip if not visible or frame rate limiting
+      if (!isVisible) return;
+      
+      const deltaTime = currentTime - lastTime;
+      if (deltaTime < frameInterval) return;
+      lastTime = currentTime - (deltaTime % frameInterval);
+
       const rect = canvas.getBoundingClientRect();
       ctx.clearRect(0, 0, rect.width, rect.height);
 
       const particles = particlesRef.current;
-      const connectionDistance = 120;
+      const connectionDistance = isMobile ? 80 : 120;
       const mouseConnectionDistance = 150;
 
       // Update and draw particles
-      particles.forEach((particle, i) => {
+      for (let i = 0; i < particles.length; i++) {
+        const particle = particles[i];
+        
         // Update position
         particle.x += particle.vx;
         particle.y += particle.vy;
@@ -77,14 +115,16 @@ const ConstellationBackground = memo(function ConstellationBackground() {
         ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity * 0.6})`;
         ctx.fill();
 
-        // Draw connections to nearby particles
-        for (let j = i + 1; j < particles.length; j++) {
+        // Draw connections to nearby particles (limit checks on mobile)
+        const maxConnections = isMobile ? Math.min(i + 5, particles.length) : particles.length;
+        for (let j = i + 1; j < maxConnections; j++) {
           const other = particles[j];
           const dx = particle.x - other.x;
           const dy = particle.y - other.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (distance < connectionDistance) {
+          if (distSq < connectionDistance * connectionDistance) {
+            const distance = Math.sqrt(distSq);
             const opacity = (1 - distance / connectionDistance) * 0.15;
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
@@ -95,13 +135,14 @@ const ConstellationBackground = memo(function ConstellationBackground() {
           }
         }
 
-        // Draw connection to mouse if nearby
-        if (mouseRef.current.active) {
+        // Draw connection to mouse if nearby (desktop only)
+        if (!isMobile && mouseRef.current.active) {
           const dx = particle.x - mouseRef.current.x;
           const dy = particle.y - mouseRef.current.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (distance < mouseConnectionDistance) {
+          if (distSq < mouseConnectionDistance * mouseConnectionDistance) {
+            const distance = Math.sqrt(distSq);
             const opacity = (1 - distance / mouseConnectionDistance) * 0.3;
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
@@ -111,12 +152,11 @@ const ConstellationBackground = memo(function ConstellationBackground() {
             ctx.stroke();
           }
         }
-      });
-
-      animationRef.current = requestAnimationFrame(drawParticles);
+      }
     };
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (isMobile) return;
       const rect = canvas.getBoundingClientRect();
       mouseRef.current = {
         x: e.clientX - rect.left,
@@ -131,24 +171,27 @@ const ConstellationBackground = memo(function ConstellationBackground() {
 
     resizeCanvas();
     createParticles();
-    drawParticles();
+    animationRef.current = requestAnimationFrame(drawParticles);
 
-    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mousemove", handleMouseMove, { passive: true });
     canvas.addEventListener("mouseleave", handleMouseLeave);
-    window.addEventListener("resize", () => {
+    
+    const handleResize = () => {
       resizeCanvas();
       createParticles();
-    });
+    };
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+      observer.disconnect();
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
-      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("resize", handleResize);
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, isMobile]);
 
   if (prefersReducedMotion) {
     return null;
@@ -157,8 +200,8 @@ const ConstellationBackground = memo(function ConstellationBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-auto"
-      style={{ opacity: 0.7 }}
+      className="absolute inset-0 w-full h-full pointer-events-auto will-change-auto"
+      style={{ opacity: isMobile ? 0.5 : 0.7 }}
       aria-hidden="true"
     />
   );

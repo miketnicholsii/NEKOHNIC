@@ -7,8 +7,15 @@ interface Ripple {
   y: number;
 }
 
+// Check if device is touch-only
+const isTouchDevice = () => {
+  if (typeof window === 'undefined') return false;
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+};
+
 export const CursorGlow = memo(function CursorGlow() {
   const prefersReducedMotion = useReducedMotion();
+  const [isTouch, setIsTouch] = useState(false);
   const [isInHero, setIsInHero] = useState(false);
   const [ripples, setRipples] = useState<Ripple[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,8 +24,13 @@ export const CursorGlow = memo(function CursorGlow() {
   const mouseX = useSpring(0, { stiffness: 150, damping: 20, mass: 0.1 });
   const mouseY = useSpring(0, { stiffness: 150, damping: 20, mass: 0.1 });
   
+  useEffect(() => {
+    setIsTouch(isTouchDevice());
+  }, []);
+  
+  
   const handleClick = useCallback((e: MouseEvent) => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || isTouch) return;
     
     const hero = containerRef.current?.parentElement;
     if (!hero) return;
@@ -43,10 +55,10 @@ export const CursorGlow = memo(function CursorGlow() {
         setRipples(prev => prev.filter(r => r.id !== id));
       }, 800);
     }
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, isTouch]);
   
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || isTouch) return;
     
     const handleMouseMove = (e: MouseEvent) => {
       const hero = containerRef.current?.parentElement;
@@ -68,15 +80,16 @@ export const CursorGlow = memo(function CursorGlow() {
       }
     };
     
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     window.addEventListener("click", handleClick);
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("click", handleClick);
     };
-  }, [mouseX, mouseY, prefersReducedMotion, handleClick]);
+  }, [mouseX, mouseY, prefersReducedMotion, handleClick, isTouch]);
   
-  if (prefersReducedMotion) return null;
+  // Don't render on touch devices or with reduced motion
+  if (prefersReducedMotion || isTouch) return null;
   
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
