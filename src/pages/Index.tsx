@@ -8,6 +8,7 @@ import { FeatureCard } from "@/components/FeatureCard";
 import { SectionHeading } from "@/components/SectionHeading";
 import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
 import { ConstellationBackground } from "@/components/ConstellationBackground";
+import { CursorGlow } from "@/components/CursorGlow";
 import { 
   ArrowRight, 
   Building2, 
@@ -148,6 +149,7 @@ export default function Index() {
       <section ref={heroRef} className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-16 sm:pt-0 sm:pb-0">
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
         <HeroBackground scrollY={heroBackgroundY} />
+        <CursorGlow />
 
         <motion.div 
           style={{ opacity: prefersReducedMotion ? 1 : heroOpacity }}
