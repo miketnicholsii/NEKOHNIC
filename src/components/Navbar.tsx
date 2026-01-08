@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, memo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Menu, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
@@ -73,13 +74,26 @@ export const Navbar = memo(function Navbar() {
       <div className="container mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <span className={`font-display text-xl font-bold tracking-display transition-colors duration-300 ${
-              showDarkText ? "text-foreground" : "text-white"
-            }`}>
-              NÈKO.
-            </span>
-          </Link>
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link to="/" className="flex items-center gap-2 group">
+                  <span className={`font-display text-xl font-bold tracking-display transition-colors duration-300 ${
+                    showDarkText ? "text-foreground" : "text-white"
+                  }`}>
+                    NÈKO.
+                  </span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent 
+                side="bottom" 
+                sideOffset={8}
+                className="bg-background/95 backdrop-blur-sm border-border/50 px-3 py-1.5 shadow-lg animate-in fade-in-0 zoom-in-95 duration-200"
+              >
+                <span className="text-sm font-logo tracking-wide text-foreground/80 italic">ē-ko</span>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1">

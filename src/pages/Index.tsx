@@ -109,7 +109,7 @@ const NekoLogo = memo(function NekoLogo() {
         <TooltipContent 
           side="bottom" 
           sideOffset={12}
-          className="bg-background/95 backdrop-blur-sm border-border/50 px-4 py-2 shadow-lg"
+          className="bg-background/95 backdrop-blur-sm border-border/50 px-4 py-2 shadow-lg animate-in fade-in-0 zoom-in-95 duration-200"
         >
           <span className="text-sm font-logo tracking-wide text-foreground/80 italic">
             ē-ko

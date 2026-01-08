@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, memo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
@@ -70,15 +71,41 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
           <div className="flex items-center justify-between h-11 lg:h-12">
             {/* Left side - Logo (fixed width to balance right side) */}
             <div className="hidden lg:flex items-center w-56 flex-shrink-0">
-              <Link to="/" className="flex items-center relative z-10">
-                <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
-              </Link>
+              <TooltipProvider delayDuration={300}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/" className="flex items-center relative z-10">
+                      <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent 
+                    side="bottom" 
+                    sideOffset={8}
+                    className="bg-background/95 backdrop-blur-sm border-border/50 px-3 py-1.5 shadow-lg animate-in fade-in-0 zoom-in-95 duration-200"
+                  >
+                    <span className="text-sm font-logo tracking-wide text-foreground/80 italic">ē-ko</span>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
             
             {/* Mobile logo */}
-            <Link to="/" className="flex lg:hidden items-center relative z-10 flex-shrink-0">
-              <span className={`font-display text-xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
-            </Link>
+            <TooltipProvider delayDuration={300}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link to="/" className="flex lg:hidden items-center relative z-10 flex-shrink-0">
+                    <span className={`font-display text-xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent 
+                  side="bottom" 
+                  sideOffset={8}
+                  className="bg-background/95 backdrop-blur-sm border-border/50 px-3 py-1.5 shadow-lg animate-in fade-in-0 zoom-in-95 duration-200"
+                >
+                  <span className="text-sm font-logo tracking-wide text-foreground/80 italic">ē-ko</span>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
             {/* Centered navigation */}
             <div className="hidden lg:flex items-center justify-center">
