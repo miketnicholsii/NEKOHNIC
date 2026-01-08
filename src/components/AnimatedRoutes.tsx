@@ -1,50 +1,51 @@
-import { lazy, Suspense, memo } from "react";
+import { Suspense, memo } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LazyBoundary, lazyWithRetry } from "@/components/LazyBoundary";
 
 // Critical path - load immediately
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 
-// Lazy load non-critical routes
-const About = lazy(() => import("@/pages/About"));
-const Services = lazy(() => import("@/pages/Services"));
-const PersonalBrand = lazy(() => import("@/pages/PersonalBrand"));
-const Pricing = lazy(() => import("@/pages/Pricing"));
-const GetStarted = lazy(() => import("@/pages/GetStarted"));
-const Contact = lazy(() => import("@/pages/Contact"));
-const PublicProfile = lazy(() => import("@/pages/PublicProfile"));
+// Lazy load non-critical routes with retry logic
+const About = lazyWithRetry(() => import("@/pages/About"));
+const Services = lazyWithRetry(() => import("@/pages/Services"));
+const PersonalBrand = lazyWithRetry(() => import("@/pages/PersonalBrand"));
+const Pricing = lazyWithRetry(() => import("@/pages/Pricing"));
+const GetStarted = lazyWithRetry(() => import("@/pages/GetStarted"));
+const Contact = lazyWithRetry(() => import("@/pages/Contact"));
+const PublicProfile = lazyWithRetry(() => import("@/pages/PublicProfile"));
 
-// Auth pages - lazy load
-const Login = lazy(() => import("@/pages/Login"));
-const ForgotPassword = lazy(() => import("@/pages/ForgotPassword"));
+// Auth pages - lazy load with retry
+const Login = lazyWithRetry(() => import("@/pages/Login"));
+const ForgotPassword = lazyWithRetry(() => import("@/pages/ForgotPassword"));
 
-// Legal pages - lazy load
-const Privacy = lazy(() => import("@/pages/legal/Privacy"));
-const Terms = lazy(() => import("@/pages/legal/Terms"));
+// Legal pages - lazy load with retry
+const Privacy = lazyWithRetry(() => import("@/pages/legal/Privacy"));
+const Terms = lazyWithRetry(() => import("@/pages/legal/Terms"));
 
-// App (authenticated) pages - lazy load
-const AppLayout = lazy(() => import("@/pages/app/AppLayout"));
-const Dashboard = lazy(() => import("@/pages/app/Dashboard"));
-const Onboarding = lazy(() => import("@/pages/app/Onboarding"));
-const BusinessStarter = lazy(() => import("@/pages/app/BusinessStarter"));
-const BusinessCredit = lazy(() => import("@/pages/app/BusinessCredit"));
-const PersonalBrandBuilder = lazy(() => import("@/pages/app/PersonalBrandBuilder"));
-const Resources = lazy(() => import("@/pages/app/Resources"));
-const Account = lazy(() => import("@/pages/app/Account"));
-const Support = lazy(() => import("@/pages/app/Support"));
-const Analytics = lazy(() => import("@/pages/app/Analytics"));
-const Achievements = lazy(() => import("@/pages/app/Achievements"));
-const CheckoutSuccess = lazy(() => import("@/pages/app/CheckoutSuccess"));
+// App (authenticated) pages - lazy load with retry
+const AppLayout = lazyWithRetry(() => import("@/pages/app/AppLayout"));
+const Dashboard = lazyWithRetry(() => import("@/pages/app/Dashboard"));
+const Onboarding = lazyWithRetry(() => import("@/pages/app/Onboarding"));
+const BusinessStarter = lazyWithRetry(() => import("@/pages/app/BusinessStarter"));
+const BusinessCredit = lazyWithRetry(() => import("@/pages/app/BusinessCredit"));
+const PersonalBrandBuilder = lazyWithRetry(() => import("@/pages/app/PersonalBrandBuilder"));
+const Resources = lazyWithRetry(() => import("@/pages/app/Resources"));
+const Account = lazyWithRetry(() => import("@/pages/app/Account"));
+const Support = lazyWithRetry(() => import("@/pages/app/Support"));
+const Analytics = lazyWithRetry(() => import("@/pages/app/Analytics"));
+const Achievements = lazyWithRetry(() => import("@/pages/app/Achievements"));
+const CheckoutSuccess = lazyWithRetry(() => import("@/pages/app/CheckoutSuccess"));
 
-// Admin pages - lazy load
-const AdminLayout = lazy(() => import("@/pages/admin/AdminLayout"));
-const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
-const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
-const AdminContent = lazy(() => import("@/pages/admin/AdminContent"));
-const AdminPlans = lazy(() => import("@/pages/admin/AdminPlans"));
-const AdminAnnouncements = lazy(() => import("@/pages/admin/AdminAnnouncements"));
+// Admin pages - lazy load with retry
+const AdminLayout = lazyWithRetry(() => import("@/pages/admin/AdminLayout"));
+const AdminDashboard = lazyWithRetry(() => import("@/pages/admin/AdminDashboard"));
+const AdminUsers = lazyWithRetry(() => import("@/pages/admin/AdminUsers"));
+const AdminContent = lazyWithRetry(() => import("@/pages/admin/AdminContent"));
+const AdminPlans = lazyWithRetry(() => import("@/pages/admin/AdminPlans"));
+const AdminAnnouncements = lazyWithRetry(() => import("@/pages/admin/AdminAnnouncements"));
 
 // Loading fallback component
 function PageLoader() {
@@ -87,9 +88,10 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
   };
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      <Suspense fallback={<PageLoader />} key={getAnimationKey()}>
-        <Routes location={location} key={getAnimationKey()}>
+    <LazyBoundary>
+      <AnimatePresence mode="wait" initial={false}>
+        <Suspense fallback={<PageLoader />} key={getAnimationKey()}>
+          <Routes location={location} key={getAnimationKey()}>
           {/* Public routes */}
           <Route path="/" element={<AnimatedPage><Index /></AnimatedPage>} />
           <Route path="/about" element={<AnimatedPage><About /></AnimatedPage>} />
@@ -139,5 +141,6 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
         </Routes>
       </Suspense>
     </AnimatePresence>
+  </LazyBoundary>
   );
 });
