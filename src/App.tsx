@@ -26,14 +26,14 @@ const App = () => (
       <TooltipProvider>
         <AuthProvider>
           <AdminPreviewProvider>
-            <UpgradeModalProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <UpgradeModalProvider>
                 <AnimatedRoutes />
                 <AdminPreviewIndicator />
-              </BrowserRouter>
-            </UpgradeModalProvider>
+              </UpgradeModalProvider>
+            </BrowserRouter>
           </AdminPreviewProvider>
         </AuthProvider>
       </TooltipProvider>
