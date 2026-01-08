@@ -1,6 +1,6 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
@@ -33,18 +33,98 @@ const notList = ["A credit repair service", "Legal or financial advice", "Get-ri
 
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-const HeroBackground = memo(function HeroBackground() {
+// Animated NEKO letters
+const nekoLetters = [
+  { char: "N", delay: 0 },
+  { char: "È", delay: 0.08 },
+  { char: "K", delay: 0.16 },
+  { char: "O", delay: 0.24 },
+];
+
+const NekoLogo = memo(function NekoLogo() {
+  return (
+    <span className="inline-flex items-baseline">
+      {nekoLetters.map((letter, index) => (
+        <motion.span
+          key={index}
+          initial={{ opacity: 0, y: 40, rotateX: -90 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{
+            duration: 0.8,
+            delay: letter.delay + 0.3,
+            ease: easeOutExpo,
+          }}
+          className="inline-block neko-letter"
+          style={{ 
+            transformStyle: "preserve-3d",
+            perspective: "1000px"
+          }}
+        >
+          <motion.span
+            className="inline-block relative"
+            whileHover={{ 
+              scale: 1.05,
+              textShadow: "0 0 40px hsl(168 65% 50% / 0.4)"
+            }}
+            transition={{ duration: 0.2 }}
+          >
+            {letter.char}
+          </motion.span>
+        </motion.span>
+      ))}
+    </span>
+  );
+});
+
+const HeroBackground = memo(function HeroBackground({ scrollY }: { scrollY: ReturnType<typeof useTransform> }) {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none contain-paint" aria-hidden="true">
-      <div className="absolute top-1/4 left-[10%] w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50 gpu-accelerated motion-safe:animate-float" />
-      <div className="absolute bottom-1/4 right-[10%] w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50 gpu-accelerated motion-safe:animate-float-delayed" />
-      <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] border border-primary-foreground/10 rounded-full" />
+      {/* Primary floating orb */}
+      <motion.div 
+        style={{ y: scrollY }}
+        className="absolute top-1/4 left-[10%] w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50 gpu-accelerated motion-safe:animate-float" 
+      />
+      {/* Secondary floating orb */}
+      <motion.div 
+        style={{ y: useTransform(scrollY, v => (v as number) * 0.6) }}
+        className="absolute bottom-1/4 right-[10%] w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50 gpu-accelerated motion-safe:animate-float-delayed" 
+      />
+      {/* Center ring */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.5, delay: 0.5, ease: easeOutExpo }}
+        className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] border border-primary-foreground/10 rounded-full" 
+      />
+      {/* Inner ring */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.6 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.8, delay: 0.7, ease: easeOutExpo }}
+        className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-primary-foreground/5 rounded-full" 
+      />
+      {/* Subtle glow behind NEKO */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 2, delay: 0.8 }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] w-[300px] sm:w-[500px] h-[150px] sm:h-[200px] bg-gradient-to-b from-primary/10 via-primary/5 to-transparent blur-3xl rounded-full"
+      />
     </div>
   );
 });
 
 export default function Index() {
   const prefersReducedMotion = useReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+  
+  // Hero parallax
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
+  const heroBackgroundY = useTransform(heroScrollProgress, [0, 1], [0, 150]);
+  const heroOpacity = useTransform(heroScrollProgress, [0, 0.8], [1, 0]);
   
   const fadeIn = useMemo(() => prefersReducedMotion 
     ? { initial: {}, animate: {}, transition: {} }
@@ -59,25 +139,42 @@ export default function Index() {
       <EccentricNavbar />
       
       {/* Hero Section */}
-      <section className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-16 sm:pt-0 sm:pb-0">
+      <section ref={heroRef} className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-16 sm:pt-0 sm:pb-0">
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
-        <HeroBackground />
+        <HeroBackground scrollY={heroBackgroundY} />
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <motion.div 
+          style={{ opacity: prefersReducedMotion ? 1 : heroOpacity }}
+          className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center"
+        >
           <div className="max-w-4xl mx-auto">
-            <motion.h1 {...fadeIn} transition={{ ...fadeIn.transition, delay: 0 }} className="font-display font-bold tracking-tighter text-primary-foreground mb-5 sm:mb-6 text-[clamp(2rem,6.5vw,4.5rem)] leading-[1.1]">
-              Hello, NÈKO.
+            {/* Pre-headline */}
+            <motion.p 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1, ease: easeOutExpo }}
+              className="text-sm font-medium tracking-[0.3em] uppercase text-primary-foreground/40 mb-6"
+            >
+              Hello
+            </motion.p>
+            
+            {/* NEKO Logo */}
+            <motion.h1 
+              className="font-display font-bold tracking-tight text-primary-foreground mb-6 text-[clamp(3.5rem,12vw,8rem)] leading-[0.9] neko-title"
+            >
+              <NekoLogo />
+              <span className="neko-dot">.</span>
             </motion.h1>
 
-            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.1 }} className="text-lg sm:text-xl text-primary-foreground/70 max-w-2xl mx-auto mb-4 leading-relaxed px-2 sm:px-0">
+            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.5 }} className="text-lg sm:text-xl text-primary-foreground/70 max-w-2xl mx-auto mb-4 leading-relaxed px-2 sm:px-0">
               A guided operating system for building legitimate businesses and personal brands.
             </motion.p>
 
-            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.18 }} className="text-base text-primary-foreground/50 max-w-xl mx-auto mb-10 leading-relaxed px-2 sm:px-0">
+            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.6 }} className="text-base text-primary-foreground/50 max-w-xl mx-auto mb-10 leading-relaxed px-2 sm:px-0">
               From formation to credit to brand — with structure, education, and clarity at every step.
             </motion.p>
 
-            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.26 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
+            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.7 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
               <Link to="/contact" className="w-full sm:w-auto">
                 <Button variant="hero" size="xl" className="w-full sm:w-auto group">
                   <span className="flex items-center gap-2">
@@ -91,12 +188,17 @@ export default function Index() {
               </Link>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         <div className="hidden sm:flex absolute bottom-8 left-1/2 -translate-x-1/2" aria-hidden="true">
-          <div className="w-5 h-8 rounded-full border-2 border-primary-foreground/20 flex items-start justify-center p-1.5">
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 0.5 }}
+            className="w-5 h-8 rounded-full border-2 border-primary-foreground/20 flex items-start justify-center p-1.5"
+          >
             <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }} className="w-1 h-1.5 bg-primary-foreground/40 rounded-full" />
-          </div>
+          </motion.div>
         </div>
       </section>
 
