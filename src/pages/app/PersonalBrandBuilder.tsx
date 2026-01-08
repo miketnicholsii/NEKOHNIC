@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
+import { FeatureGate, useFeatureGate } from "@/components/FeatureGate";
+import { PageLoader } from "@/components/LoadingStates";
 import ProfileEditor from "@/components/personal-brand/ProfileEditor";
 import ProjectsEditor from "@/components/personal-brand/ProjectsEditor";
 import LinksEditor from "@/components/personal-brand/LinksEditor";
@@ -21,6 +22,7 @@ import {
   ExternalLink,
   Lock,
 } from "lucide-react";
+import type { Feature } from "@/lib/entitlements";
 
 export interface DigitalCV {
   id: string;
@@ -56,17 +58,25 @@ export interface SocialLink {
   label?: string;
 }
 
+// Tab configuration with feature requirements
+const TABS = [
+  { id: "profile", label: "Profile", icon: User, feature: null },
+  { id: "projects", label: "Projects", icon: Briefcase, feature: null },
+  { id: "links", label: "Links", icon: Link2, feature: null },
+  { id: "seo", label: "SEO", icon: Search, feature: "personal_brand_seo" as Feature },
+] as const;
+
 export default function PersonalBrandBuilder() {
-  const { user, subscription } = useAuth();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [cv, setCV] = useState<DigitalCV | null>(null);
 
-  const userTier = normalizeTier(subscription?.tier);
-  const hasSEOAccess = tierMeetsRequirement(userTier, "pro");
-  const hasPublishAccess = tierMeetsRequirement(userTier, "starter");
+  // Feature access checks
+  const seoAccess = useFeatureGate("personal_brand_seo");
+  const publishAccess = useFeatureGate("personal_brand_publish");
 
   useEffect(() => {
     loadCV();
@@ -167,7 +177,7 @@ export default function PersonalBrandBuilder() {
   };
 
   const handlePublish = async () => {
-    if (!hasPublishAccess) {
+    if (!publishAccess.hasAccess) {
       toast.error("Upgrade to Starter plan to publish your profile");
       return;
     }
@@ -197,19 +207,15 @@ export default function PersonalBrandBuilder() {
     }
   };
 
-  const tabs = [
-    { id: "profile", label: "Profile", icon: User },
-    { id: "projects", label: "Projects", icon: Briefcase },
-    { id: "links", label: "Links", icon: Link2 },
-    { id: "seo", label: "SEO", icon: Search, tier: "pro" },
-  ];
+  // Helper to check tab access
+  const getTabAccess = (feature: Feature | null): boolean => {
+    if (!feature) return true;
+    if (feature === "personal_brand_seo") return seoAccess.hasAccess;
+    return true;
+  };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <PageLoader message="Loading your brand builder..." />;
   }
 
   if (!cv) return null;
@@ -239,11 +245,11 @@ export default function PersonalBrandBuilder() {
           </Button>
           <Button
             onClick={handlePublish}
-            disabled={isSaving || !hasPublishAccess}
+            disabled={isSaving || !publishAccess.hasAccess}
             className="gap-2"
             variant={cv.is_published ? "outline" : "default"}
           >
-            {!hasPublishAccess && <Lock className="h-4 w-4" />}
+            {!publishAccess.hasAccess && <Lock className="h-4 w-4" />}
             {cv.is_published ? "Unpublish" : "Publish"}
           </Button>
         </div>
@@ -283,8 +289,8 @@ export default function PersonalBrandBuilder() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-4 h-auto p-1 bg-muted/50">
-          {tabs.map((tab) => {
-            const hasAccess = !tab.tier || tierMeetsRequirement(userTier, tab.tier);
+          {TABS.map((tab) => {
+            const hasAccess = getTabAccess(tab.feature);
             return (
               <TabsTrigger
                 key={tab.id}
@@ -316,20 +322,13 @@ export default function PersonalBrandBuilder() {
         </TabsContent>
 
         <TabsContent value="seo" className="mt-0">
-          {hasSEOAccess ? (
+          <FeatureGate 
+            feature="personal_brand_seo"
+            lockedTitle="SEO Settings"
+            lockedDescription="Customize your page title, description, and social sharing image to improve visibility and click-through rates."
+          >
             <SEOSettings cv={cv} setCV={setCV} />
-          ) : (
-            <div className="bg-card border border-border rounded-xl p-8 text-center">
-              <Lock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">SEO Settings</h3>
-              <p className="text-muted-foreground mb-4">
-                Customize your page title, description, and social sharing image.
-              </p>
-              <p className="text-sm text-primary font-medium">
-                Upgrade to Pro plan to unlock SEO settings
-              </p>
-            </div>
-          )}
+          </FeatureGate>
         </TabsContent>
       </Tabs>
 

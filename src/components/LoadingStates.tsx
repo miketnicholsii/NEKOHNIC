@@ -64,6 +64,26 @@ export function LoadingCard({ title, description, className }: LoadingCardProps)
   );
 }
 
+interface PageLoaderProps {
+  message?: string;
+  className?: string;
+}
+
+/**
+ * Full-page loading state with centered spinner
+ * Use for route-level loading states
+ */
+export function PageLoader({ message = "Loading...", className }: PageLoaderProps) {
+  return (
+    <div className={cn("flex items-center justify-center min-h-[60vh]", className)} role="status" aria-live="polite">
+      <div className="text-center">
+        <LoadingSpinner size="lg" className="justify-center mb-3" />
+        <p className="text-sm text-muted-foreground animate-pulse">{message}</p>
+      </div>
+    </div>
+  );
+}
+
 interface LoadingOverlayProps {
   isLoading: boolean;
   children: ReactNode;

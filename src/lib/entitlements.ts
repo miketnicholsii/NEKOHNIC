@@ -15,9 +15,15 @@ export type Feature =
   | "digital_cv_unlimited"
   // Personal Brand
   | "personal_brand_page"
+  | "personal_brand_seo"
+  | "personal_brand_publish"
   // Analytics
   | "analytics_basic"
   | "analytics_advanced"
+  // Business Credit
+  | "credit_building_steps"
+  | "tradeline_tracker"
+  | "score_monitoring"
   // Business Tools
   | "business_tools_limited"
   | "business_tools_full"
@@ -72,9 +78,19 @@ export const FEATURE_ENTITLEMENTS: Record<Feature, FeatureConfig> = {
 
   // Personal Brand
   personal_brand_page: {
-    requiredTier: "pro",
+    requiredTier: "starter",
     description: "Personal brand page",
-    upgradeMessage: "Upgrade to Pro to create your personal brand page",
+    upgradeMessage: "Upgrade to Starter to create your personal brand page",
+  },
+  personal_brand_seo: {
+    requiredTier: "pro",
+    description: "SEO settings for personal brand page",
+    upgradeMessage: "Upgrade to Pro to access SEO settings",
+  },
+  personal_brand_publish: {
+    requiredTier: "starter",
+    description: "Publish your personal brand page",
+    upgradeMessage: "Upgrade to Starter to publish your profile",
   },
 
   // Analytics
@@ -87,6 +103,22 @@ export const FEATURE_ENTITLEMENTS: Record<Feature, FeatureConfig> = {
     requiredTier: "elite",
     description: "Advanced analytics and reporting",
     upgradeMessage: "Upgrade to Elite for advanced analytics",
+  },
+
+  // Business Credit
+  credit_building_steps: {
+    requiredTier: "free",
+    description: "Access to credit building steps",
+  },
+  tradeline_tracker: {
+    requiredTier: "starter",
+    description: "Track vendor accounts and tradelines",
+    upgradeMessage: "Upgrade to Starter to track your tradelines",
+  },
+  score_monitoring: {
+    requiredTier: "pro",
+    description: "Monitor business credit scores across bureaus",
+    upgradeMessage: "Upgrade to Pro for score monitoring",
   },
 
   // Business Tools

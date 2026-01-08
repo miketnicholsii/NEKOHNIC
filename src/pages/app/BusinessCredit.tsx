@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
-import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
+import { FeatureGate, useFeatureGate } from "@/components/FeatureGate";
+import { PageLoader } from "@/components/LoadingStates";
 import CreditBuildingSteps from "@/components/business-credit/CreditBuildingSteps";
 import TradelineTracker from "@/components/business-credit/TradelineTracker";
 import ScoreMonitoring from "@/components/business-credit/ScoreMonitoring";
@@ -13,16 +14,39 @@ import {
   BarChart3,
   Lock,
 } from "lucide-react";
+import type { Feature } from "@/lib/entitlements";
+
+// Tab configuration with feature requirements
+const TABS = [
+  { 
+    id: "steps", 
+    label: "Credit Building", 
+    icon: TrendingUp, 
+    feature: "credit_building_steps" as Feature,
+  },
+  { 
+    id: "tradelines", 
+    label: "Tradelines", 
+    icon: CreditCard, 
+    feature: "tradeline_tracker" as Feature,
+  },
+  { 
+    id: "scores", 
+    label: "Score Monitoring", 
+    icon: BarChart3, 
+    feature: "score_monitoring" as Feature,
+  },
+] as const;
 
 export default function BusinessCredit() {
-  const { user, subscription } = useAuth();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("steps");
   const [progress, setProgress] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(true);
 
-  const userTier = normalizeTier(subscription?.tier);
-  const hasTradelineAccess = tierMeetsRequirement(userTier, "starter");
-  const hasScoreAccess = tierMeetsRequirement(userTier, "pro");
+  // Feature access hooks for tabs
+  const tradelineAccess = useFeatureGate("tradeline_tracker");
+  const scoreAccess = useFeatureGate("score_monitoring");
 
   // Load credit building progress
   useEffect(() => {
@@ -53,18 +77,20 @@ export default function BusinessCredit() {
     loadProgress();
   }, [user]);
 
-  const tabs = [
-    { id: "steps", label: "Credit Building", icon: TrendingUp, tier: "free" },
-    { id: "tradelines", label: "Tradelines", icon: CreditCard, tier: "starter" },
-    { id: "scores", label: "Score Monitoring", icon: BarChart3, tier: "pro" },
-  ];
+  // Helper to check if tab is accessible
+  const getTabAccess = (tabId: string): boolean => {
+    switch (tabId) {
+      case "tradelines":
+        return tradelineAccess.hasAccess;
+      case "scores":
+        return scoreAccess.hasAccess;
+      default:
+        return true;
+    }
+  };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <PageLoader message="Loading credit builder..." />;
   }
 
   return (
@@ -81,8 +107,8 @@ export default function BusinessCredit() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-3 h-auto p-1 bg-muted/50">
-          {tabs.map((tab) => {
-            const hasAccess = tierMeetsRequirement(userTier, tab.tier);
+          {TABS.map((tab) => {
+            const hasAccess = getTabAccess(tab.id);
             return (
               <TabsTrigger
                 key={tab.id}
@@ -118,46 +144,27 @@ export default function BusinessCredit() {
             </TabsContent>
 
             <TabsContent value="tradelines" className="mt-0">
-              {hasTradelineAccess ? (
+              <FeatureGate 
+                feature="tradeline_tracker"
+                lockedTitle="Tradeline Tracker"
+                lockedDescription="Track your vendor accounts, credit limits, and payment status to build your business credit profile."
+              >
                 <TradelineTracker userId={user?.id || ""} />
-              ) : (
-                <LockedFeature 
-                  title="Tradeline Tracker"
-                  description="Track your vendor accounts, credit limits, and payment status."
-                  requiredTier="Starter"
-                />
-              )}
+              </FeatureGate>
             </TabsContent>
 
             <TabsContent value="scores" className="mt-0">
-              {hasScoreAccess ? (
+              <FeatureGate 
+                feature="score_monitoring"
+                lockedTitle="Score Monitoring"
+                lockedDescription="Track your business credit scores across all major bureaus including Dun & Bradstreet, Experian, and Equifax."
+              >
                 <ScoreMonitoring userId={user?.id || ""} />
-              ) : (
-                <LockedFeature 
-                  title="Score Monitoring"
-                  description="Track your business credit scores across all major bureaus."
-                  requiredTier="Pro"
-                />
-              )}
+              </FeatureGate>
             </TabsContent>
           </motion.div>
         </AnimatePresence>
       </Tabs>
-    </div>
-  );
-}
-
-function LockedFeature({ title, description, requiredTier }: { title: string; description: string; requiredTier: string }) {
-  return (
-    <div className="bg-card border border-border rounded-xl p-8 text-center">
-      <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-4">
-        <Lock className="h-8 w-8 text-muted-foreground" />
-      </div>
-      <h3 className="font-display text-xl font-bold text-foreground mb-2">{title}</h3>
-      <p className="text-muted-foreground mb-4 max-w-md mx-auto">{description}</p>
-      <p className="text-sm text-primary font-medium">
-        Upgrade to {requiredTier} plan to unlock this feature
-      </p>
     </div>
   );
 }
