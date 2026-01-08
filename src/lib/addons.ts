@@ -153,24 +153,37 @@ export function getServicesByCategory(category: AddOnService["category"]): AddOn
 
 // Get services available for a tier
 export function getServicesForTier(
-  tier: SubscriptionTier | string,
+  tier: SubscriptionTier | string | null | undefined,
   services: AddOnService[] = ALL_SERVICES
 ): { available: AddOnService[]; locked: AddOnService[] } {
+  // Defensive: handle null/undefined/unknown tiers safely
   const tierOrder: SubscriptionTier[] = ["free", "starter", "pro", "elite"];
-  const normalizedTier = normalizeTier(tier);
-  const tierIndex = tierOrder.indexOf(normalizedTier);
-
-  const available: AddOnService[] = [];
-  const locked: AddOnService[] = [];
-
-  services.forEach((service) => {
-    const requiredIndex = tierOrder.indexOf(service.requiredTier);
-    if (tierIndex >= requiredIndex) {
-      available.push(service);
-    } else {
-      locked.push(service);
+  
+  try {
+    const normalizedTier = normalizeTier(tier as string);
+    const tierIndex = tierOrder.indexOf(normalizedTier);
+    
+    // If tier is unknown/invalid, return empty available, all locked
+    if (tierIndex === -1) {
+      return { available: [], locked: [...services] };
     }
-  });
 
-  return { available, locked };
+    const available: AddOnService[] = [];
+    const locked: AddOnService[] = [];
+
+    services.forEach((service) => {
+      const requiredIndex = tierOrder.indexOf(service.requiredTier);
+      if (requiredIndex === -1 || tierIndex >= requiredIndex) {
+        available.push(service);
+      } else {
+        locked.push(service);
+      }
+    });
+
+    return { available, locked };
+  } catch (error) {
+    console.error("getServicesForTier error:", error);
+    // Fail safely: return empty available, all locked
+    return { available: [], locked: [...services] };
+  }
 }

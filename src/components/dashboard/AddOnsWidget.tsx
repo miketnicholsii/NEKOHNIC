@@ -413,6 +413,10 @@ export default function AddOnsWidget() {
           <div className="flex items-center justify-center py-4">
             <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
           </div>
+        ) : featuredAddons.length === 0 ? (
+          <div className="py-4 text-center">
+            <p className="text-sm text-muted-foreground">No add-ons available</p>
+          </div>
         ) : (
           featuredAddons.slice(0, 3).map((addon) => {
             const Icon = getAddOnIcon(addon.id);

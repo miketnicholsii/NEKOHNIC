@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Settings2, RotateCcw, Check, X, Eye, EyeOff } from "lucide-react";
 import { useDashboardLayout, DASHBOARD_WIDGETS } from "@/hooks/use-dashboard-layout";
 import DraggableWidget from "./DraggableWidget";
+import { WidgetErrorBoundary } from "@/components/ErrorBoundary";
 
 // Widget components
 import DashboardStats from "./DashboardStats";
@@ -44,30 +45,56 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
-// Widget renderer
+// Widget name mapping for error boundaries
+const WIDGET_NAMES: Record<string, string> = {
+  "stats": "Dashboard Stats",
+  "product-suite": "Product Suite",
+  "activity-feed": "Activity Feed",
+  "streak-tracker": "Streak Tracker",
+  "achievements": "Achievements",
+  "tier-progress": "Tier Progress",
+  "add-ons": "Add-Ons",
+  "next-steps": "Next Steps",
+  "quick-actions": "Quick Actions",
+};
+
+// Widget renderer with ErrorBoundary protection
 function renderWidget(widgetId: string) {
-  switch (widgetId) {
-    case "stats":
-      return <DashboardStats />;
-    case "product-suite":
-      return <FullProductSuite />;
-    case "activity-feed":
-      return <ActivityFeed />;
-    case "streak-tracker":
-      return <StreakTracker />;
-    case "achievements":
-      return <AchievementsPreview />;
-    case "tier-progress":
-      return <TierProgress />;
-    case "add-ons":
-      return <AddOnsWidget />;
-    case "next-steps":
-      return <NextSteps />;
-    case "quick-actions":
-      return <QuickActions />;
-    default:
-      return null;
-  }
+  const widgetName = WIDGET_NAMES[widgetId] || widgetId;
+  
+  const getWidgetComponent = () => {
+    switch (widgetId) {
+      case "stats":
+        return <DashboardStats />;
+      case "product-suite":
+        return <FullProductSuite />;
+      case "activity-feed":
+        return <ActivityFeed />;
+      case "streak-tracker":
+        return <StreakTracker />;
+      case "achievements":
+        return <AchievementsPreview />;
+      case "tier-progress":
+        return <TierProgress />;
+      case "add-ons":
+        return <AddOnsWidget />;
+      case "next-steps":
+        return <NextSteps />;
+      case "quick-actions":
+        return <QuickActions />;
+      default:
+        return null;
+    }
+  };
+
+  const component = getWidgetComponent();
+  if (!component) return null;
+
+  return (
+    <WidgetErrorBoundary name={widgetName}>
+      {component}
+    </WidgetErrorBoundary>
+  );
 }
 
 // Get widget grid class based on minWidth
