@@ -7,11 +7,30 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Tier price mapping
-const TIER_PRICES: Record<string, string> = {
-  start: "price_1SmNazLlRyOCUFRXg2YtsQvM",
-  build: "price_1SmNbDLlRyOCUFRXfSntGFev",
-  scale: "price_1SmNbSLlRyOCUFRX2TKdwjJY",
+// New tier price mapping with monthly and annual options
+const TIER_PRICES: Record<string, { monthly: string; annual: string; product_id: string }> = {
+  starter: {
+    monthly: "price_1SnN4SLlRyOCUFRX6VQbrGjr",
+    annual: "price_1SnN5HLlRyOCUFRXKZNkl7uC",
+    product_id: "prod_TksqB7NIXg4KNK",
+  },
+  pro: {
+    monthly: "price_1SnN4oLlRyOCUFRX7Uw8oAOQ",
+    annual: "price_1SnN5VLlRyOCUFRXOUTTV8Yl",
+    product_id: "prod_TksqgwJoMRqpuM",
+  },
+  elite: {
+    monthly: "price_1SnN50LlRyOCUFRX80R5vh5u",
+    annual: "price_1SnN5gLlRyOCUFRXbH0fw7gR",
+    product_id: "prod_Tksqz2DPSSb64V",
+  },
+};
+
+// Legacy tier name mapping for backward compatibility
+const LEGACY_TIER_MAP: Record<string, string> = {
+  start: "starter",
+  build: "pro",
+  scale: "elite",
 };
 
 const logStep = (step: string, details?: unknown) => {
@@ -44,17 +63,25 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
-    // Get the requested tier and promo code from the body
+    // Get the requested tier, billing period, and promo code from the body
     const body = await req.json();
-    const tier = body.tier as string;
+    let tier = (body.tier as string)?.toLowerCase();
+    const billingPeriod = (body.billingPeriod as string) || "monthly";
     const promoCode = body.promoCode as string | undefined;
     
+    // Handle legacy tier names
+    if (tier && LEGACY_TIER_MAP[tier]) {
+      tier = LEGACY_TIER_MAP[tier];
+      logStep("Mapped legacy tier name", { original: body.tier, mapped: tier });
+    }
+    
     if (!tier || !TIER_PRICES[tier]) {
-      throw new Error(`Invalid tier: ${tier}. Valid tiers are: start, build, scale`);
+      throw new Error(`Invalid tier: ${tier}. Valid tiers are: starter, pro, elite`);
     }
 
-    const priceId = TIER_PRICES[tier];
-    logStep("Creating checkout for tier", { tier, priceId, promoCode });
+    const tierConfig = TIER_PRICES[tier];
+    const priceId = billingPeriod === "annual" ? tierConfig.annual : tierConfig.monthly;
+    logStep("Creating checkout for tier", { tier, billingPeriod, priceId, promoCode });
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
     
@@ -132,6 +159,7 @@ serve(async (req) => {
       metadata: {
         user_id: user.id,
         tier: tier,
+        billing_period: billingPeriod,
         promo_code: promoCode || "",
       },
     };

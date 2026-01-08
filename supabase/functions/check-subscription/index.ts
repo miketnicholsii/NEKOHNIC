@@ -7,11 +7,24 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Product ID to tier mapping
+// New product ID to tier mapping
 const PRODUCT_TO_TIER: Record<string, string> = {
-  "prod_TjrJr11KgRexld": "start",
-  "prod_TjrJLggG2PAity": "build",
-  "prod_TjrKR20UBv3ksL": "scale",
+  // New tier products
+  "prod_TksqB7NIXg4KNK": "starter",
+  "prod_TksqgwJoMRqpuM": "pro",
+  "prod_Tksqz2DPSSb64V": "elite",
+  // Legacy products for backward compatibility
+  "prod_TjrJr11KgRexld": "starter", // was "start"
+  "prod_TjrJLggG2PAity": "pro",     // was "build"
+  "prod_TjrKR20UBv3ksL": "elite",   // was "scale"
+};
+
+// Map new tier names to database enum values (for backward compatibility)
+const TIER_TO_DB_PLAN: Record<string, string> = {
+  free: "free",
+  starter: "start",   // DB enum is still "start"
+  pro: "build",       // DB enum is still "build"
+  elite: "scale",     // DB enum is still "scale"
 };
 
 const logStep = (step: string, details?: unknown) => {
@@ -107,14 +120,28 @@ serve(async (req) => {
     }
 
     const subscription = subscriptions.data[0];
-    const productId = subscription.items.data[0].price.product as string;
+    const priceItem = subscription.items.data[0];
+    const productId = priceItem.price.product as string;
+    const priceId = priceItem.price.id;
+    
+    // Get tier from product ID (handles both new and legacy products)
     const tier = PRODUCT_TO_TIER[productId] || "free";
+    const dbPlan = TIER_TO_DB_PLAN[tier] || "free";
+    
     const subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
+    const subscriptionStart = new Date(subscription.current_period_start * 1000).toISOString();
+    
+    // Determine billing period from price interval
+    const interval = priceItem.price.recurring?.interval;
+    const billingPeriod = interval === "year" ? "annual" : "monthly";
     
     logStep("Active subscription found", { 
       subscriptionId: subscription.id, 
       productId, 
+      priceId,
       tier, 
+      dbPlan,
+      billingPeriod,
       endDate: subscriptionEnd 
     });
 
@@ -123,11 +150,11 @@ serve(async (req) => {
       .from("subscriptions")
       .upsert({
         user_id: user.id,
-        plan: tier,
+        plan: dbPlan,
         status: "active",
         stripe_customer_id: customerId,
         stripe_subscription_id: subscription.id,
-        current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+        current_period_start: subscriptionStart,
         current_period_end: subscriptionEnd,
         cancel_at_period_end: subscription.cancel_at_period_end,
       }, { onConflict: "user_id" });
@@ -135,6 +162,9 @@ serve(async (req) => {
     return new Response(JSON.stringify({
       subscribed: true,
       tier: tier,
+      product_id: productId,
+      price_id: priceId,
+      billing_period: billingPeriod,
       subscription_end: subscriptionEnd,
       cancel_at_period_end: subscription.cancel_at_period_end,
     }), {
