@@ -2,6 +2,7 @@ import { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -78,29 +79,44 @@ const nekoLetters = [
 
 const NekoLogo = memo(function NekoLogo() {
   return (
-    <span className="inline-flex items-baseline">
-      {nekoLetters.map((letter, index) => (
-        <motion.span
-          key={index}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.8,
-            delay: letter.delay + 0.3,
-            ease: easeOutExpo,
-          }}
-          whileHover={{ 
-            y: -8,
-            scale: 1.05,
-            color: "hsl(168, 65%, 50%)",
-            transition: { duration: 0.2, ease: "easeOut" }
-          }}
-          className="inline-block neko-letter cursor-default select-none"
+    <TooltipProvider delayDuration={300}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="inline-flex items-baseline cursor-default">
+            {nekoLetters.map((letter, index) => (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.8,
+                  delay: letter.delay + 0.3,
+                  ease: easeOutExpo,
+                }}
+                whileHover={{ 
+                  y: -8,
+                  scale: 1.05,
+                  color: "hsl(168, 65%, 50%)",
+                  transition: { duration: 0.2, ease: "easeOut" }
+                }}
+                className="inline-block neko-letter cursor-default select-none"
+              >
+                {letter.char}
+              </motion.span>
+            ))}
+          </span>
+        </TooltipTrigger>
+        <TooltipContent 
+          side="bottom" 
+          sideOffset={12}
+          className="bg-background/95 backdrop-blur-sm border-border/50 px-4 py-2 shadow-lg"
         >
-          {letter.char}
-        </motion.span>
-      ))}
-    </span>
+          <span className="text-sm font-logo tracking-wide text-foreground/80 italic">
+            ē-ko
+          </span>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 });
 
