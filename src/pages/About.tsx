@@ -11,23 +11,23 @@ import { ArrowRight, Target, Heart, Lightbulb, Users } from "lucide-react";
 const values = [
   {
     icon: Target,
-    title: "Intentional Growth",
-    description: "Every feature supports sustainable progress. No temporary wins that cost you later.",
+    title: "Clarity First",
+    description: "We cut through the noise so you can focus on building what matters.",
   },
   {
     icon: Heart,
-    title: "Founder-First",
-    description: "Built for people starting from zero. We remember that feeling.",
+    title: "Built for Beginnings",
+    description: "Designed for people starting from zero. We remember that feeling.",
   },
   {
     icon: Lightbulb,
-    title: "Education Over Hype",
-    description: "Structure, clarity, and informed decisions. No shortcuts.",
+    title: "Education Over Shortcuts",
+    description: "Real understanding creates lasting results. No hacks, no gimmicks.",
   },
   {
     icon: Users,
-    title: "Community-Driven",
-    description: "For freelancers, creators, and entrepreneurs building something real.",
+    title: "For Founders & Creators",
+    description: "Whether building a business or a personal brand, we meet you where you are.",
   },
 ];
 
@@ -86,7 +86,7 @@ export default function About() {
               transition={{ ...fadeIn.transition, delay: 0.05 }}
               className="font-display font-bold tracking-tighter text-primary-foreground mb-6 text-[clamp(2rem,6.5vw,4.5rem)] leading-[1.1]"
             >
-              Hello, NÈKO.
+              Why NÈKO Exists
             </motion.h1>
             
             <motion.p 
@@ -94,7 +94,7 @@ export default function About() {
               transition={{ ...fadeIn.transition, delay: 0.1 }}
               className="text-lg sm:text-xl text-primary-foreground/70 max-w-2xl mx-auto mb-4 leading-relaxed"
             >
-              This is a beginning.
+              Helping founders and creators build the digital presence and business infrastructure they need to be taken seriously.
             </motion.p>
             
             <motion.p 
@@ -102,7 +102,7 @@ export default function About() {
               transition={{ ...fadeIn.transition, delay: 0.15 }}
               className="text-base text-primary-foreground/50 max-w-xl mx-auto leading-relaxed"
             >
-              The moment where intent becomes direction, and the work becomes possible.
+              Two tracks. One mission. Clear paths to legitimacy and visibility.
             </motion.p>
           </div>
         </div>
@@ -125,14 +125,14 @@ export default function About() {
             <AnimatedSection direction="left">
               <SectionHeading
                 label="Our Story"
-                title="NÈKO exists in the space between signal and noise."
+                title="Built for the space between idea and legitimacy."
                 className="mb-8"
               />
               
               <div className="space-y-5 text-muted-foreground leading-relaxed">
-                <p>"Hello, NÈKO" is both a greeting and a starting point.</p>
-                <p>We work with founders, creators, and people building something real — those navigating the gap between having an idea and running a legitimate business.</p>
-                <p>That gap is where most people get stuck. Too much noise, too many options, no clear path forward.</p>
+                <p>Starting a business or building a personal brand shouldn't require figuring everything out alone.</p>
+                <p>We saw too many talented people stuck — unsure how to get their LLC, build business credit, or create a digital presence that actually represents them.</p>
+                <p>NÈKO bridges that gap with two focused tracks: <strong className="text-foreground">Business Enablement</strong> for infrastructure and credibility, and <strong className="text-foreground">Personal Branding</strong> for visibility and identity.</p>
               </div>
             </AnimatedSection>
 
@@ -173,8 +173,8 @@ export default function About() {
             <div className="max-w-3xl mx-auto text-center mb-12">
               <SectionHeading
                 label="What We Are"
-                title="A guided operating system."
-                description="Not a tool. Not a shortcut. A structured path through the complexity — with education, progress tracking, and clarity at every step."
+                title="Two tracks. One clear path forward."
+                description="Whether you're building a business, a personal brand, or both — we provide the structure, guidance, and tools to make it real."
                 centered
               />
             </div>
@@ -225,10 +225,10 @@ export default function About() {
               Our Mission
             </p>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4 max-w-2xl mx-auto">
-              Make starting a business clear, accessible, and legitimate.
+              Make legitimacy and visibility accessible to everyone.
             </h2>
             <p className="text-base sm:text-lg text-primary-foreground/60 mb-10 max-w-md mx-auto">
-              We provide the roadmap. You build something meaningful.
+              Business infrastructure. Personal brand identity. The foundation for being taken seriously.
             </p>
             <Link to="/contact">
               <Button variant="hero" size="xl" className="group">
