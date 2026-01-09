@@ -43,7 +43,7 @@ While we strive to protect your information, no method of transmission over the 
 • Data portability
 • Opt-out of marketing communications
 
-To exercise these rights, please contact us at hello@helloneko.co.`,
+To exercise these rights, please contact us at neko@helloneko.co.`,
   },
   {
     title: "Cookies and Tracking",
@@ -57,7 +57,7 @@ To exercise these rights, please contact us at hello@helloneko.co.`,
     title: "Contact Us",
     content: `If you have any questions about this Privacy Policy or our data practices, please contact us at:
 
-Email: hello@helloneko.co`,
+Email: neko@helloneko.co`,
   },
 ];
 
