@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
-import { Download, Instagram, Linkedin, Image, FileImage, Sparkles } from "lucide-react";
+import { Download, Instagram, Linkedin, Image, FileImage, Sparkles, Mail, Presentation, CreditCard, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,11 +13,12 @@ interface BrandAsset {
   name: string;
   description: string;
   filename: string;
-  category: "social" | "template" | "background";
+  category: "social" | "template" | "background" | "business" | "presentation";
   dimensions: string;
 }
 
 const brandAssets: BrandAsset[] = [
+  // Social Media Assets
   {
     id: "instagram-logo",
     name: "Instagram Logo Post",
@@ -42,6 +43,23 @@ const brandAssets: BrandAsset[] = [
     category: "social",
     dimensions: "1920×512",
   },
+  {
+    id: "welcome-post",
+    name: "Welcome Post",
+    description: "Hello, NÈKO. welcome graphic",
+    filename: "neko-welcome-post.png",
+    category: "social",
+    dimensions: "1080×1080",
+  },
+  {
+    id: "og-image",
+    name: "Open Graph Image",
+    description: "Website preview card for social sharing",
+    filename: "neko-og-image.png",
+    category: "social",
+    dimensions: "1200×630",
+  },
+  // Templates
   {
     id: "instagram-story",
     name: "Instagram Story Template",
@@ -75,14 +93,6 @@ const brandAssets: BrandAsset[] = [
     dimensions: "1080×1080",
   },
   {
-    id: "pattern-bg",
-    name: "Pattern Background",
-    description: "Abstract teal mesh pattern for social posts",
-    filename: "neko-pattern-bg.png",
-    category: "background",
-    dimensions: "1080×1080",
-  },
-  {
     id: "announcement",
     name: "Announcement Template",
     description: "Coming Soon neon glow announcement graphic",
@@ -107,11 +117,86 @@ const brandAssets: BrandAsset[] = [
     dimensions: "1080×1080",
   },
   {
-    id: "welcome-post",
-    name: "Welcome Post",
-    description: "Hello, NÈKO. welcome graphic",
-    filename: "neko-welcome-post.png",
-    category: "social",
+    id: "thank-you",
+    name: "Thank You Card",
+    description: "Elegant appreciation graphic for customers",
+    filename: "neko-thank-you.png",
+    category: "template",
+    dimensions: "1080×1080",
+  },
+  // Business Materials
+  {
+    id: "email-signature",
+    name: "Email Signature Banner",
+    description: "Professional email signature with teal accent line",
+    filename: "neko-email-signature.png",
+    category: "business",
+    dimensions: "1200×512",
+  },
+  {
+    id: "business-card-front",
+    name: "Business Card Front",
+    description: "Premium business card front design with logo",
+    filename: "neko-business-card-front.png",
+    category: "business",
+    dimensions: "1920×1080",
+  },
+  {
+    id: "business-card-back",
+    name: "Business Card Back",
+    description: "Business card back with geometric pattern",
+    filename: "neko-business-card-back.png",
+    category: "business",
+    dimensions: "1920×1080",
+  },
+  {
+    id: "letterhead",
+    name: "Letterhead Header",
+    description: "Corporate letterhead design with NÈKO branding",
+    filename: "neko-letterhead.png",
+    category: "business",
+    dimensions: "1920×1080",
+  },
+  // Presentation Templates
+  {
+    id: "presentation-cover",
+    name: "Presentation Cover",
+    description: "Bold title slide with flowing teal shapes",
+    filename: "neko-presentation-cover.png",
+    category: "presentation",
+    dimensions: "1920×1080",
+  },
+  {
+    id: "presentation-content",
+    name: "Presentation Content",
+    description: "Clean content slide with sidebar accent",
+    filename: "neko-presentation-content.png",
+    category: "presentation",
+    dimensions: "1920×1080",
+  },
+  {
+    id: "presentation-divider",
+    name: "Section Divider",
+    description: "Dramatic section divider with wave graphics",
+    filename: "neko-presentation-divider.png",
+    category: "presentation",
+    dimensions: "1920×1080",
+  },
+  {
+    id: "zoom-background",
+    name: "Zoom Background",
+    description: "Professional virtual meeting background",
+    filename: "neko-zoom-background.png",
+    category: "presentation",
+    dimensions: "1920×1080",
+  },
+  // Backgrounds
+  {
+    id: "pattern-bg",
+    name: "Pattern Background",
+    description: "Abstract teal mesh pattern for social posts",
+    filename: "neko-pattern-bg.png",
+    category: "background",
     dimensions: "1080×1080",
   },
 ];
@@ -120,16 +205,22 @@ const categoryLabels = {
   social: "Social Media",
   template: "Templates",
   background: "Backgrounds",
+  business: "Business",
+  presentation: "Presentations",
 };
 
 const categoryIcons = {
   social: Instagram,
   template: FileImage,
   background: Image,
+  business: CreditCard,
+  presentation: Presentation,
 };
 
+type CategoryFilter = "all" | "social" | "template" | "background" | "business" | "presentation";
+
 export default function Brand() {
-  const [filter, setFilter] = useState<"all" | "social" | "template" | "background">("all");
+  const [filter, setFilter] = useState<CategoryFilter>("all");
 
   const filteredAssets = filter === "all" 
     ? brandAssets 
@@ -152,11 +243,20 @@ export default function Brand() {
     });
   };
 
+  const assetCounts = {
+    all: brandAssets.length,
+    social: brandAssets.filter(a => a.category === "social").length,
+    template: brandAssets.filter(a => a.category === "template").length,
+    background: brandAssets.filter(a => a.category === "background").length,
+    business: brandAssets.filter(a => a.category === "business").length,
+    presentation: brandAssets.filter(a => a.category === "presentation").length,
+  };
+
   return (
     <>
       <Helmet>
         <title>Brand Assets | NÈKO</title>
-        <meta name="description" content="Download official NÈKO brand assets for social media, including Instagram posts, LinkedIn banners, and branded templates." />
+        <meta name="description" content="Download official NÈKO brand assets for social media, business cards, presentations, and more. All assets match the helloneko.co color scheme." />
       </Helmet>
 
       <Navbar />
@@ -178,8 +278,8 @@ export default function Brand() {
               NÈKO Brand Assets
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-              Download official branded graphics for your social media presence. 
-              All assets match the helloneko.co color scheme.
+              Download official branded graphics for social media, business materials, 
+              presentations, and more. All {brandAssets.length} assets match the helloneko.co color scheme.
             </p>
 
             {/* Social Links */}
@@ -206,7 +306,7 @@ export default function Brand() {
 
             <Button onClick={handleDownloadAll} size="lg" className="gap-2">
               <Download className="w-4 h-4" />
-              Download All Assets
+              Download All {brandAssets.length} Assets
             </Button>
           </motion.div>
 
@@ -217,9 +317,9 @@ export default function Brand() {
               size="sm"
               onClick={() => setFilter("all")}
             >
-              All Assets
+              All ({assetCounts.all})
             </Button>
-            {(["social", "template", "background"] as const).map((cat) => {
+            {(["social", "template", "business", "presentation", "background"] as const).map((cat) => {
               const Icon = categoryIcons[cat];
               return (
                 <Button
@@ -230,7 +330,7 @@ export default function Brand() {
                   className="gap-2"
                 >
                   <Icon className="w-4 h-4" />
-                  {categoryLabels[cat]}
+                  {categoryLabels[cat]} ({assetCounts[cat]})
                 </Button>
               );
             })}
@@ -245,7 +345,7 @@ export default function Brand() {
                   key={asset.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  transition={{ duration: 0.4, delay: index * 0.03 }}
                 >
                   <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300 h-full">
                     <div className="aspect-square relative overflow-hidden bg-tertiary">
