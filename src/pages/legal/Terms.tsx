@@ -97,7 +97,7 @@ Your continued use of the services after changes constitutes acceptance of the n
     title: "Contact Us",
     content: `If you have any questions about these Terms of Service, please contact us at:
 
-Email: hello@helloneko.co`,
+Email: neko@helloneko.co`,
   },
 ];
 
