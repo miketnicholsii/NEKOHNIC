@@ -10,6 +10,7 @@ import TaskManager from "@/components/dashboard/TaskManager";
 import WelcomeHeader from "@/components/dashboard/WelcomeHeader";
 import WidgetGrid from "@/components/dashboard/WidgetGrid";
 import { AdminPreviewPanel } from "@/components/admin/AdminPreviewPanel";
+import { AnnouncementsBanner } from "@/components/dashboard/AnnouncementsBanner";
 import {
   ArrowRight,
   Crown,
@@ -41,6 +42,9 @@ export default function Dashboard() {
     <div className="space-y-6" role="main" aria-label="Dashboard">
       {/* Admin Preview Panel */}
       {isAdmin && <AdminPreviewPanel />}
+
+      {/* Announcements Banner */}
+      <AnnouncementsBanner />
 
       {/* Personalized Welcome Header */}
       <WelcomeHeader />
