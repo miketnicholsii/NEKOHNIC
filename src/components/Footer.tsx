@@ -1,14 +1,13 @@
 import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { InstagramSection } from "./InstagramSection";
-import { ArrowUpRight, Instagram, Linkedin } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 const footerLinks = {
   platform: [
     { href: "/services", label: "Services" },
     { href: "/personal-brand", label: "Personal Brand" },
     { href: "/pricing", label: "Pricing" },
-    { href: "/brand-kit", label: "Brand Kit" },
   ],
   company: [
     { href: "/about", label: "About" },
@@ -97,34 +96,11 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             </ul>
           </div>
 
-          {/* Social & Connect */}
+          {/* Instagram */}
           <div className="col-span-2 sm:col-span-1">
             <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-primary-foreground/80 mb-4 sm:mb-6 uppercase">
               Connect
             </h4>
-            
-            {/* Social Media Icons */}
-            <div className="flex items-center gap-3 mb-6">
-              <a
-                href="https://www.instagram.com/thehelloneko"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 hover:scale-110 transition-transform duration-300"
-                aria-label="Follow us on Instagram"
-              >
-                <Instagram className="w-5 h-5 text-white" />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/helloneko"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-center w-10 h-10 rounded-full bg-[#0077B5] hover:scale-110 transition-transform duration-300"
-                aria-label="Follow us on LinkedIn"
-              >
-                <Linkedin className="w-5 h-5 text-white" />
-              </a>
-            </div>
-            
             <InstagramSection />
           </div>
         </div>
