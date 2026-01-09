@@ -8,7 +8,7 @@ const footerLinks = {
     { href: "/services", label: "Services" },
     { href: "/personal-brand", label: "Personal Brand" },
     { href: "/pricing", label: "Pricing" },
-    { href: "/brand", label: "Brand Assets" },
+    { href: "/brand-kit", label: "Brand Kit" },
   ],
   company: [
     { href: "/about", label: "About" },
