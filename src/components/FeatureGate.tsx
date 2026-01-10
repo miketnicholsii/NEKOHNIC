@@ -146,8 +146,8 @@ export function FeatureGate({
   }
 
   // Default locked UI based on style
-  const title = lockedTitle || "Feature Locked";
-  const description = lockedDescription || upgradeMessage || "Upgrade your plan to access this feature.";
+  const title = lockedTitle || "This Feature Is Waiting for You";
+  const description = lockedDescription || upgradeMessage || "When you're ready, upgrading your plan will unlock this.";
 
   const renderModal = () => (
     <UpgradeModal
@@ -220,7 +220,7 @@ export function FeatureGate({
               <p className="text-sm text-muted-foreground mb-4 max-w-xs">{description}</p>
               {showUpgradeCTA && (
                 <Button variant="cta" size="sm">
-                  Unlock Feature
+                  Unlock This
                   <ArrowRight className="h-4 w-4 ml-1" aria-hidden="true" />
                 </Button>
               )}

@@ -55,7 +55,7 @@ export default function WelcomeHeader() {
             {getGreeting()}, <span className="text-primary">{firstName}</span>
           </h1>
           <p className="text-muted-foreground text-sm max-w-md">
-            Your business building journey continues. Let's make progress today.
+            Every step forward counts. What would you like to focus on today?
           </p>
         </div>
 

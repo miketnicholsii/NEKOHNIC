@@ -309,7 +309,7 @@ export default function BusinessStarter() {
           Business Starter
         </h1>
         <p className="text-muted-foreground">
-          Your guided workflow to establish business legitimacy. {completedSteps} of {STEPS.length} steps completed.
+          A clear path to making your business official. You've completed {completedSteps} of {STEPS.length} steps — nice work.
         </p>
         
         {/* Progress Bar */}

@@ -199,9 +199,9 @@ export default function Account() {
         animate={{ opacity: 1, y: 0 }}
         className="space-y-2"
       >
-        <h1 className="text-3xl font-display font-bold">Account Settings</h1>
+        <h1 className="text-3xl font-display font-bold">Your Account</h1>
         <p className="text-muted-foreground">
-          Manage your profile, subscription, and add-ons
+          Your profile, plan details, and preferences — all in one place
         </p>
       </motion.div>
 
