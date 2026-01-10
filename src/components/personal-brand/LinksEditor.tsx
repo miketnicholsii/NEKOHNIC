@@ -55,7 +55,7 @@ export default function LinksEditor({ cv, setCV }: Props) {
     e.preventDefault();
     
     if (!formData.url.trim()) {
-      toast.error("URL is required");
+      toast.error("Add a URL to continue");
       return;
     }
 
@@ -96,7 +96,7 @@ export default function LinksEditor({ cv, setCV }: Props) {
       ...prev,
       links: (prev.links || []).filter(l => l.id !== linkId)
     } : null);
-    toast.success("Link removed");
+    toast.success("Link removed — all good");
   };
 
   const resetForm = () => {

@@ -159,8 +159,8 @@ export function useDashboardLayout() {
     } catch (error) {
       console.error("Error saving dashboard layout:", error);
       toast({
-        title: "Failed to save layout",
-        description: "Your changes may not persist.",
+        title: "Couldn't save your layout",
+        description: "Try again in a moment.",
         variant: "destructive",
       });
     } finally {
@@ -184,10 +184,10 @@ export function useDashboardLayout() {
     saveLayout(widgetOrder, newHidden);
     
     toast({
-      title: hiddenWidgets.includes(widgetId) ? "Widget shown" : "Widget hidden",
+      title: hiddenWidgets.includes(widgetId) ? "Widget restored" : "Widget tucked away",
       description: hiddenWidgets.includes(widgetId) 
-        ? "The widget is now visible on your dashboard."
-        : "The widget has been hidden. You can restore it from settings.",
+        ? "It's back on your dashboard."
+        : "You can bring it back anytime from settings.",
     });
   }, [hiddenWidgets, widgetOrder, saveLayout, toast]);
 
@@ -197,8 +197,8 @@ export function useDashboardLayout() {
     setHiddenWidgets([]);
     saveLayout(DEFAULT_ORDER, []);
     toast({
-      title: "Layout reset",
-      description: "Your dashboard has been restored to the default layout.",
+      title: "Fresh start",
+      description: "Your dashboard is back to its default layout.",
     });
   }, [saveLayout, toast]);
 

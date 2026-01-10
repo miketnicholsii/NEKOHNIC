@@ -80,7 +80,7 @@ export default function Contact() {
     
     if (!name || name.length < 2) {
       toast({
-        title: "Please enter your name",
+        title: "We'd love to know your name",
         variant: "destructive",
       });
       return;
@@ -88,7 +88,7 @@ export default function Contact() {
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       toast({
-        title: "Please enter a valid email",
+        title: "We need a valid email to respond",
         variant: "destructive",
       });
       return;
@@ -96,8 +96,8 @@ export default function Contact() {
 
     if (!message || message.length < 10) {
       toast({
-        title: "Please enter a message",
-        description: "Message must be at least 10 characters.",
+        title: "Tell us a bit more",
+        description: "A few more words would help us understand.",
         variant: "destructive",
       });
       return;
@@ -105,7 +105,7 @@ export default function Contact() {
 
     if (!turnstileToken) {
       toast({
-        title: "Please complete the security check",
+        title: "One quick security check",
         variant: "destructive",
       });
       return;
@@ -131,8 +131,8 @@ export default function Contact() {
 
       if (error || data?.error) {
         toast({
-          title: "Something went wrong",
-          description: "Please try again or email us directly.",
+          title: "That didn't quite work",
+          description: "Feel free to try again, or email us directly.",
           variant: "destructive",
         });
         turnstileRef.current?.reset();
@@ -143,8 +143,8 @@ export default function Contact() {
       setIsSuccess(true);
     } catch (err) {
       toast({
-        title: "Something went wrong",
-        description: "Please try again later.",
+        title: "Something unexpected happened",
+        description: "Please try again in a moment.",
         variant: "destructive",
       });
       turnstileRef.current?.reset();

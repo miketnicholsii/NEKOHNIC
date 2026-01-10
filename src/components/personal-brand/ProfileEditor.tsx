@@ -24,7 +24,7 @@ export default function ProfileEditor({ cv, setCV, userId }: Props) {
     if (!file || !userId) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image must be less than 5MB");
+      toast.error("Image is a bit too large — keep it under 5MB");
       return;
     }
 
@@ -44,10 +44,10 @@ export default function ProfileEditor({ cv, setCV, userId }: Props) {
         .getPublicUrl(filePath);
 
       setCV(prev => prev ? { ...prev, social_image_url: publicUrl } : null);
-      toast.success("Image uploaded!");
+      toast.success("Looking good! Image uploaded.");
     } catch (error) {
       console.error("Upload error:", error);
-      toast.error("Failed to upload image");
+      toast.error("Couldn't upload that image. Try again?");
     } finally {
       setIsUploading(false);
     }
@@ -58,7 +58,7 @@ export default function ProfileEditor({ cv, setCV, userId }: Props) {
     
     const skills = cv.skills || [];
     if (skills.includes(newSkill.trim())) {
-      toast.error("Skill already added");
+      toast.error("You've already got that one!");
       return;
     }
 

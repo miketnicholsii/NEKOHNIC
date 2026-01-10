@@ -37,7 +37,7 @@ export default function ProjectsEditor({ cv, setCV, userId }: Props) {
     if (!file || !userId) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image must be less than 5MB");
+      toast.error("Image is a bit too large — keep it under 5MB");
       return;
     }
 
@@ -58,10 +58,10 @@ export default function ProjectsEditor({ cv, setCV, userId }: Props) {
         .getPublicUrl(filePath);
 
       setFormData(prev => ({ ...prev, image_url: publicUrl }));
-      toast.success("Image uploaded!");
+      toast.success("Looking good! Image uploaded.");
     } catch (error) {
       console.error("Upload error:", error);
-      toast.error("Failed to upload image");
+      toast.error("Couldn't upload that image. Try again?");
     } finally {
       setIsUploading(false);
     }
@@ -71,7 +71,7 @@ export default function ProjectsEditor({ cv, setCV, userId }: Props) {
     e.preventDefault();
     
     if (!formData.title.trim()) {
-      toast.error("Project title is required");
+      toast.error("Give your project a title first");
       return;
     }
 
@@ -96,7 +96,7 @@ export default function ProjectsEditor({ cv, setCV, userId }: Props) {
 
     setIsDialogOpen(false);
     resetForm();
-    toast.success(editingProject ? "Project updated!" : "Project added!");
+    toast.success(editingProject ? "Project updated!" : "Project added — nice work!");
   };
 
   const handleEdit = (project: Project) => {
@@ -117,7 +117,7 @@ export default function ProjectsEditor({ cv, setCV, userId }: Props) {
       ...prev,
       projects: (prev.projects || []).filter(p => p.id !== projectId)
     } : null);
-    toast.success("Project deleted");
+    toast.success("Project removed");
   };
 
   const resetForm = () => {

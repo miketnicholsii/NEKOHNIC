@@ -100,8 +100,8 @@ export default function GetStarted() {
     
     if (!name || name.length < 2) {
       toast({
-        title: "Please enter your name",
-        description: "Name must be at least 2 characters.",
+        title: "We'd love to know your name",
+        description: "Just 2 characters or more will do.",
         variant: "destructive",
       });
       return;
@@ -109,8 +109,8 @@ export default function GetStarted() {
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       toast({
-        title: "Please enter a valid email",
-        description: "We need a valid email to get in touch.",
+        title: "We need a valid email",
+        description: "So we can get back to you.",
         variant: "destructive",
       });
       return;
@@ -118,8 +118,8 @@ export default function GetStarted() {
 
     if (!turnstileToken) {
       toast({
-        title: "Please complete the security check",
-        description: "This helps us prevent spam.",
+        title: "One quick security check",
+        description: "This helps us keep things safe.",
         variant: "destructive",
       });
       return;
@@ -144,8 +144,8 @@ export default function GetStarted() {
       if (error) {
         console.error("Submission error:", error);
         toast({
-          title: "Something went wrong",
-          description: "Please try again or email us directly at hello@helloneko.co",
+          title: "That didn't quite work",
+          description: "Feel free to try again, or reach out directly at hello@helloneko.co",
           variant: "destructive",
         });
         turnstileRef.current?.reset();
@@ -155,7 +155,7 @@ export default function GetStarted() {
 
       if (data?.error) {
         toast({
-          title: "Submission failed",
+          title: "We couldn't process that",
           description: data.error,
           variant: "destructive",
         });
@@ -165,7 +165,7 @@ export default function GetStarted() {
       }
     
       toast({
-        title: "Welcome to NEKO!",
+        title: "You're all set!",
         description: data?.message || "We'll be in touch soon to help you get started.",
       });
       
@@ -184,8 +184,8 @@ export default function GetStarted() {
     } catch (err) {
       console.error("Unexpected error:", err);
       toast({
-        title: "Something went wrong",
-        description: "Please try again later.",
+        title: "Something unexpected happened",
+        description: "Please try again in a moment.",
         variant: "destructive",
       });
       turnstileRef.current?.reset();

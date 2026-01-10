@@ -69,13 +69,13 @@ export default function TaskManager() {
 
   const handleCreateTask = async () => {
     if (!newTask.title.trim()) {
-      toast.error("Task title is required");
+      toast.error("Give your task a name first");
       return;
     }
 
     try {
       await createTask(newTask);
-      toast.success("Task created!");
+      toast.success("Task added — you got this!");
       setNewTask({
         title: "",
         description: null,
@@ -87,25 +87,29 @@ export default function TaskManager() {
       });
       setIsCreateOpen(false);
     } catch {
-      toast.error("Failed to create task");
+      toast.error("Couldn't add that task. Try again?");
     }
   };
 
   const handleStatusChange = async (taskId: string, status: Task["status"]) => {
     try {
       await updateTask(taskId, { status });
-      toast.success("Task updated!");
+      if (status === "done") {
+        toast.success("Nice work! Task complete.");
+      } else {
+        toast.success("Task updated");
+      }
     } catch {
-      toast.error("Failed to update task");
+      toast.error("Couldn't update that. Try again?");
     }
   };
 
   const handleDeleteTask = async (taskId: string) => {
     try {
       await deleteTask(taskId);
-      toast.success("Task deleted");
+      toast.success("Task removed");
     } catch {
-      toast.error("Failed to delete task");
+      toast.error("Couldn't delete that. Try again?");
     }
   };
 

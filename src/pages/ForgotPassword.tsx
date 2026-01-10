@@ -21,7 +21,7 @@ export default function ForgotPassword() {
     
     if (!trimmedEmail) {
       toast({
-        title: "Please enter your email",
+        title: "We need your email address",
         variant: "destructive",
       });
       return;
@@ -38,7 +38,7 @@ export default function ForgotPassword() {
 
       if (error) {
         toast({
-          title: "Error",
+          title: "That didn't work",
           description: error.message,
           variant: "destructive",
         });
@@ -48,8 +48,8 @@ export default function ForgotPassword() {
       setIsSubmitted(true);
     } catch (err) {
       toast({
-        title: "Something went wrong",
-        description: "Please try again later.",
+        title: "Something unexpected happened",
+        description: "Please try again in a moment.",
         variant: "destructive",
       });
     } finally {

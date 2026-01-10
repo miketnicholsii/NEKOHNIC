@@ -32,7 +32,7 @@ export default function Login() {
     
     if (!email.trim() || !password) {
       toast({
-        title: "Please fill in all fields",
+        title: "We need both your email and password",
         variant: "destructive",
       });
       return;
@@ -51,7 +51,7 @@ export default function Login() {
 
       if (error) {
         toast({
-          title: "Login failed",
+          title: "That didn't work",
           description: error.message,
           variant: "destructive",
         });
@@ -68,15 +68,15 @@ export default function Login() {
       }
 
       toast({
-        title: "Hello again",
-        description: "You're in.",
+        title: "Welcome back!",
+        description: "Good to see you again.",
       });
       
       navigate("/app");
     } catch (err) {
       toast({
-        title: "Something went wrong",
-        description: "Please try again later.",
+        title: "Something unexpected happened",
+        description: "Please try again in a moment.",
         variant: "destructive",
       });
     } finally {

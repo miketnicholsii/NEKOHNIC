@@ -226,10 +226,10 @@ export default function CreditBuildingSteps({ progress, setProgress, userId }: P
         [stepId]: allChecked
       }));
 
-      toast.success("Progress saved!");
+      toast.success("Progress saved — keep it up!");
     } catch (error) {
       console.error("Error saving progress:", error);
-      toast.error("Failed to save progress");
+      toast.error("Couldn't save that. Try again?");
     } finally {
       setIsSaving(false);
     }
@@ -269,14 +269,14 @@ export default function CreditBuildingSteps({ progress, setProgress, userId }: P
         [stepId]: true
       }));
 
-      toast.success("Step completed! 🎉");
+      toast.success("Nice work — step complete! 🎉");
       
       if (currentStep < CREDIT_STEPS.length - 1) {
         setTimeout(() => setCurrentStep(currentStep + 1), 500);
       }
     } catch (error) {
       console.error("Error marking complete:", error);
-      toast.error("Failed to save progress");
+      toast.error("Couldn't save that. Try again?");
     } finally {
       setIsSaving(false);
     }

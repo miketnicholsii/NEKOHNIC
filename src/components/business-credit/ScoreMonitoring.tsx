@@ -82,7 +82,7 @@ export default function ScoreMonitoring({ userId }: Props) {
       setScores(data || []);
     } catch (error) {
       console.error("Error loading scores:", error);
-      toast.error("Failed to load credit scores");
+      toast.error("Couldn't load your scores. Try refreshing.");
     } finally {
       setIsLoading(false);
     }
@@ -104,13 +104,13 @@ export default function ScoreMonitoring({ userId }: Props) {
         });
 
       if (error) throw error;
-      toast.success("Score recorded!");
+      toast.success("Score recorded — nice tracking!");
       setIsDialogOpen(false);
       resetForm();
       loadScores();
     } catch (error) {
       console.error("Error saving score:", error);
-      toast.error("Failed to save score");
+      toast.error("Couldn't save that score. Try again?");
     }
   };
 
@@ -124,11 +124,11 @@ export default function ScoreMonitoring({ userId }: Props) {
         .eq("id", id);
 
       if (error) throw error;
-      toast.success("Score deleted");
+      toast.success("Score removed");
       loadScores();
     } catch (error) {
       console.error("Error deleting score:", error);
-      toast.error("Failed to delete score");
+      toast.error("Couldn't delete that. Try again?");
     }
   };
 

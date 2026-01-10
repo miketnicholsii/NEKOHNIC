@@ -92,7 +92,7 @@ export default function TradelineTracker({ userId }: Props) {
       setTradelines(data || []);
     } catch (error) {
       console.error("Error loading tradelines:", error);
-      toast.error("Failed to load tradelines");
+      toast.error("Couldn't load your tradelines. Try refreshing.");
     } finally {
       setIsLoading(false);
     }
@@ -138,7 +138,7 @@ export default function TradelineTracker({ userId }: Props) {
           .insert(payload);
 
         if (error) throw error;
-        toast.success("Tradeline added!");
+        toast.success("Tradeline added — great progress!");
       }
 
       setIsDialogOpen(false);
@@ -146,7 +146,7 @@ export default function TradelineTracker({ userId }: Props) {
       loadTradelines();
     } catch (error) {
       console.error("Error saving tradeline:", error);
-      toast.error("Failed to save tradeline");
+      toast.error("Couldn't save that. Try again?");
     }
   };
 
@@ -175,11 +175,11 @@ export default function TradelineTracker({ userId }: Props) {
         .eq("id", id);
 
       if (error) throw error;
-      toast.success("Tradeline deleted");
+      toast.success("Tradeline removed");
       loadTradelines();
     } catch (error) {
       console.error("Error deleting tradeline:", error);
-      toast.error("Failed to delete tradeline");
+      toast.error("Couldn't delete that. Try again?");
     }
   };
 
