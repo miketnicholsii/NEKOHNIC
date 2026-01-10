@@ -72,8 +72,8 @@ export default function AdminLayout() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <Shield className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-foreground mb-2">Access Denied</h1>
-          <p className="text-muted-foreground mb-4">You don't have permission to access this area.</p>
+          <h1 className="text-xl font-bold text-foreground mb-2">This Area Is Restricted</h1>
+          <p className="text-muted-foreground mb-4">You don't have permission to view this page. If you think this is a mistake, please reach out.</p>
           <Link to="/app" className="text-primary hover:underline">
             Return to Dashboard
           </Link>

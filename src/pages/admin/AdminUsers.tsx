@@ -167,7 +167,7 @@ export default function AdminUsers() {
       setTotalCount(count || 0);
     } catch (error) {
       console.error("Error loading users:", error);
-      toast.error("Failed to load users");
+      toast.error("We couldn't load the users right now. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -217,13 +217,13 @@ export default function AdminUsers() {
         if (subError) throw subError;
       }
 
-      toast.success("User updated successfully");
+      toast.success("User updated — changes saved.");
       setIsEditDialogOpen(false);
       setEditingUser(null);
       loadUsers();
     } catch (error) {
       console.error("Error saving user:", error);
-      toast.error("Failed to save user");
+      toast.error("That didn't save. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -267,10 +267,10 @@ export default function AdminUsers() {
         transition={{ duration: 0.5 }}
       >
         <h1 className="font-display text-2xl sm:text-3xl font-bold text-primary-foreground mb-2">
-          User Management
+          Your Users
         </h1>
         <p className="text-primary-foreground/60">
-          View and manage all users, subscriptions, and access levels.
+          See who's here, how they're progressing, and lend a hand when needed.
         </p>
       </motion.div>
 
@@ -339,7 +339,7 @@ export default function AdminUsers() {
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-8">
                     <User className="h-10 w-10 text-primary-foreground/40 mx-auto mb-2" />
-                    <p className="text-primary-foreground/60">No users found</p>
+                    <p className="text-primary-foreground/60">No users found — try adjusting your search.</p>
                   </TableCell>
                 </TableRow>
               ) : (

@@ -109,7 +109,7 @@ export default function AdminContent() {
       setResources(data || []);
     } catch (error) {
       console.error("Error loading resources:", error);
-      toast.error("Failed to load resources");
+      toast.error("We couldn't load the resources right now. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -119,7 +119,7 @@ export default function AdminContent() {
     e.preventDefault();
 
     if (!formData.title.trim()) {
-      toast.error("Title is required");
+      toast.error("Please add a title for this resource.");
       return;
     }
 
@@ -142,14 +142,14 @@ export default function AdminContent() {
           .eq("id", editingResource.id);
 
         if (error) throw error;
-        toast.success("Resource updated!");
+        toast.success("Resource updated — changes saved.");
       } else {
         const { error } = await supabase
           .from("resources")
           .insert(payload);
 
         if (error) throw error;
-        toast.success("Resource created!");
+        toast.success("Resource created — it's ready to go!");
       }
 
       setIsDialogOpen(false);
@@ -157,7 +157,7 @@ export default function AdminContent() {
       loadResources();
     } catch (error) {
       console.error("Error saving resource:", error);
-      toast.error("Failed to save resource");
+      toast.error("That didn't save. Please try again.");
     }
   };
 
@@ -186,11 +186,11 @@ export default function AdminContent() {
         .eq("id", id);
 
       if (error) throw error;
-      toast.success("Resource deleted");
+      toast.success("Resource removed.");
       loadResources();
     } catch (error) {
       console.error("Error deleting resource:", error);
-      toast.error("Failed to delete resource");
+      toast.error("We couldn't delete that. Please try again.");
     }
   };
 
@@ -202,11 +202,11 @@ export default function AdminContent() {
         .eq("id", resource.id);
 
       if (error) throw error;
-      toast.success(resource.is_published ? "Resource unpublished" : "Resource published");
+      toast.success(resource.is_published ? "Resource is now hidden." : "Resource is now live!");
       loadResources();
     } catch (error) {
       console.error("Error toggling publish status:", error);
-      toast.error("Failed to update resource");
+      toast.error("That didn't work. Please try again.");
     }
   };
 
@@ -258,10 +258,10 @@ export default function AdminContent() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-bold text-foreground">
-            Content Management
+            Resources
           </h1>
           <p className="text-muted-foreground">
-            Create and manage resources, guides, and templates
+            Create and share guides, templates, and helpful content for your users.
           </p>
         </div>
         <Dialog

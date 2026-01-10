@@ -18,8 +18,8 @@ export default function AdminPlans() {
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-primary-foreground mb-2">Subscription Plans</h1>
-        <p className="text-primary-foreground/60">View and manage your subscription tier configuration.</p>
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-primary-foreground mb-2">Plans</h1>
+        <p className="text-primary-foreground/60">Here's how your subscription tiers are set up.</p>
       </motion.div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -50,8 +50,8 @@ export default function AdminPlans() {
 
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }}
         className="bg-primary-foreground/5 border border-primary-foreground/10 rounded-xl p-6">
-        <h3 className="font-semibold text-primary-foreground mb-2">Manage in Stripe</h3>
-        <p className="text-primary-foreground/60 text-sm mb-4">To modify pricing or view subscription analytics, visit your Stripe Dashboard.</p>
+        <h3 className="font-semibold text-primary-foreground mb-2">Need to Make Changes?</h3>
+        <p className="text-primary-foreground/60 text-sm mb-4">To adjust pricing or view subscription analytics, head over to your Stripe Dashboard.</p>
         <Button variant="outline" className="gap-2" onClick={() => window.open("https://dashboard.stripe.com", "_blank")}>
           <ExternalLink className="h-4 w-4" /> Open Stripe Dashboard
         </Button>

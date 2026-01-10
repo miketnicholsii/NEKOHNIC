@@ -180,10 +180,10 @@ export default function AdminDashboard() {
         transition={{ duration: 0.5 }}
       >
         <h1 className="font-display text-2xl sm:text-3xl font-bold text-primary-foreground mb-2">
-          Admin Dashboard
+          Welcome Back
         </h1>
         <p className="text-primary-foreground/60">
-          Overview of your platform's performance.
+          Here's how things are going — take a look around.
         </p>
       </motion.div>
 
@@ -243,7 +243,7 @@ export default function AdminDashboard() {
           <div className="divide-y divide-primary-foreground/10">
             {recentUsers.length === 0 ? (
               <div className="p-6 text-center text-primary-foreground/60">
-                No users yet
+                No users yet — they'll show up here once they join.
               </div>
             ) : (
               recentUsers.map((user) => (
@@ -295,7 +295,7 @@ export default function AdminDashboard() {
               <Users className="h-5 w-5 text-primary" />
               <div>
                 <p className="font-medium text-primary-foreground text-sm">Manage Users</p>
-                <p className="text-xs text-primary-foreground/60">View, edit, and manage subscriptions</p>
+                <p className="text-xs text-primary-foreground/60">See who's here and how they're doing</p>
               </div>
             </Link>
             <Link
@@ -304,8 +304,8 @@ export default function AdminDashboard() {
             >
               <FileText className="h-5 w-5 text-secondary" />
               <div>
-                <p className="font-medium text-primary-foreground text-sm">Create Resource</p>
-                <p className="text-xs text-primary-foreground/60">Add guides, templates, and content</p>
+                <p className="font-medium text-primary-foreground text-sm">Add a Resource</p>
+                <p className="text-xs text-primary-foreground/60">Share guides, templates, and helpful content</p>
               </div>
             </Link>
             <Link
@@ -315,7 +315,7 @@ export default function AdminDashboard() {
               <CreditCard className="h-5 w-5 text-yellow-500" />
               <div>
                 <p className="font-medium text-primary-foreground text-sm">View Plans</p>
-                <p className="text-xs text-primary-foreground/60">Check pricing and plan configuration</p>
+                <p className="text-xs text-primary-foreground/60">Review pricing and subscription setup</p>
               </div>
             </Link>
           </div>

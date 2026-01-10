@@ -21,7 +21,7 @@ export default function AdminComingSoon({ title, description }: AdminComingSoonP
           {title}
         </h1>
         <p className="text-primary-foreground/60 max-w-md mx-auto">
-          {description || "This admin feature is coming soon."}
+          {description || "This feature is on the way. We're taking our time to get it right."}
         </p>
       </motion.div>
     </div>

@@ -76,7 +76,7 @@ export default function AdminAnnouncements() {
     e.preventDefault();
     
     if (!formData.title.trim() || !formData.message.trim()) {
-      toast.error("Title and message are required");
+      toast.error("Please add a title and message for this announcement.");
       return;
     }
 
@@ -95,13 +95,13 @@ export default function AdminAnnouncements() {
     setAnnouncements((prev) => [newAnnouncement, ...prev]);
     setIsDialogOpen(false);
     resetForm();
-    toast.success("Announcement created!");
+    toast.success("Announcement created — your users will see it soon.");
   };
 
   const handleDelete = (id: string) => {
     if (!confirm("Delete this announcement?")) return;
     setAnnouncements((prev) => prev.filter((a) => a.id !== id));
-    toast.success("Announcement deleted");
+    toast.success("Announcement removed.");
   };
 
   const handleToggleActive = (id: string) => {
@@ -138,7 +138,7 @@ export default function AdminAnnouncements() {
             Announcements
           </h1>
           <p className="text-primary-foreground/60">
-            Create and manage platform-wide announcements.
+            Keep your users in the loop with updates, tips, and news.
           </p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -310,7 +310,7 @@ export default function AdminAnnouncements() {
             <Bell className="h-12 w-12 text-primary-foreground/40 mx-auto mb-4" />
             <h3 className="font-semibold text-primary-foreground mb-2">No announcements yet</h3>
             <p className="text-primary-foreground/60 text-sm">
-              Create your first announcement to notify users about updates, maintenance, or promotions.
+              When you have something to share, create an announcement and your users will see it.
             </p>
           </motion.div>
         ) : (
@@ -387,10 +387,10 @@ export default function AdminAnnouncements() {
         <div className="flex items-start gap-3">
           <AlertTriangle className="h-5 w-5 text-yellow-500 mt-0.5" />
           <div>
-            <h4 className="font-medium text-primary-foreground">Local Storage Only</h4>
+            <h4 className="font-medium text-primary-foreground">Heads Up</h4>
             <p className="text-sm text-primary-foreground/60 mt-1">
-              Announcements are currently stored locally. To persist them across sessions, 
-              you can add an announcements table to your database.
+              These announcements are stored locally for now. For persistence across sessions, 
+              consider adding an announcements table to your database.
             </p>
           </div>
         </div>
