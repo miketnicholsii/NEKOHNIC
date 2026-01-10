@@ -228,7 +228,14 @@ export default function Services() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedStagger className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             <motion.div variants={staggerItem}>
-              <Link to="#formation" className="block p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300">
+              <a 
+                href="#formation" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('formation')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="block p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300 cursor-pointer"
+              >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-11 h-11 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
                     <Building2 className="h-5 w-5" />
@@ -241,11 +248,18 @@ export default function Services() {
                 <span className="text-sm font-medium text-primary flex items-center gap-2">
                   Learn more <ArrowRight className="h-4 w-4" />
                 </span>
-              </Link>
+              </a>
             </motion.div>
             
             <motion.div variants={staggerItem}>
-              <Link to="#brand" className="block p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300">
+              <a 
+                href="#brand" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('brand')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="block p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300 cursor-pointer"
+              >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-11 h-11 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
                     <User className="h-5 w-5" />
@@ -258,7 +272,7 @@ export default function Services() {
                 <span className="text-sm font-medium text-primary flex items-center gap-2">
                   Learn more <ArrowRight className="h-4 w-4" />
                 </span>
-              </Link>
+              </a>
             </motion.div>
           </AnimatedStagger>
         </div>
