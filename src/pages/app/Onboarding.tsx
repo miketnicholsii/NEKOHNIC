@@ -203,7 +203,7 @@ export default function Onboarding() {
                     Welcome to NÈKO
                   </h1>
                   <p className="text-muted-foreground">
-                    Let's personalize your journey. Where are you in your business?
+                    Let's set things up so we can guide you well. Where are you in your business journey?
                   </p>
                 </div>
                 <RadioGroup
@@ -238,10 +238,10 @@ export default function Onboarding() {
               <div className="space-y-6">
                 <div className="text-center mb-6">
                   <h2 className="font-display text-xl font-bold text-foreground mb-2">
-                    Tell us more about your business
+                    A little more about you
                   </h2>
                   <p className="text-muted-foreground">
-                    This helps us tailor your experience
+                    This helps us show you what's most relevant
                   </p>
                 </div>
                 
@@ -294,10 +294,10 @@ export default function Onboarding() {
               <div className="space-y-6">
                 <div className="text-center mb-6">
                   <h2 className="font-display text-xl font-bold text-foreground mb-2">
-                    What are your goals?
+                    What would you like to accomplish?
                   </h2>
                   <p className="text-muted-foreground">
-                    Select all that apply
+                    Select everything that sounds like you
                   </p>
                 </div>
                 
@@ -330,10 +330,10 @@ export default function Onboarding() {
               <div className="space-y-6">
                 <div className="text-center mb-6">
                   <h2 className="font-display text-xl font-bold text-foreground mb-2">
-                    Current business status
+                    What have you already done?
                   </h2>
                   <p className="text-muted-foreground">
-                    This helps us customize your checklist
+                    No worries if the answer is "nothing yet" — we'll start from scratch together
                   </p>
                 </div>
                 
@@ -387,7 +387,7 @@ export default function Onboarding() {
 
                 <div className="p-4 rounded-xl bg-primary/5 border border-primary/20">
                   <p className="text-sm text-foreground">
-                    <strong>You're all set!</strong> Based on your answers, we'll create a personalized dashboard with next steps to help you achieve your goals.
+                    <strong>You're ready!</strong> We'll build you a personalized dashboard with clear next steps. One thing at a time — we've got you.
                   </p>
                 </div>
               </div>

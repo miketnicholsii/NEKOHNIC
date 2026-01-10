@@ -101,7 +101,7 @@ export default function BusinessCredit() {
           Business Credit Builder
         </h1>
         <p className="text-muted-foreground">
-          Build strong business credit through strategic vendor accounts and monitoring.
+          Build a strong credit foundation for your business — one thoughtful step at a time.
         </p>
       </div>
 
@@ -147,7 +147,7 @@ export default function BusinessCredit() {
               <FeatureGate 
                 feature="tradeline_tracker"
                 lockedTitle="Tradeline Tracker"
-                lockedDescription="Track your vendor accounts, credit limits, and payment status to build your business credit profile."
+                lockedDescription="Keep tabs on your vendor accounts, credit limits, and payment status — all the pieces that build your credit profile."
               >
                 <TradelineTracker userId={user?.id || ""} />
               </FeatureGate>
@@ -157,7 +157,7 @@ export default function BusinessCredit() {
               <FeatureGate 
                 feature="score_monitoring"
                 lockedTitle="Score Monitoring"
-                lockedDescription="Track your business credit scores across all major bureaus including Dun & Bradstreet, Experian, and Equifax."
+                lockedDescription="See your business credit scores from Dun & Bradstreet, Experian, and Equifax — all in one calm, clear view."
               >
                 <ScoreMonitoring userId={user?.id || ""} />
               </FeatureGate>

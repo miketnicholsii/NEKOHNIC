@@ -111,7 +111,7 @@ export default function Dashboard() {
             className="space-y-6"
           >
             <div className="bg-card border border-border rounded-xl p-6">
-              <h2 className="font-display text-xl font-bold text-foreground mb-4">Learning Resources</h2>
+              <h2 className="font-display text-xl font-bold text-foreground mb-4">Learn at Your Pace</h2>
               <div className="grid sm:grid-cols-2 gap-4">
                 {[
                   {
@@ -177,10 +177,10 @@ export default function Dashboard() {
         >
           <Crown className="h-8 w-8 text-primary mx-auto mb-4" aria-hidden="true" />
           <h3 className="font-display text-lg font-bold text-foreground mb-2">
-            Unlock Your Full Potential
+            Ready for more?
           </h3>
           <p className="text-muted-foreground text-sm mb-4 max-w-md mx-auto">
-            Upgrade to access the full credit roadmap, vendor guidance, and expanded personal brand tools.
+            When you're ready to grow, our premium plans give you the complete credit roadmap, vendor guidance, and expanded personal brand tools.
           </p>
           <Link to="/pricing">
             <Button variant="cta">

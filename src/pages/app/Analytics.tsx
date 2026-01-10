@@ -227,10 +227,10 @@ export default function Analytics() {
         >
           <div>
             <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-1">
-              Progress Analytics
+              Your Progress
             </h1>
             <p className="text-muted-foreground">
-              Track your journey and completion trends over time
+              A clear view of how your journey is unfolding
             </p>
           </div>
           <Select value={timeRange} onValueChange={(v) => setTimeRange(v as typeof timeRange)}>

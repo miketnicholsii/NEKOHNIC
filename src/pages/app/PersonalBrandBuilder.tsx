@@ -231,7 +231,7 @@ export default function PersonalBrandBuilder() {
             Personal Brand Builder
           </h1>
           <p className="text-muted-foreground">
-            Create your Digital CV — a professional page that showcases your story.
+            Build a Digital CV that tells your story — professional, polished, and uniquely yours.
           </p>
         </div>
         <div className="flex items-center gap-2">

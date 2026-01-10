@@ -23,7 +23,7 @@ export default function ComingSoon({ title, description }: ComingSoonProps) {
           {title}
         </h1>
         <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-          {description || "This feature is coming soon. We're working hard to bring you a great experience."}
+          {description || "This feature is on the way. We're taking our time to get it right for you."}
         </p>
         <Link to="/app">
           <Button variant="outline">

@@ -156,7 +156,7 @@ export default function Resources() {
           Resources
         </h1>
         <p className="text-muted-foreground">
-          Curated guides, templates, and checklists to help you build your business.
+          Guides, templates, and checklists — created to help you move forward with confidence.
         </p>
       </div>
 

@@ -4,7 +4,7 @@ export default function Support() {
   return (
     <ComingSoon
       title="Support"
-      description="Get help with your journey. Submit tickets and get responses from our team. Coming in Phase 6."
+      description="Need a hand? Soon you'll be able to reach out directly and get personal help from our team."
     />
   );
 }

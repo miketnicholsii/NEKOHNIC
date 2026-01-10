@@ -86,7 +86,7 @@ export default function QuickActions() {
               Quick Actions
             </h3>
             <p className="text-xs text-muted-foreground">
-              Jump to common tasks
+              Pick up where you left off
             </p>
           </div>
         </div>

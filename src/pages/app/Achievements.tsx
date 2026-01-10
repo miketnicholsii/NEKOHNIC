@@ -12,10 +12,10 @@ export default function Achievements() {
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
           <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground">
-            Achievements & Badges
+            Your Achievements
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Track your progress and earn rewards as you build your business
+            Every milestone matters. See how far you've come.
           </p>
         </div>
 
