@@ -251,7 +251,7 @@ const TierCardComponent = memo(function TierCardComponent({
           disabled={isCurrentPlan || isLoading}
           onClick={() => onSelect(tierKey)}
         >
-          {isCurrentPlan ? "Current Plan" : isFree ? "Get Started Free" : "Subscribe"}
+          {isCurrentPlan ? "Current Plan" : isFree ? "Get Started Free" : "Say Hello"}
         </Button>
       </div>
     </div>
@@ -298,33 +298,10 @@ export default function Pricing() {
       return;
     }
 
-    if (!user) {
-      toast.info("Please sign in to subscribe");
-      navigate("/login");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { 
-          tier, 
-          billingPeriod: isAnnual ? "annual" : "monthly" 
-        },
-      });
-
-      if (error) throw error;
-
-      if (data?.url) {
-        window.open(data.url, "_blank");
-      }
-    } catch (error) {
-      console.error("Checkout error:", error);
-      toast.error("Failed to start checkout. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    // For paid tiers, redirect to contact page
+    navigate("/contact");
   };
+
 
   const tiers: SubscriptionTier[] = ["free", "starter", "pro", "elite"];
 
