@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
   Plus,
@@ -29,6 +30,7 @@ import {
   Bell,
   Trash2,
   Calendar,
+  Pencil,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -58,10 +60,11 @@ const TARGET_OPTIONS = [
 ];
 
 export default function AdminAnnouncements() {
-  // For now, we'll store announcements in local state
-  // In a full implementation, you'd create an announcements table
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     message: "",
@@ -72,7 +75,32 @@ export default function AdminAnnouncements() {
     ends_at: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    loadAnnouncements();
+  }, []);
+
+  const loadAnnouncements = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("announcements")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setAnnouncements(data || []);
+    } catch (error) {
+      console.error("Error loading announcements:", error);
+      toast.error("We couldn't load announcements right now. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const toIsoDate = (value: string) => {
+    return new Date(value).toISOString();
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.title.trim() || !formData.message.trim()) {
@@ -80,37 +108,100 @@ export default function AdminAnnouncements() {
       return;
     }
 
-    const newAnnouncement: Announcement = {
-      id: Date.now().toString(),
-      title: formData.title,
-      message: formData.message,
-      type: formData.type,
-      target: formData.target,
-      is_active: formData.is_active,
-      starts_at: formData.starts_at,
-      ends_at: formData.ends_at || null,
-      created_at: new Date().toISOString(),
-    };
+    setIsSaving(true);
 
-    setAnnouncements((prev) => [newAnnouncement, ...prev]);
-    setIsDialogOpen(false);
-    resetForm();
-    toast.success("Announcement created — your users will see it soon.");
+    try {
+      const payload = {
+        title: formData.title.trim(),
+        message: formData.message.trim(),
+        type: formData.type,
+        target: formData.target,
+        is_active: formData.is_active,
+        starts_at: toIsoDate(formData.starts_at),
+        ends_at: formData.ends_at ? toIsoDate(formData.ends_at) : null,
+      };
+
+      if (editingAnnouncement) {
+        const { error } = await supabase
+          .from("announcements")
+          .update(payload)
+          .eq("id", editingAnnouncement.id);
+
+        if (error) throw error;
+        toast.success("Announcement updated.");
+      } else {
+        const { error } = await supabase
+          .from("announcements")
+          .insert(payload);
+
+        if (error) throw error;
+        toast.success("Announcement created — your users will see it soon.");
+      }
+
+      setIsDialogOpen(false);
+      resetForm();
+      loadAnnouncements();
+    } catch (error) {
+      console.error("Error saving announcement:", error);
+      toast.error("That didn't save. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!confirm("Delete this announcement?")) return;
-    setAnnouncements((prev) => prev.filter((a) => a.id !== id));
-    toast.success("Announcement removed.");
+
+    try {
+      const { error } = await supabase
+        .from("announcements")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+      setAnnouncements((prev) => prev.filter((a) => a.id !== id));
+      toast.success("Announcement removed.");
+    } catch (error) {
+      console.error("Error deleting announcement:", error);
+      toast.error("We couldn't delete that. Please try again.");
+    }
   };
 
-  const handleToggleActive = (id: string) => {
-    setAnnouncements((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, is_active: !a.is_active } : a))
-    );
+  const handleToggleActive = async (announcement: Announcement) => {
+    try {
+      const { error } = await supabase
+        .from("announcements")
+        .update({ is_active: !announcement.is_active })
+        .eq("id", announcement.id);
+
+      if (error) throw error;
+      setAnnouncements((prev) =>
+        prev.map((a) =>
+          a.id === announcement.id ? { ...a, is_active: !a.is_active } : a
+        )
+      );
+    } catch (error) {
+      console.error("Error updating announcement:", error);
+      toast.error("That didn't work. Please try again.");
+    }
+  };
+
+  const handleEdit = (announcement: Announcement) => {
+    setEditingAnnouncement(announcement);
+    setFormData({
+      title: announcement.title,
+      message: announcement.message,
+      type: announcement.type,
+      target: announcement.target,
+      is_active: announcement.is_active,
+      starts_at: format(new Date(announcement.starts_at), "yyyy-MM-dd"),
+      ends_at: announcement.ends_at ? format(new Date(announcement.ends_at), "yyyy-MM-dd") : "",
+    });
+    setIsDialogOpen(true);
   };
 
   const resetForm = () => {
+    setEditingAnnouncement(null);
     setFormData({
       title: "",
       message: "",
@@ -123,6 +214,14 @@ export default function AdminAnnouncements() {
   };
 
   const activeCount = announcements.filter((a) => a.is_active).length;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-pulse text-primary-foreground/60">Loading announcements...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -141,7 +240,13 @@ export default function AdminAnnouncements() {
             Keep your users in the loop with updates, tips, and news.
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog
+          open={isDialogOpen}
+          onOpenChange={(open) => {
+            setIsDialogOpen(open);
+            if (!open) resetForm();
+          }}
+        >
           <DialogTrigger asChild>
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
@@ -150,7 +255,9 @@ export default function AdminAnnouncements() {
           </DialogTrigger>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle>Create Announcement</DialogTitle>
+              <DialogTitle>
+                {editingAnnouncement ? "Edit Announcement" : "Create Announcement"}
+              </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -277,8 +384,8 @@ export default function AdminAnnouncements() {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" className="flex-1">
-                  Create
+                <Button type="submit" className="flex-1" disabled={isSaving}>
+                  {isSaving ? "Saving..." : editingAnnouncement ? "Update" : "Create"}
                 </Button>
               </div>
             </form>
@@ -359,8 +466,16 @@ export default function AdminAnnouncements() {
                   <div className="flex items-center gap-2">
                     <Switch
                       checked={announcement.is_active}
-                      onCheckedChange={() => handleToggleActive(announcement.id)}
+                      onCheckedChange={() => handleToggleActive(announcement)}
                     />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEdit(announcement)}
+                      className="h-8 w-8 text-primary-foreground/60 hover:text-primary"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
@@ -376,25 +491,6 @@ export default function AdminAnnouncements() {
           })
         )}
       </div>
-
-      {/* Note about persistence */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-4"
-      >
-        <div className="flex items-start gap-3">
-          <AlertTriangle className="h-5 w-5 text-yellow-500 mt-0.5" />
-          <div>
-            <h4 className="font-medium text-primary-foreground">Heads Up</h4>
-            <p className="text-sm text-primary-foreground/60 mt-1">
-              These announcements are stored locally for now. For persistence across sessions, 
-              consider adding an announcements table to your database.
-            </p>
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 }
