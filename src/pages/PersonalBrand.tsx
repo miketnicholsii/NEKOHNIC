@@ -114,7 +114,7 @@ export default function PersonalBrand() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-lg sm:text-xl text-primary-foreground/70 max-w-2xl mx-auto leading-relaxed mb-8"
             >
-              A professional presence that tells your story, showcases your work, and builds the credibility that opens doors.
+              A professional presence that tells your story, showcases your work, and helps people understand who you are — all in one place.
             </motion.p>
 
             <motion.div 
@@ -335,18 +335,18 @@ export default function PersonalBrand() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>
             <p className="text-sm font-medium tracking-widest uppercase text-primary-foreground/40 mb-4">
-              Ready?
+              Ready to Begin?
             </p>
             <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
-              Build your professional presence.
+              Your presence is waiting.
             </h2>
             <p className="text-lg text-primary-foreground/60 mb-10 max-w-md mx-auto">
-              Your Digital CV is waiting. Let's make it happen.
+              Let's create something that represents the real you.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link to="/contact">
                 <Button variant="hero" size="xl" className="group">
-                  Get Started
+                  Say Hello
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>

@@ -168,13 +168,13 @@ export default function Contact() {
             className="max-w-2xl"
           >
             <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary-foreground/70 mb-3">
-              Contact
+              Say Hello
             </span>
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tightest text-primary-foreground mb-4">
-              Get in touch
+              Let's talk
             </h1>
             <p className="text-lg text-primary-foreground/70">
-              Have a question or ready to start? We'd like to hear from you.
+              Questions, ideas, or ready to start? We'd genuinely like to hear from you.
             </p>
           </motion.div>
         </div>

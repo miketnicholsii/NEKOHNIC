@@ -149,18 +149,18 @@ const CTASection = memo(function CTASection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
         <AnimatedSection direction="none">
           <p className="text-sm font-medium tracking-widest uppercase text-primary-foreground/40 mb-4">
-            Ready?
+            Ready to Begin?
           </p>
           <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
-            Let's get you set up.
+            Start where you are.
           </h2>
           <p className="text-lg text-primary-foreground/60 mb-10 max-w-md mx-auto">
-            Whether it's your business, your credit, or your brand — we're here to help.
+            You don't need to have everything figured out. We'll help you find your next step.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link to="/contact">
               <Button variant="hero" size="xl" className="group">
-                Get Started
+                Say Hello
                 <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
             </Link>
@@ -210,14 +210,14 @@ export default function Services() {
               transition={{ ...fadeIn.transition, delay: 0.1 }}
               className="font-display font-bold tracking-tighter text-primary-foreground mb-6 text-[clamp(2rem,6vw,4rem)] leading-[1.1]"
             >
-              Two tracks. One goal.
+              A clear path forward.
             </motion.h1>
             <motion.p 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0.2 }}
               className="text-lg sm:text-xl text-primary-foreground/70 max-w-2xl mx-auto leading-relaxed"
             >
-              Business enablement and personal branding — each structured with guidance, progress tracking, and clarity at every step.
+              Business infrastructure and personal branding — each with structure, guidance, and visible progress at every step.
             </motion.p>
           </div>
         </div>
@@ -285,13 +285,13 @@ export default function Services() {
           <AnimatedSection direction="none">
             <div className="text-center mb-12">
               <p className="text-sm font-medium tracking-widest uppercase text-primary-foreground/40 mb-4">
-                How It Works
+                Choose Your Path
               </p>
               <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
-                Two paths. Your choice.
+                One track or both — your choice.
               </h2>
               <p className="text-base sm:text-lg text-primary-foreground/60 max-w-xl mx-auto">
-                Choose one track, or combine them for a complete foundation.
+                Each track works on its own, or combine them for a complete foundation.
               </p>
             </div>
           </AnimatedSection>

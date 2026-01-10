@@ -9,9 +9,9 @@ import { User } from "@supabase/supabase-js";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
-  { href: "/services", label: "Services" },
+  { href: "/services", label: "How It Works" },
   { href: "/personal-brand", label: "Personal Brand" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "/pricing", label: "Plans" },
 ] as const;
 
 export const Navbar = memo(function Navbar() {

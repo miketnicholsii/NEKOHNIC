@@ -59,12 +59,12 @@ const audiences = [
   { label: "Creators & Professionals", description: "Establishing a personal brand that stands on its own" },
 ];
 
-// The problem statements
-const problems = [
-  "You want to start a business but don't know where to begin",
-  "You've heard about business credit but don't have a clear path",
-  "You need a professional presence but don't have time to figure it all out",
-  "You're juggling personal and business finances without proper separation",
+// Common starting points - framed positively
+const startingPoints = [
+  "You have a business idea and want to do it right from the start",
+  "You're ready to build business credit on your own terms",
+  "You want a professional presence that truly represents you",
+  "You're ready to separate personal and business finances properly",
 ];
 
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -206,11 +206,11 @@ export default function Index() {
 
             {/* ONE-SENTENCE POSITIONING STATEMENT */}
             <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.5 }} className="text-base sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-3 sm:mb-4 leading-relaxed px-2 sm:px-0 font-medium">
-              We help individuals and small businesses establish, grow, and manage their digital and financial presence.
+              A calm, guided way to start and grow your business — with clarity at every step.
             </motion.p>
 
             <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.6 }} className="text-sm sm:text-base text-primary-foreground/50 max-w-xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2 sm:px-0">
-              From business formation to credit building to personal branding — with structure, guidance, and clarity at every step.
+              Business formation. Credit building. Personal branding. We help you take the next right step.
             </motion.p>
 
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.7 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
@@ -241,34 +241,34 @@ export default function Index() {
         </div>
       </section>
 
-      {/* THE PROBLEM Section */}
+      {/* WHERE YOU ARE Section - Positive framing */}
       <section className="py-12 sm:py-16 lg:py-24 bg-muted/30 relative">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="max-w-3xl mx-auto text-center mb-10 sm:mb-12">
               <p className="text-xs sm:text-sm font-medium tracking-widest uppercase text-primary mb-3">
-                The Problem
+                Sound Familiar?
               </p>
               <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
-                Starting is harder than it should be.
+                You're ready. You just need the path.
               </h2>
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-                You know you need to get your business set up properly. You know you should be building credit. You know your online presence matters. But the path forward isn't clear.
+                Starting a business doesn't have to feel overwhelming. When you know the next right step, everything gets clearer.
               </p>
             </div>
           </AnimatedSection>
 
           <AnimatedStagger className="grid sm:grid-cols-2 gap-3 sm:gap-4 max-w-2xl mx-auto">
-            {problems.map((problem, index) => (
+            {startingPoints.map((point, index) => (
               <motion.div 
                 key={index} 
                 variants={staggerItem}
                 className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border"
               >
-                <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-xs font-bold text-muted-foreground">{index + 1}</span>
+                <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
                 </div>
-                <p className="text-sm text-foreground leading-relaxed">{problem}</p>
+                <p className="text-sm text-foreground leading-relaxed">{point}</p>
               </motion.div>
             ))}
           </AnimatedStagger>
@@ -281,17 +281,17 @@ export default function Index() {
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             <AnimatedSection direction="left">
               <p className="text-xs sm:text-sm font-medium tracking-widest uppercase text-primary mb-3">
-                Why NÈKO Exists
+                How We Help
               </p>
               <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
-                Clarity, credibility, and a real path forward.
+                Your guide from idea to credibility.
               </h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  NÈKO bridges the gap between where you are and where you want to be. We provide the structure, guidance, and tools to help you establish a legitimate business presence and build the financial foundation to grow.
+                  Think of NÈKO as a thoughtful guide sitting beside you — helping you understand where you are, what comes next, and how to move forward with confidence.
                 </p>
                 <p>
-                  We work across two connected tracks: helping businesses get set up correctly and credibly, and helping individuals build a professional digital presence that represents who they are.
+                  We work across two tracks: business infrastructure (formation, banking, credit building) and personal presence (your professional identity online). Use one or both — we meet you where you are.
                 </p>
               </div>
               
@@ -300,9 +300,9 @@ export default function Index() {
                 <div className="flex items-start gap-3">
                   <Sparkles className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-foreground">The outcome</p>
+                    <p className="text-sm font-medium text-foreground">What you'll walk away with</p>
                     <p className="text-sm text-muted-foreground mt-1">
-                      A properly formed business. Credit that doesn't depend on your personal score. A professional presence that opens doors. Growth on your terms.
+                      A properly formed business. Credit that grows on its own. A professional presence that opens doors. Peace of mind.
                     </p>
                   </div>
                 </div>

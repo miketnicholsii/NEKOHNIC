@@ -214,14 +214,13 @@ export default function GetStarted() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeIn} className="max-w-2xl">
             <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-3 sm:mb-4">
-              Get Started
+              Welcome
             </span>
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tightest text-foreground mb-4 sm:mb-6 text-balance">
-              Let's begin your journey.
+              It's nice to meet you.
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-              Tell us a bit about yourself and where you are in your business journey. 
-              We'll help you find the right path forward.
+              Tell us a bit about yourself and where you are. We'll help you figure out the next step — no pressure, no rush.
             </p>
           </motion.div>
         </div>

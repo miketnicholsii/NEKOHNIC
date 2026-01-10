@@ -318,10 +318,10 @@ export default function Pricing() {
             className="max-w-2xl mx-auto"
           >
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tightest text-foreground mb-4 sm:mb-6">
-              Simple, transparent pricing.
+              Clear, honest pricing.
             </h1>
             <p className="text-base sm:text-lg text-muted-foreground px-2 sm:px-0 mb-8">
-              Choose the plan that fits your journey. Upgrade or downgrade anytime.
+              Choose what fits your journey. Upgrade, downgrade, or cancel anytime — no pressure.
             </p>
 
             {/* Billing Toggle */}
@@ -451,17 +451,17 @@ export default function Pricing() {
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>
             <p className="text-sm font-medium tracking-widest uppercase text-primary-foreground/40 mb-4">
-              Ready to start?
+              Ready to begin?
             </p>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-3 sm:mb-4">
-              Build your business foundation today.
+              Start where you are.
             </h2>
             <p className="text-base sm:text-lg text-primary-foreground/60 mb-8 sm:mb-10 max-w-md mx-auto px-2">
-              Join thousands of entrepreneurs building legitimate businesses.
+              You don't need to have it all figured out. We'll help you find your next step.
             </p>
-            <Link to="/get-started" className="inline-block w-full sm:w-auto">
+            <Link to="/contact" className="inline-block w-full sm:w-auto">
               <Button variant="hero" size="lg" className="group w-full sm:w-auto">
-                Get Started Free
+                Say Hello
                 <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
             </Link>

@@ -86,7 +86,7 @@ export default function About() {
               transition={{ ...fadeIn.transition, delay: 0.05 }}
               className="font-display font-bold tracking-tighter text-primary-foreground mb-6 text-[clamp(2rem,6.5vw,4.5rem)] leading-[1.1]"
             >
-              Why NÈKO Exists
+              Hello, NÈKO.
             </motion.h1>
             
             <motion.p 
@@ -94,7 +94,7 @@ export default function About() {
               transition={{ ...fadeIn.transition, delay: 0.1 }}
               className="text-lg sm:text-xl text-primary-foreground/70 max-w-2xl mx-auto mb-4 leading-relaxed"
             >
-              Helping founders and creators build the digital presence and business infrastructure they need to be taken seriously.
+              We believe starting a business shouldn't feel overwhelming. Neither should building a professional presence.
             </motion.p>
             
             <motion.p 
@@ -102,7 +102,7 @@ export default function About() {
               transition={{ ...fadeIn.transition, delay: 0.15 }}
               className="text-base text-primary-foreground/50 max-w-xl mx-auto leading-relaxed"
             >
-              Two tracks. One mission. Clear paths to legitimacy and visibility.
+              NÈKO is here to make the path clear.
             </motion.p>
           </div>
         </div>
@@ -125,14 +125,14 @@ export default function About() {
             <AnimatedSection direction="left">
               <SectionHeading
                 label="Our Story"
-                title="Built for the space between idea and legitimacy."
+                title="For the space between idea and reality."
                 className="mb-8"
               />
               
               <div className="space-y-5 text-muted-foreground leading-relaxed">
-                <p>Starting a business or building a personal brand shouldn't require figuring everything out alone.</p>
-                <p>We saw too many talented people stuck — unsure how to get their LLC, build business credit, or create a digital presence that actually represents them.</p>
-                <p>NÈKO bridges that gap with two focused tracks: <strong className="text-foreground">Business Enablement</strong> for infrastructure and credibility, and <strong className="text-foreground">Personal Branding</strong> for visibility and identity.</p>
+                <p>We started NÈKO because we saw something frustrating: talented people with great ideas getting stuck on the logistics.</p>
+                <p>Not because they couldn't do it — but because no one had shown them the path clearly. How do you actually form an LLC? What's the right order for building business credit? How do you create a professional presence without spending months on it?</p>
+                <p>We built NÈKO to be the guide we wished we'd had. Calm, clear, and genuinely helpful.</p>
               </div>
             </AnimatedSection>
 
@@ -225,10 +225,10 @@ export default function About() {
               Our Mission
             </p>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4 max-w-2xl mx-auto">
-              Make legitimacy and visibility accessible to everyone.
+              Make the first step feel possible.
             </h2>
             <p className="text-base sm:text-lg text-primary-foreground/60 mb-10 max-w-md mx-auto">
-              Business infrastructure. Personal brand identity. The foundation for being taken seriously.
+              Clarity comes from taking action. We help you take that action with confidence.
             </p>
             <Link to="/contact">
               <Button variant="hero" size="xl" className="group">

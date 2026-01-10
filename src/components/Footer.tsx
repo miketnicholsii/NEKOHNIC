@@ -5,13 +5,13 @@ import { ArrowUpRight } from "lucide-react";
 
 const footerLinks = {
   platform: [
-    { href: "/services", label: "Services" },
+    { href: "/services", label: "How It Works" },
     { href: "/personal-brand", label: "Personal Brand" },
-    { href: "/pricing", label: "Pricing" },
+    { href: "/pricing", label: "Plans" },
   ],
   company: [
     { href: "/about", label: "About" },
-    { href: "/contact", label: "Get in Touch" },
+    { href: "/contact", label: "Say Hello" },
     { href: "/login", label: "Member Login" },
   ],
   legal: [
@@ -37,10 +37,10 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               </span>
             </Link>
             <p className="text-primary-foreground/60 text-xs sm:text-sm leading-relaxed max-w-sm mb-4 sm:mb-6">
-              A guided operating system for building legitimate businesses and personal brands.
+              A calm, guided way to start and grow your business — with clarity at every step.
             </p>
             <p className="text-primary-foreground/40 text-[10px] sm:text-xs leading-relaxed max-w-sm">
-              Structure. Education. Clarity.
+              Built for people ready to move forward.
             </p>
           </div>
 

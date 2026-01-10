@@ -10,9 +10,9 @@ import { User } from "@supabase/supabase-js";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
-  { href: "/services", label: "Services" },
+  { href: "/services", label: "How It Works" },
   { href: "/personal-brand", label: "Brand" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "/pricing", label: "Plans" },
 ] as const;
 
 const NavPill = memo(function NavPill({ href, label, isActive, showDarkText }: { href: string; label: string; isActive: boolean; showDarkText: boolean }) {
