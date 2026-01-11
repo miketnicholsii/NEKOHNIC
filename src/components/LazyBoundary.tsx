@@ -103,28 +103,29 @@ export class LazyBoundary extends Component<LazyBoundaryProps, LazyBoundaryState
 
 /**
  * Creates a lazy component with built-in retry logic for chunk load failures.
- * If the initial load fails, it will retry once after a short delay.
+ * If the initial load fails, it will retry with exponential backoff.
  */
 export function lazyWithRetry<T extends ComponentType<any>>(
   importFn: () => Promise<{ default: T }>,
-  retries = 1,
-  delay = 1000
+  retries = 2,
+  delay = 500
 ): React.LazyExoticComponent<T> {
   return lazy(async () => {
-    try {
-      return await importFn();
-    } catch (error) {
-      // Retry logic for chunk load failures
-      for (let i = 0; i < retries; i++) {
-        await new Promise((resolve) => setTimeout(resolve, delay));
-        try {
-          // Add cache-busting query param on retry
-          return await importFn();
-        } catch (retryError) {
-          if (i === retries - 1) throw retryError;
+    let lastError: Error | null = null;
+    
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        // Add cache-busting on retries
+        if (attempt > 0) {
+          await new Promise((resolve) => setTimeout(resolve, delay * attempt));
         }
+        return await importFn();
+      } catch (error) {
+        lastError = error as Error;
+        console.warn(`Lazy load attempt ${attempt + 1} failed:`, error);
       }
-      throw error;
     }
+    
+    throw lastError;
   });
 }

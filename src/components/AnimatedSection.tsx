@@ -11,17 +11,17 @@ interface AnimatedSectionProps {
 }
 
 const directionVariants = {
-  up: { y: 24, opacity: 0 },
-  down: { y: -24, opacity: 0 },
-  left: { x: 24, opacity: 0 },
-  right: { x: -24, opacity: 0 },
+  up: { y: 16, opacity: 0 },
+  down: { y: -16, opacity: 0 },
+  left: { x: 16, opacity: 0 },
+  right: { x: -16, opacity: 0 },
   none: { opacity: 0 },
 };
 
 const visible = { x: 0, y: 0, opacity: 1 };
 
-// Optimized easing curve for smooth animations
-const smoothEase = [0.25, 0.1, 0.25, 1] as const;
+// Faster, simpler easing
+const smoothEase = [0.4, 0, 0.2, 1] as const;
 
 export const AnimatedSection = memo(function AnimatedSection({
   children,
@@ -29,10 +29,10 @@ export const AnimatedSection = memo(function AnimatedSection({
   delay = 0,
   direction = "up",
   once = true,
-  amount = 0.2,
+  amount = 0.15,
 }: AnimatedSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once, margin: "-60px 0px", amount });
+  const isInView = useInView(ref, { once, margin: "-40px 0px", amount });
   const prefersReducedMotion = useFramerReducedMotion();
 
   const variants = useMemo(() => ({
@@ -51,12 +51,11 @@ export const AnimatedSection = memo(function AnimatedSection({
       animate={isInView ? "visible" : "hidden"}
       variants={variants}
       transition={{
-        duration: 0.5,
-        delay,
+        duration: 0.35,
+        delay: Math.min(delay, 0.3), // Cap delay to prevent long waits
         ease: smoothEase,
       }}
       className={className}
-      style={{ willChange: isInView ? "auto" : "transform, opacity" }}
     >
       {children}
     </motion.div>
@@ -73,11 +72,11 @@ interface AnimatedStaggerProps {
 export const AnimatedStagger = memo(function AnimatedStagger({
   children,
   className = "",
-  staggerDelay = 0.1,
+  staggerDelay = 0.08,
   once = true,
 }: AnimatedStaggerProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once, margin: "-40px 0px", amount: 0.1 });
+  const isInView = useInView(ref, { once, margin: "-30px 0px", amount: 0.1 });
   const prefersReducedMotion = useFramerReducedMotion();
 
   const containerVariants = useMemo(() => ({
@@ -85,7 +84,7 @@ export const AnimatedStagger = memo(function AnimatedStagger({
     visible: {
       transition: {
         staggerChildren: staggerDelay,
-        delayChildren: 0.1,
+        delayChildren: 0.05,
       },
     },
   }), [staggerDelay]);
@@ -108,13 +107,13 @@ export const AnimatedStagger = memo(function AnimatedStagger({
 });
 
 export const staggerItem = {
-  hidden: { y: 16, opacity: 0 },
+  hidden: { y: 12, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
     transition: {
-      duration: 0.4,
-      ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+      duration: 0.3,
+      ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
     },
   },
 };

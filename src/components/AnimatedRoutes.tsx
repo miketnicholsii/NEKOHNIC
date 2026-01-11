@@ -1,18 +1,17 @@
 import { Suspense, memo } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { Routes, Route } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LazyBoundary, lazyWithRetry } from "@/components/LazyBoundary";
 
-// Critical path - load immediately
+// Critical path - load immediately (main nav pages)
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
+import About from "@/pages/About";
+import Services from "@/pages/Services";
+import PersonalBrand from "@/pages/PersonalBrand";
+import Pricing from "@/pages/Pricing";
 
-// Lazy load non-critical routes with retry logic
-const About = lazyWithRetry(() => import("@/pages/About"));
-const Services = lazyWithRetry(() => import("@/pages/Services"));
-const PersonalBrand = lazyWithRetry(() => import("@/pages/PersonalBrand"));
-const Pricing = lazyWithRetry(() => import("@/pages/Pricing"));
+// Lazy load secondary routes with retry logic
 const GetStarted = lazyWithRetry(() => import("@/pages/GetStarted"));
 const Contact = lazyWithRetry(() => import("@/pages/Contact"));
 const PublicProfile = lazyWithRetry(() => import("@/pages/PublicProfile"));
@@ -47,8 +46,8 @@ const AdminContent = lazyWithRetry(() => import("@/pages/admin/AdminContent"));
 const AdminPlans = lazyWithRetry(() => import("@/pages/admin/AdminPlans"));
 const AdminAnnouncements = lazyWithRetry(() => import("@/pages/admin/AdminAnnouncements"));
 
-// Loading fallback component
-function PageLoader() {
+// Loading fallback component - simplified for faster render
+const PageLoader = memo(function PageLoader() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="space-y-4 w-full max-w-md px-8">
@@ -58,59 +57,33 @@ function PageLoader() {
       </div>
     </div>
   );
-}
-
-// Lightweight page transitions for performance
-const pageVariants = {
-  initial: { opacity: 0 },
-  enter: { opacity: 1, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] as const } },
-  exit: { opacity: 0, transition: { duration: 0.12, ease: [0.4, 0, 1, 1] as const } },
-};
-
-const AnimatedPage = memo(function AnimatedPage({ children }: { children: React.ReactNode }) {
-  return (
-    <motion.div variants={pageVariants} initial="initial" animate="enter" exit="exit" className="min-h-full">
-      {children}
-    </motion.div>
-  );
 });
 
+// Removed AnimatePresence for performance - causing page load issues
 export const AnimatedRoutes = memo(function AnimatedRoutes() {
-  const location = useLocation();
-  
-  // Get the base path for animation key (prevents re-animating nested routes)
-  const getAnimationKey = () => {
-    const path = location.pathname;
-    // For app and admin routes, use the base path to prevent re-animation on nested nav
-    if (path.startsWith('/app')) return '/app';
-    if (path.startsWith('/admin')) return '/admin';
-    return path;
-  };
-
   return (
     <LazyBoundary>
-      <AnimatePresence mode="wait" initial={false}>
-        <Suspense fallback={<PageLoader />} key={getAnimationKey()}>
-          <Routes location={location} key={getAnimationKey()}>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
           {/* Public routes */}
-          <Route path="/" element={<AnimatedPage><Index /></AnimatedPage>} />
-          <Route path="/about" element={<AnimatedPage><About /></AnimatedPage>} />
-          <Route path="/services" element={<AnimatedPage><Services /></AnimatedPage>} />
-          <Route path="/personal-brand" element={<AnimatedPage><PersonalBrand /></AnimatedPage>} />
-          <Route path="/pricing" element={<AnimatedPage><Pricing /></AnimatedPage>} />
-          <Route path="/get-started" element={<AnimatedPage><GetStarted /></AnimatedPage>} />
-          <Route path="/contact" element={<AnimatedPage><Contact /></AnimatedPage>} />
+          <Route path="/" element={<Index />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/personal-brand" element={<PersonalBrand />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/get-started" element={<GetStarted />} />
+          <Route path="/contact" element={<Contact />} />
           
           {/* Auth routes */}
-          <Route path="/login" element={<AnimatedPage><Login /></AnimatedPage>} />
-          <Route path="/forgot-password" element={<AnimatedPage><ForgotPassword /></AnimatedPage>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           
           {/* Legal routes */}
-          <Route path="/legal/privacy" element={<AnimatedPage><Privacy /></AnimatedPage>} />
-          <Route path="/legal/terms" element={<AnimatedPage><Terms /></AnimatedPage>} />
+          <Route path="/legal/privacy" element={<Privacy />} />
+          <Route path="/legal/terms" element={<Terms />} />
           
-          {/* Authenticated app routes - no page transition on nested routes */}
-          <Route path="/app" element={<AnimatedPage><AppLayout /></AnimatedPage>}>
+          {/* Authenticated app routes */}
+          <Route path="/app" element={<AppLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="onboarding" element={<Onboarding />} />
             <Route path="business-starter" element={<BusinessStarter />} />
@@ -124,8 +97,8 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
             <Route path="checkout-success" element={<CheckoutSuccess />} />
           </Route>
           
-          {/* Admin routes - no page transition on nested routes */}
-          <Route path="/admin" element={<AnimatedPage><AdminLayout /></AnimatedPage>}>
+          {/* Admin routes */}
+          <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="users" element={<AdminUsers />} />
             <Route path="content" element={<AdminContent />} />
@@ -134,13 +107,12 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
           </Route>
           
           {/* Public profile route */}
-          <Route path="/p/:slug" element={<AnimatedPage><PublicProfile /></AnimatedPage>} />
+          <Route path="/p/:slug" element={<PublicProfile />} />
           
           {/* Fallback */}
-          <Route path="*" element={<AnimatedPage><NotFound /></AnimatedPage>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
-    </AnimatePresence>
-  </LazyBoundary>
+    </LazyBoundary>
   );
 });

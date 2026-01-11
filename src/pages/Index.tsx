@@ -2,7 +2,6 @@ import { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -69,54 +68,18 @@ const startingPoints = [
 
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-// Animated NEKO letters
-const nekoLetters = [
-  { char: "N", delay: 0 },
-  { char: "È", delay: 0.08 },
-  { char: "K", delay: 0.16 },
-  { char: "O", delay: 0.24 },
-];
-
+// Simplified NEKO logo - no complex per-letter animations or tooltips
 const NekoLogo = memo(function NekoLogo() {
   return (
-    <TooltipProvider delayDuration={300}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span className="inline-flex items-baseline cursor-default">
-            {nekoLetters.map((letter, index) => (
-              <motion.span
-                key={index}
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.8,
-                  delay: letter.delay + 0.3,
-                  ease: easeOutExpo,
-                }}
-                whileHover={{ 
-                  y: -8,
-                  scale: 1.05,
-                  color: "hsl(168, 65%, 50%)",
-                  transition: { duration: 0.2, ease: "easeOut" }
-                }}
-                className="inline-block neko-letter cursor-default select-none"
-              >
-                {letter.char}
-              </motion.span>
-            ))}
-          </span>
-        </TooltipTrigger>
-        <TooltipContent 
-          side="bottom" 
-          sideOffset={12}
-          className="bg-background/95 backdrop-blur-sm border-border/50 px-4 py-2 shadow-lg animate-in fade-in-0 zoom-in-95 duration-200"
-        >
-          <span className="text-sm font-logo tracking-wide text-foreground/80 italic">
-            ē-ko
-          </span>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <motion.span
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.2, ease: easeOutExpo }}
+      className="inline-block cursor-default select-none"
+      title="NÈKO - pronounced 'ē-ko'"
+    >
+      NÈKO
+    </motion.span>
   );
 });
 
