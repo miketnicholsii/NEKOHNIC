@@ -37,6 +37,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ErrorState } from "@/components/LoadingStates";
 
 const PRIORITY_CONFIG = {
   low: { label: "Low", color: "text-muted-foreground", bg: "bg-muted" },
@@ -53,7 +54,7 @@ const STATUS_CONFIG = {
 
 export default function TaskManager() {
   const { recordTaskCompletion } = useStreaks();
-  const { tasks, isLoading, createTask, updateTask, deleteTask } = useTasks({
+  const { tasks, isLoading, error, fetchTasks, createTask, updateTask, deleteTask } = useTasks({
     onTaskComplete: recordTaskCompletion,
   });
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -204,6 +205,14 @@ export default function TaskManager() {
       </div>
 
       {/* Kanban Columns */}
+      {error && (
+        <ErrorState
+          title="Couldn't load your tasks"
+          description={error}
+          onRetry={fetchTasks}
+          variant="card"
+        />
+      )}
       <div className="grid md:grid-cols-3 gap-4">
         {/* To Do */}
         <TaskColumn

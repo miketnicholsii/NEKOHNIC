@@ -32,9 +32,16 @@ export function useTasks(options?: UseTasksOptions) {
   const [error, setError] = useState<string | null>(null);
 
   const fetchTasks = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      setTasks([]);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
     
     try {
+      setIsLoading(true);
+      setError(null);
       const { data, error: fetchError } = await supabase
         .from("user_tasks")
         .select("*")
