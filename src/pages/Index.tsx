@@ -8,6 +8,9 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { SectionIndicator, MobileProgressBar } from "@/components/SectionIndicator";
 import { AnimatedSection, AnimatedStagger, staggerItem, staggerCardItem } from "@/components/AnimatedSection";
 import { HomePricing } from "@/components/HomePricing";
+import { DashboardPreview } from "@/components/previews/DashboardPreview";
+import { BusinessCreditPreview } from "@/components/previews/BusinessCreditPreview";
+import { PersonalBrandPreview } from "@/components/previews/PersonalBrandPreview";
 import { 
   ArrowRight, 
   Building2, 
@@ -591,6 +594,56 @@ export default function Index() {
               </motion.div>
             ))}
           </AnimatedStagger>
+        </div>
+      </section>
+
+      {/* PRODUCT DEMOS Section - Interactive previews */}
+      <section id="demos" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative scroll-mt-20">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <SectionHeading
+              label="See It In Action"
+              title="Explore what you'll get."
+              description="Click on any preview to see the full demo. These are real examples of what your dashboard experience looks like."
+              centered
+              className="mb-10 sm:mb-12"
+            />
+          </AnimatedSection>
+
+          <div className="grid lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <AnimatedSection direction="left" delay={0}>
+              <DashboardPreview />
+              <p className="text-center mt-4 text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">Your Dashboard</span> — Track progress, manage tasks, and see your journey at a glance.
+              </p>
+            </AnimatedSection>
+            
+            <AnimatedSection direction="none" delay={0.1}>
+              <BusinessCreditPreview />
+              <p className="text-center mt-4 text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">Credit Builder</span> — Build business credit through vendor accounts and tradelines.
+              </p>
+            </AnimatedSection>
+            
+            <AnimatedSection direction="right" delay={0.2}>
+              <PersonalBrandPreview />
+              <p className="text-center mt-4 text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">Personal Brand</span> — Create your professional Digital CV and online presence.
+              </p>
+            </AnimatedSection>
+          </div>
+
+          <AnimatedSection delay={0.3} className="text-center mt-10">
+            <p className="text-sm text-muted-foreground mb-4">
+              Click any preview above to see the full interactive demo
+            </p>
+            <Link to="/get-started">
+              <Button variant="default" size="lg" className="group">
+                Start Building Today
+                <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </Button>
+            </Link>
+          </AnimatedSection>
         </div>
       </section>
 
