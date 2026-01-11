@@ -1,5 +1,5 @@
 import { memo, useState, useEffect, useCallback } from "react";
-import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface Section {
@@ -168,8 +168,18 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
   const [sectionProgress, setSectionProgress] = useState(0);
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
   const [isSwipeNavigating, setIsSwipeNavigating] = useState(false);
+  const [showSwipeHint, setShowSwipeHint] = useState(false);
+  const [hasSeenHint, setHasSeenHint] = useState(false);
   const { scrollYProgress } = useScroll();
   const prefersReducedMotion = useReducedMotion();
+
+  // Check if user has seen the swipe hint before
+  useEffect(() => {
+    const seen = localStorage.getItem('neko-swipe-hint-seen');
+    if (seen) {
+      setHasSeenHint(true);
+    }
+  }, []);
   
   // Smooth spring animation for the progress bar
   const scaleX = useSpring(scrollYProgress, {
@@ -189,6 +199,11 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
 
           // Show after scrolling past hero
           setIsVisible(scrollY > viewportHeight * 0.5);
+
+          // Show swipe hint on first visit when bar becomes visible
+          if (scrollY > viewportHeight * 0.5 && !localStorage.getItem('neko-swipe-hint-seen')) {
+            setShowSwipeHint(true);
+          }
 
           // Track active section and calculate progress within section
           const sectionElements = sections.map(s => document.getElementById(s.id));
@@ -260,6 +275,13 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
     }
   }, [prefersReducedMotion, triggerHaptic]);
 
+  // Dismiss swipe hint and save to localStorage
+  const dismissSwipeHint = useCallback(() => {
+    setShowSwipeHint(false);
+    setHasSeenHint(true);
+    localStorage.setItem('neko-swipe-hint-seen', 'true');
+  }, []);
+
   // Swipe gesture handlers
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     const touch = e.touches[0];
@@ -282,6 +304,11 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
     if (isHorizontalSwipe && Math.abs(deltaX) > minSwipeDistance) {
       setIsSwipeNavigating(true);
       
+      // Dismiss swipe hint on first successful swipe
+      if (showSwipeHint) {
+        dismissSwipeHint();
+      }
+      
       if (deltaX > 0 && activeSection > 0) {
         // Swipe right = go to previous section
         triggerHaptic([10, 30, 10]); // Short-long-short pattern for swipe
@@ -302,14 +329,87 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
   if (!isVisible) return null;
 
   return (
-    <motion.div
-      initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
-      animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-background/95 backdrop-blur-lg border-t border-border safe-area-bottom touch-pan-y"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
+    <>
+      {/* Swipe Hint Overlay */}
+      <AnimatePresence>
+        {showSwipeHint && !hasSeenHint && !prefersReducedMotion && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 lg:hidden pointer-events-none"
+          >
+            {/* Dark overlay */}
+            <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
+            
+            {/* Swipe hint content */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              className="absolute bottom-20 left-0 right-0 flex flex-col items-center gap-4 px-6 pointer-events-auto"
+            >
+              {/* Animated swipe gesture */}
+              <div className="relative w-32 h-12 flex items-center justify-center">
+                {/* Left arrow */}
+                <motion.div
+                  animate={{ x: [-8, -16, -8], opacity: [0.4, 1, 0.4] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute left-0"
+                >
+                  <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </motion.div>
+                
+                {/* Animated finger/dot */}
+                <motion.div
+                  animate={{ x: [-20, 20, -20] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-8 h-8 rounded-full bg-primary/80 shadow-lg flex items-center justify-center"
+                >
+                  <div className="w-3 h-3 rounded-full bg-background" />
+                </motion.div>
+                
+                {/* Right arrow */}
+                <motion.div
+                  animate={{ x: [8, 16, 8], opacity: [0.4, 1, 0.4] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.75 }}
+                  className="absolute right-0"
+                >
+                  <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </motion.div>
+              </div>
+              
+              {/* Hint text */}
+              <p className="text-sm font-medium text-foreground text-center">
+                Swipe left or right to navigate sections
+              </p>
+              
+              {/* Dismiss button */}
+              <button
+                onClick={dismissSwipeHint}
+                className="px-4 py-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Got it
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.div
+        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+        animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-background/95 backdrop-blur-lg border-t border-border safe-area-bottom touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
       {/* Section dot indicators */}
       <div className="flex items-center justify-center gap-1.5 pt-2.5 pb-1">
         {sections.map((section, index) => {
@@ -408,5 +508,6 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
         </button>
       </div>
     </motion.div>
+    </>
   );
 });
