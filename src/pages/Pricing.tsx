@@ -251,7 +251,7 @@ const TierCardComponent = memo(function TierCardComponent({
           disabled={isCurrentPlan || isLoading}
           onClick={() => onSelect(tierKey)}
         >
-          {isCurrentPlan ? "Current Plan" : isFree ? "Get Started Free" : "Say Hello"}
+          {isCurrentPlan ? "Current Plan" : isFree ? "Get Started Free" : "Get Started"}
         </Button>
       </div>
     </div>
@@ -298,8 +298,8 @@ export default function Pricing() {
       return;
     }
 
-    // For paid tiers, redirect to contact page
-    navigate("/contact");
+    // For paid tiers, redirect to onboarding
+    navigate("/get-started");
   };
 
 
@@ -459,9 +459,9 @@ export default function Pricing() {
             <p className="text-base sm:text-lg text-primary-foreground/60 mb-8 sm:mb-10 max-w-md mx-auto px-2">
               You don't need to have it all figured out. We'll help you find your next step.
             </p>
-            <Link to="/contact" className="inline-block w-full sm:w-auto">
+            <Link to="/get-started" className="inline-block w-full sm:w-auto">
               <Button variant="hero" size="lg" className="group w-full sm:w-auto">
-                Say Hello
+                Get Started
                 <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
             </Link>

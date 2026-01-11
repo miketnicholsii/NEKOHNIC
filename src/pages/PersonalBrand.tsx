@@ -123,7 +123,7 @@ export default function PersonalBrand() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-3"
             >
-              <Link to="/contact">
+              <Link to="/get-started">
                 <Button variant="hero" size="lg" className="group">
                   Get Started
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -160,7 +160,7 @@ export default function PersonalBrand() {
               </div>
 
               <div className="mt-6">
-                <Link to="/contact">
+                <Link to="/get-started">
                   <Button variant="cta" size="lg" className="group">
                     Build Your Digital CV
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -344,9 +344,9 @@ export default function PersonalBrand() {
               Let's create something that represents the real you.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link to="/contact">
+              <Link to="/get-started">
                 <Button variant="hero" size="xl" className="group">
-                  Say Hello
+                  Get Started
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>

@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 
 /**
  * Floating CTA that appears after user scrolls past the hero section.
- * Encourages exploration first, then presents the "Say Hello" CTA.
+ * Encourages exploration first, then presents the "Get Started" CTA.
  */
 export const FloatingCTA = memo(function FloatingCTA() {
   const [isVisible, setIsVisible] = useState(false);
@@ -57,14 +57,14 @@ export const FloatingCTA = memo(function FloatingCTA() {
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="fixed bottom-6 right-6 z-40 hidden sm:block"
         >
-          <Link to="/contact">
+          <Link to="/get-started">
             <Button 
               variant="cta" 
               size="lg" 
               className="shadow-xl group"
             >
               <span className="flex items-center gap-2">
-                Say Hello
+                Get Started
                 <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </span>
             </Button>

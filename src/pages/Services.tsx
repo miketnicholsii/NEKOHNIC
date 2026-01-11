@@ -158,9 +158,9 @@ const CTASection = memo(function CTASection() {
             You don't need to have everything figured out. We'll help you find your next step.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link to="/contact">
+            <Link to="/get-started">
               <Button variant="hero" size="xl" className="group">
-                Say Hello
+                Get Started
                 <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
             </Link>

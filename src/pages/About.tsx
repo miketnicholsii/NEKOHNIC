@@ -230,9 +230,9 @@ export default function About() {
             <p className="text-base sm:text-lg text-primary-foreground/60 mb-10 max-w-md mx-auto">
               Clarity comes from taking action. We help you take that action with confidence.
             </p>
-            <Link to="/contact">
+            <Link to="/get-started">
               <Button variant="hero" size="xl" className="group">
-                Say Hello
+                Get Started
                 <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
             </Link>

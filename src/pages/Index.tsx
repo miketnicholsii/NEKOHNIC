@@ -700,8 +700,8 @@ export default function Index() {
                   <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               </Link>
-              <Link to="/contact" className="w-full sm:w-auto">
-                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto">Say Hello</Button>
+              <Link to="/pricing" className="w-full sm:w-auto">
+                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto">View Plans</Button>
               </Link>
             </div>
           </AnimatedSection>

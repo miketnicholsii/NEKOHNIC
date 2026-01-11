@@ -341,10 +341,10 @@ export default function Login() {
           <p className="text-center text-sm text-muted-foreground mt-8">
             Not a member yet?{" "}
             <Link 
-              to="/contact" 
+              to="/get-started" 
               className="text-primary font-medium hover:text-primary/80 transition-colors hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 rounded-sm"
             >
-              Say Hello
+              Get Started
             </Link>
           </p>
         </div>

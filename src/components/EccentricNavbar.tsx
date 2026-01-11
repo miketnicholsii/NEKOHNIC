@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo } from "react";
+import { useState, useEffect, useCallback, memo, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 
 // Anchor-based navigation for homepage flow
 const navLinks = [
+  { href: "/", label: "Home", isAnchor: false },
   { href: "#services", label: "What We Do", isAnchor: true },
   { href: "#pricing", label: "Plans", isAnchor: true },
   { href: "#paths", label: "How It Works", isAnchor: true },
@@ -50,6 +51,7 @@ const NavPill = memo(function NavPill({
       <a 
         href={href} 
         onClick={handleClick}
+        aria-current={isActive ? "location" : undefined}
         className="relative group cursor-pointer"
       >
         <span className={`relative z-10 block px-3.5 py-1.5 text-sm font-medium transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
@@ -64,7 +66,7 @@ const NavPill = memo(function NavPill({
   }
 
   return (
-    <Link to={href} className="relative group">
+    <Link to={href} className="relative group" aria-current={isActive ? "page" : undefined}>
       <span className={`relative z-10 block px-3.5 py-1.5 text-sm font-medium transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
         {label}
       </span>
@@ -83,6 +85,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     let ticking = false;
@@ -119,6 +122,41 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (location.pathname !== "/") {
+      setActiveSection(null);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   const toggleMenu = useCallback(() => setIsOpen(prev => !prev), []);
   const closeMenu = useCallback(() => setIsOpen(false), []);
 
@@ -135,10 +173,14 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
 
   const isHeroPage = location.pathname === "/" || location.pathname === "/about";
   const showDarkText = !isHeroPage || isScrolled;
+  const isHome = location.pathname === "/";
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "py-2" : "py-3 sm:py-4"}`}>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "py-2" : "py-3 sm:py-4"}`}
+        aria-label="Main navigation"
+      >
         <div className={`absolute inset-0 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" : isHeroPage ? "bg-transparent" : "bg-background/90 backdrop-blur-lg border-b border-border/50"}`} />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-between h-11 lg:h-12">
@@ -162,7 +204,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                     key={link.href} 
                     href={link.href} 
                     label={link.label} 
-                    isActive={link.isAnchor ? activeSection === link.href.replace("#", "") : location.pathname === link.href} 
+                    isActive={link.isAnchor ? activeSection === link.href.replace("#", "") : (link.href === "/" ? isHome && !activeSection : location.pathname === link.href)} 
                     showDarkText={showDarkText}
                     isAnchor={link.isAnchor}
                     onAnchorClick={handleAnchorClick}
@@ -203,7 +245,14 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
               )}
             </div>
 
-            <button className={`lg:hidden p-2 rounded-lg transition-colors relative z-10 ${showDarkText ? "text-foreground hover:bg-muted" : "text-white hover:bg-white/10"}`} onClick={toggleMenu} aria-label="Toggle menu" aria-expanded={isOpen}>
+            <button
+              ref={menuButtonRef}
+              className={`lg:hidden p-2 rounded-lg transition-colors relative z-10 ${showDarkText ? "text-foreground hover:bg-muted" : "text-white hover:bg-white/10"}`}
+              onClick={toggleMenu}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+            >
               {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
@@ -214,19 +263,32 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
         {isOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="fixed inset-0 z-40 lg:hidden">
             <div className="absolute inset-0 bg-background/95 backdrop-blur-lg" onClick={closeMenu} />
-            <motion.div initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }} transition={{ type: "spring", stiffness: 350, damping: 35 }} className="absolute right-0 top-0 h-full w-full max-w-xs bg-card border-l border-border shadow-xl">
+            <motion.div
+              id="mobile-menu"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 350, damping: 35 }}
+              className="absolute right-0 top-0 h-full w-full max-w-xs bg-card border-l border-border shadow-xl"
+              aria-label="Mobile navigation"
+            >
               <div className="flex flex-col h-full pt-16 pb-6 px-5">
-                <nav className="flex-1 space-y-1">
-                  {navLinks.map((link) => (
-                    link.isAnchor ? (
+                <nav className="flex-1 space-y-1" aria-label="Primary">
+                  {navLinks.map((link) => {
+                    const anchorActive = activeSection === link.href.replace("#", "");
+                    const routeActive = link.href === "/" ? isHome && !activeSection : location.pathname === link.href;
+                    const isActive = link.isAnchor ? anchorActive : routeActive;
+
+                    return link.isAnchor ? (
                       <a 
                         key={link.href} 
                         href={link.href} 
                         onClick={(e) => {
                           e.preventDefault();
                           handleAnchorClick(link.href.replace("#", ""));
-                        }} 
-                        className={`block px-3 py-3 rounded-lg text-base font-medium transition-colors ${activeSection === link.href.replace("#", "") ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
+                        }}
+                        aria-current={isActive ? "location" : undefined}
+                        className={`block px-3 py-3 rounded-lg text-base font-medium transition-colors ${isActive ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
                       >
                         {link.label}
                       </a>
@@ -234,28 +296,14 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                       <Link 
                         key={link.href} 
                         to={link.href} 
-                        onClick={closeMenu} 
-                        className={`block px-3 py-3 rounded-lg text-base font-medium transition-colors ${location.pathname === link.href ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
+                        onClick={closeMenu}
+                        aria-current={isActive ? "page" : undefined}
+                        className={`block px-3 py-3 rounded-lg text-base font-medium transition-colors ${isActive ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
                       >
                         {link.label}
                       </Link>
-                    )
-                  ))}
-                  {/* Add explicit link to full services page for more detail */}
-                  <Link 
-                    to="/services" 
-                    onClick={closeMenu} 
-                    className="block px-3 py-3 rounded-lg text-base font-medium text-muted-foreground hover:bg-muted"
-                  >
-                    Full Services →
-                  </Link>
-                  <Link 
-                    to="/pricing" 
-                    onClick={closeMenu} 
-                    className="block px-3 py-3 rounded-lg text-base font-medium text-muted-foreground hover:bg-muted"
-                  >
-                    Full Pricing →
-                  </Link>
+                    );
+                  })}
                 </nav>
                 <div className="space-y-2.5 pt-4 border-t border-border">
                   {user ? (
