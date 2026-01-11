@@ -9,6 +9,7 @@ import { AdminPreviewProvider } from "@/hooks/use-admin-preview";
 import { UpgradeModalProvider } from "@/components/UpgradeModalProvider";
 import { AdminPreviewIndicator } from "@/components/admin/AdminPreviewPanel";
 import { AnimatedRoutes } from "@/components/AnimatedRoutes";
+import { FloatingCTA } from "@/components/FloatingCTA";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -31,6 +32,7 @@ const App = () => (
             <BrowserRouter>
               <UpgradeModalProvider>
                 <AnimatedRoutes />
+                <FloatingCTA />
                 <AdminPreviewIndicator />
               </UpgradeModalProvider>
             </BrowserRouter>

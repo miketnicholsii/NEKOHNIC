@@ -176,18 +176,19 @@ export default function Index() {
               Business formation. Credit building. Personal branding. We help you take the next right step.
             </motion.p>
 
-            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.7 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
-              <Link to="/contact" className="w-full sm:w-auto">
-                <Button variant="hero" size="lg" className="w-full sm:w-auto group">
+            {/* Single exploration-focused CTA */}
+            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.7 }} className="flex flex-col items-center gap-4 px-4 sm:px-0">
+              <Link to="/services">
+                <Button variant="hero-outline" size="lg" className="group">
                   <span className="flex items-center gap-2">
-                    Get Started
-                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                    Explore What We Do
+                    <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                   </span>
                 </Button>
               </Link>
-              <Link to="/services" className="w-full sm:w-auto">
-                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto">See How It Works</Button>
-              </Link>
+              <p className="text-xs sm:text-sm text-primary-foreground/40">
+                Business formation · Credit building · Personal branding
+              </p>
             </motion.div>
           </div>
         </div>
@@ -563,7 +564,7 @@ export default function Index() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
               <Link to="/contact" className="w-full sm:w-auto">
                 <Button variant="hero" size="lg" className="w-full sm:w-auto group">
-                  Get Started
+                  Say Hello
                   <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               </Link>

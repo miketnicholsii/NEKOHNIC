@@ -81,8 +81,8 @@ export const Navbar = memo(function Navbar() {
   }, []);
 
   const isHeroPage = location.pathname === "/" || location.pathname === "/about";
-  const ctaHref = user ? "/app" : "/signup";
-  const ctaLabel = user ? "Dashboard" : "Get Started";
+  const ctaHref = user ? "/app" : "/contact";
+  const ctaLabel = user ? "Dashboard" : "Say Hello";
   
   // Determine navbar style: hero pages get transparent until scrolled
   const showDarkText = !isHeroPage || isScrolled;
