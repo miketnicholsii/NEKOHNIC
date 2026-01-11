@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
+import { SectionIndicator } from "@/components/SectionIndicator";
 import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
 import { 
   ArrowRight, 
@@ -141,9 +142,10 @@ export default function Index() {
   return (
     <main className="min-h-screen overflow-x-hidden">
       <EccentricNavbar />
+      <SectionIndicator />
       
       {/* Hero Section - Clear Positioning */}
-      <section className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-16">
+      <section id="hero" className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-16">
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
         <HeroBackground />
 
@@ -206,7 +208,7 @@ export default function Index() {
       </section>
 
       {/* WHERE YOU ARE Section - Positive framing */}
-      <section className="py-12 sm:py-16 lg:py-24 bg-muted/30 relative">
+      <section id="starting-points" className="py-12 sm:py-16 lg:py-24 bg-muted/30 relative scroll-mt-20">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="max-w-3xl mx-auto text-center mb-10 sm:mb-12">
@@ -240,7 +242,7 @@ export default function Index() {
       </section>
 
       {/* WHY NÈKO EXISTS Section */}
-      <section className="py-12 sm:py-16 lg:py-28 bg-background relative">
+      <section id="how-we-help" className="py-12 sm:py-16 lg:py-28 bg-background relative scroll-mt-20">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             <AnimatedSection direction="left">
@@ -301,7 +303,7 @@ export default function Index() {
       </section>
 
       {/* TWO TRACKS Section */}
-      <section className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative">
+      <section id="two-tracks" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative scroll-mt-20">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-10 sm:mb-12">
@@ -367,7 +369,7 @@ export default function Index() {
       </section>
 
       {/* HOW THE TRACKS WORK TOGETHER - Visual Diagram */}
-      <section className="py-12 sm:py-16 lg:py-24 bg-tertiary relative overflow-hidden">
+      <section id="paths" className="py-12 sm:py-16 lg:py-24 bg-tertiary relative overflow-hidden scroll-mt-20">
         <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative">
           <AnimatedSection direction="none">
@@ -512,7 +514,7 @@ export default function Index() {
       </section>
 
       {/* WHAT WORKING WITH NÈKO LOOKS LIKE Section */}
-      <section className="py-12 sm:py-16 lg:py-28 bg-background relative">
+      <section id="experience" className="py-12 sm:py-16 lg:py-28 bg-background relative scroll-mt-20">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
@@ -548,7 +550,7 @@ export default function Index() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16 lg:py-24 bg-tertiary relative overflow-hidden">
+      <section id="cta" className="py-12 sm:py-16 lg:py-24 bg-tertiary relative overflow-hidden scroll-mt-20">
         <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>
