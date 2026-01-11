@@ -106,6 +106,7 @@ export const AnimatedStagger = memo(function AnimatedStagger({
   );
 });
 
+// Standard stagger item - subtle slide up
 export const staggerItem = {
   hidden: { y: 12, opacity: 0 },
   visible: {
@@ -114,6 +115,34 @@ export const staggerItem = {
     transition: {
       duration: 0.3,
       ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
+    },
+  },
+};
+
+// Card stagger item - more pronounced with scale
+export const staggerCardItem = {
+  hidden: { y: 24, opacity: 0, scale: 0.96 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.45,
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+    },
+  },
+};
+
+// Feature item - slide from side with subtle rotation
+export const staggerFeatureItem = {
+  hidden: { x: -20, opacity: 0, rotateY: -5 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    rotateY: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
     },
   },
 };

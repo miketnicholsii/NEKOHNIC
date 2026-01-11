@@ -6,7 +6,7 @@ import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SectionIndicator } from "@/components/SectionIndicator";
-import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
+import { AnimatedSection, AnimatedStagger, staggerItem, staggerCardItem } from "@/components/AnimatedSection";
 import { 
   ArrowRight, 
   Building2, 
@@ -144,14 +144,16 @@ const ServiceCard = memo(function ServiceCard({
   description: string; 
   outcome: string;
 }) {
+  const prefersReducedMotion = useReducedMotion();
+  
   return (
-    <div className="p-5 sm:p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300">
+    <div className="group p-5 sm:p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300">
       <div className="flex items-start gap-4">
-        <div className="flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+        <div className={`flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center transition-transform duration-300 ${!prefersReducedMotion ? 'group-hover:scale-110' : ''}`}>
           <Icon className="h-5 w-5" />
         </div>
         <div className="flex-1">
-          <h3 className="font-display font-bold text-base sm:text-lg text-foreground mb-2">{title}</h3>
+          <h3 className="font-display font-bold text-base sm:text-lg text-foreground mb-2 transition-colors duration-200 group-hover:text-primary">{title}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed mb-3">{description}</p>
           <div className="flex items-center gap-2 text-xs sm:text-sm text-primary font-medium">
             <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" />
@@ -368,9 +370,9 @@ export default function Index() {
               </div>
             </AnimatedSection>
             
-            <AnimatedStagger className="grid md:grid-cols-2 gap-4 sm:gap-5">
+            <AnimatedStagger className="grid md:grid-cols-2 gap-4 sm:gap-5" staggerDelay={0.12}>
               {businessServices.map((service) => (
-                <motion.div key={service.title} variants={staggerItem}>
+                <motion.div key={service.title} variants={staggerCardItem}>
                   <ServiceCard {...service} />
                 </motion.div>
               ))}
@@ -391,9 +393,9 @@ export default function Index() {
               </div>
             </AnimatedSection>
             
-            <AnimatedStagger className="grid md:grid-cols-2 gap-4 sm:gap-5">
+            <AnimatedStagger className="grid md:grid-cols-2 gap-4 sm:gap-5" staggerDelay={0.12}>
               {brandingServices.map((service) => (
-                <motion.div key={service.title} variants={staggerItem}>
+                <motion.div key={service.title} variants={staggerCardItem}>
                   <ServiceCard {...service} />
                 </motion.div>
               ))}
@@ -561,7 +563,7 @@ export default function Index() {
             />
           </AnimatedSection>
 
-          <AnimatedStagger className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 max-w-5xl mx-auto">
+          <AnimatedStagger className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 max-w-5xl mx-auto" staggerDelay={0.1}>
             {[
               { icon: Shield, title: "Guided Setup", description: "Step-by-step guidance through business formation, banking, and legitimacy essentials." },
               { icon: CreditCard, title: "Structured Credit Path", description: "A clear roadmap through vendor accounts, tradelines, and credit building." },
@@ -570,13 +572,13 @@ export default function Index() {
             ].map((item) => (
               <motion.div 
                 key={item.title} 
-                variants={staggerItem}
-                className="p-5 sm:p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300 text-center"
+                variants={staggerCardItem}
+                className="group p-5 sm:p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 text-center"
               >
-                <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-primary/10 text-primary mb-4">
+                <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-primary/10 text-primary mb-4 transition-transform duration-300 group-hover:scale-110">
                   <item.icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-display font-bold text-base mb-2 text-foreground">{item.title}</h3>
+                <h3 className="font-display font-bold text-base mb-2 text-foreground transition-colors duration-200 group-hover:text-primary">{item.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
               </motion.div>
             ))}
