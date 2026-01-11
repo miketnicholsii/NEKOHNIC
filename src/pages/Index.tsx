@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
-import { SectionIndicator } from "@/components/SectionIndicator";
+import { SectionIndicator, MobileProgressBar } from "@/components/SectionIndicator";
 import { AnimatedSection, AnimatedStagger, staggerItem, staggerCardItem } from "@/components/AnimatedSection";
 import { 
   ArrowRight, 
@@ -177,9 +177,10 @@ export default function Index() {
       }, [prefersReducedMotion]);
 
   return (
-    <main className="min-h-screen overflow-x-hidden">
+    <main className="min-h-screen overflow-x-hidden pb-16 lg:pb-0">
       <EccentricNavbar />
       <SectionIndicator />
+      <MobileProgressBar />
       
       {/* Hero Section - Clear Positioning */}
       <section id="hero" className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-16">
