@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { useProgress } from "@/hooks/use-progress";
 import { useTasks } from "@/hooks/use-tasks";
-import { useAuth } from "@/hooks/use-auth";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { NextStepsSkeleton } from "./DashboardSkeletons";
 import {
   ArrowRight,
   CheckCircle2,
@@ -50,8 +51,16 @@ const MODULE_INFO: Record<string, { name: string; icon: React.ElementType }> = {
 };
 
 export default function NextSteps() {
-  const { progress } = useProgress();
-  const { tasks } = useTasks();
+  const { progress, isLoading: progressLoading } = useProgress();
+  const { tasks, isLoading: tasksLoading } = useTasks();
+  const prefersReducedMotion = useReducedMotion();
+
+  const isLoading = progressLoading || tasksLoading;
+
+  // Show skeleton while loading
+  if (isLoading) {
+    return <NextStepsSkeleton />;
+  }
 
   // Find next incomplete step for each module
   const getNextStep = (module: string) => {
@@ -102,13 +111,13 @@ export default function NextSteps() {
       {/* Primary Next Action */}
       {primaryNextStep && (
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           className="p-6 rounded-2xl bg-gradient-primary text-primary-foreground"
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-primary-foreground/20 flex items-center justify-center flex-shrink-0">
-              <Sparkles className="h-6 w-6" />
+              <Sparkles className="h-6 w-6" aria-hidden="true" />
             </div>
             <div className="flex-1">
               <p className="text-sm text-primary-foreground/80 mb-1">
@@ -121,7 +130,7 @@ export default function NextSteps() {
             <Link to={primaryNextStep.href}>
               <Button variant="hero" className="group">
                 Continue
-                <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Button>
             </Link>
           </div>
@@ -140,22 +149,22 @@ export default function NextSteps() {
             return (
               <motion.div
                 key={`${step.module}-${step.id}`}
-                initial={{ opacity: 0, x: -10 }}
+                initial={prefersReducedMotion ? false : { opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
                 <Link
                   to={step.href}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border hover:border-primary/30 transition-colors"
+                  className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border hover:border-primary/30 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 >
                   <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                    <Icon className="h-4 w-4 text-muted-foreground" />
+                    <Icon className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs text-muted-foreground">{info?.name}</p>
                     <p className="text-sm font-medium text-foreground truncate">{step.title}</p>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                 </Link>
               </motion.div>
             );
@@ -167,13 +176,13 @@ export default function NextSteps() {
       {urgentTasks.length > 0 && (
         <div className="space-y-3">
           <h3 className="font-semibold text-foreground text-sm flex items-center gap-2">
-            <Clock className="h-4 w-4 text-destructive" />
+            <Clock className="h-4 w-4 text-destructive" aria-hidden="true" />
             Priority Tasks
           </h3>
           {urgentTasks.map((task, index) => (
             <motion.div
               key={task.id}
-              initial={{ opacity: 0, x: -10 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
               className={`flex items-center gap-3 p-3 rounded-lg border ${
@@ -184,7 +193,7 @@ export default function NextSteps() {
             >
               <Circle className={`h-4 w-4 flex-shrink-0 ${
                 task.priority === "urgent" ? "text-destructive" : "text-orange-600"
-              }`} />
+              }`} aria-hidden="true" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground truncate">{task.title}</p>
                 {task.due_date && (
@@ -207,8 +216,8 @@ export default function NextSteps() {
 
       {/* All Complete State */}
       {sortedSteps.length === 0 && urgentTasks.length === 0 && (
-        <div className="text-center py-8">
-          <CheckCircle2 className="h-12 w-12 text-primary mx-auto mb-4" />
+        <div className="text-center py-8" role="status">
+          <CheckCircle2 className="h-12 w-12 text-primary mx-auto mb-4" aria-hidden="true" />
           <h3 className="font-semibold text-foreground mb-1">All caught up!</h3>
           <p className="text-sm text-muted-foreground">
             You've completed all available steps. Great work!

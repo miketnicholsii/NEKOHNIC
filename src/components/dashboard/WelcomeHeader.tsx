@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useStreaks } from "@/hooks/use-streaks";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
+import { WelcomeHeaderSkeleton } from "./DashboardSkeletons";
 import {
   Crown,
   Flame,
@@ -14,8 +16,14 @@ import {
 import { format } from "date-fns";
 
 export default function WelcomeHeader() {
-  const { user, profile, subscription } = useAuth();
-  const { streaks } = useStreaks();
+  const { user, profile, subscription, isLoading: authLoading } = useAuth();
+  const { streaks, isLoading: streaksLoading } = useStreaks();
+  const prefersReducedMotion = useReducedMotion();
+
+  // Show skeleton while critical data is loading
+  if (authLoading) {
+    return <WelcomeHeaderSkeleton />;
+  }
   
   const tierConfig = SUBSCRIPTION_TIERS[subscription.tier];
   const firstName = profile?.full_name?.split(" ")[0] || 
@@ -34,7 +42,7 @@ export default function WelcomeHeader() {
 
   return (
     <motion.header
-      initial={{ opacity: 0, y: -10 }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
       className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 border border-border p-6"
@@ -62,7 +70,7 @@ export default function WelcomeHeader() {
         {/* Right: Stats & Actions */}
         <div className="flex flex-wrap items-center gap-3">
           {/* Streak indicator */}
-          {streaks && streaks.login_streak_current > 0 && (
+          {!streaksLoading && streaks && streaks.login_streak_current > 0 && (
             <div 
               className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20"
               role="status"

@@ -22,6 +22,7 @@ import { Settings2, RotateCcw, Check, X, Eye, EyeOff } from "lucide-react";
 import { useDashboardLayout, DASHBOARD_WIDGETS } from "@/hooks/use-dashboard-layout";
 import DraggableWidget from "./DraggableWidget";
 import { WidgetErrorBoundary } from "@/components/ErrorBoundary";
+import { WidgetGridSkeleton } from "./DashboardSkeletons";
 
 // Widget components
 import DashboardStats from "./DashboardStats";
@@ -161,16 +162,7 @@ export default function WidgetGrid() {
   };
 
   if (isLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="h-24 bg-muted/50 rounded-xl animate-pulse" />
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-48 bg-muted/50 rounded-xl animate-pulse" />
-          ))}
-        </div>
-      </div>
-    );
+    return <WidgetGridSkeleton />;
   }
 
   // Group widgets by size for proper layout

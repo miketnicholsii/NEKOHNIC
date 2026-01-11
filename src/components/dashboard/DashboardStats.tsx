@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { useProgress } from "@/hooks/use-progress";
 import { useTasks } from "@/hooks/use-tasks";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { StatsGridSkeleton } from "./DashboardSkeletons";
 import {
   CheckCircle2,
   Clock,
@@ -9,8 +11,16 @@ import {
 } from "lucide-react";
 
 export default function DashboardStats() {
-  const { progress, getAllModulesProgress } = useProgress();
-  const { tasks } = useTasks();
+  const { progress, getAllModulesProgress, isLoading: progressLoading } = useProgress();
+  const { tasks, isLoading: tasksLoading } = useTasks();
+  const prefersReducedMotion = useReducedMotion();
+
+  const isLoading = progressLoading || tasksLoading;
+
+  // Show skeleton while loading
+  if (isLoading) {
+    return <StatsGridSkeleton />;
+  }
 
   // Calculate stats from progress Record
   const progressItems = Object.values(progress);
@@ -58,20 +68,20 @@ export default function DashboardStats() {
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3" role="region" aria-label="Dashboard statistics">
       {stats.map((stat, index) => {
         const Icon = stat.icon;
         return (
           <motion.div
             key={stat.label}
-            initial={{ opacity: 0, y: 10 }}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
             className="bg-card border border-border rounded-xl p-4"
           >
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-lg ${stat.bgColor} flex items-center justify-center`}>
-                <Icon className={`h-5 w-5 ${stat.color}`} />
+                <Icon className={`h-5 w-5 ${stat.color}`} aria-hidden="true" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{stat.value}</p>
