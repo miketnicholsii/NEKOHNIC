@@ -232,8 +232,22 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Haptic feedback helper - triggers vibration on supported devices
+  const triggerHaptic = useCallback((pattern: number | number[] = 10) => {
+    if ('vibrate' in navigator) {
+      try {
+        navigator.vibrate(pattern);
+      } catch {
+        // Silently fail if vibration is not supported or blocked
+      }
+    }
+  }, []);
+
   const scrollToSection = useCallback((sectionIndex: number) => {
     if (sectionIndex < 0 || sectionIndex >= sections.length) return;
+    
+    // Trigger haptic feedback
+    triggerHaptic(15);
     
     const element = document.getElementById(sections[sectionIndex].id);
     if (element) {
@@ -242,7 +256,7 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
         block: "start"
       });
     }
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, triggerHaptic]);
 
   if (!isVisible) return null;
 
