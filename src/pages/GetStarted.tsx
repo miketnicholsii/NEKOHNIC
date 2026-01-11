@@ -145,7 +145,7 @@ export default function GetStarted() {
         console.error("Submission error:", error);
         toast({
           title: "That didn't quite work",
-          description: "Feel free to try again, or reach out directly at hello@helloneko.co",
+          description: "Feel free to try again, or reach out directly at neko@helloneko.co",
           variant: "destructive",
         });
         turnstileRef.current?.reset();
@@ -423,11 +423,11 @@ export default function GetStarted() {
                     Prefer to reach out directly?
                   </p>
                   <a
-                    href="mailto:hello@helloneko.co"
+                    href="mailto:neko@helloneko.co"
                     className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary/20 rounded"
                   >
                     <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                    hello@helloneko.co
+                    neko@helloneko.co
                   </a>
                 </div>
               </div>
