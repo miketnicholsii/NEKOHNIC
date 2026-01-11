@@ -180,6 +180,19 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
       setHasSeenHint(true);
     }
   }, []);
+
+  // Auto-dismiss swipe hint after 5 seconds
+  useEffect(() => {
+    if (showSwipeHint && !hasSeenHint) {
+      const timer = setTimeout(() => {
+        setShowSwipeHint(false);
+        setHasSeenHint(true);
+        localStorage.setItem('neko-swipe-hint-seen', 'true');
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [showSwipeHint, hasSeenHint]);
   
   // Smooth spring animation for the progress bar
   const scaleX = useSpring(scrollYProgress, {
