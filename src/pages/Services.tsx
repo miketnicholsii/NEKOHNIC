@@ -198,6 +198,18 @@ export default function Services() {
         <HeroBackground />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm mb-8">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+            >
+              <span aria-hidden="true">←</span>
+              Back to Home
+            </Link>
+            <Button asChild variant="cta" size="sm">
+              <Link to="/pricing">Continue</Link>
+            </Button>
+          </div>
           <div className="max-w-4xl mx-auto">
             <motion.p 
               {...fadeIn}

@@ -10,6 +10,8 @@ import { supabase, getAuthStorageMode, setRememberMePreference } from "@/integra
 import { useAuth } from "@/hooks/use-auth";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { Eye, EyeOff, Loader2, ArrowLeft } from "lucide-react";
+import { EccentricNavbar } from "@/components/EccentricNavbar";
+import { Footer } from "@/components/Footer";
 
 // Empathetic error messages mapping
 const getErrorMessage = (error: string): { title: string; description: string } => {
@@ -144,17 +146,19 @@ export default function Login() {
       };
 
   return (
-    <main className="min-h-screen bg-gradient-hero relative overflow-hidden flex items-center justify-center p-4">
-      {/* Subtle radial glow */}
-      <div 
-        className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" 
-        aria-hidden="true" 
-      />
-      
-      <motion.div
-        {...motionProps}
-        className="w-full max-w-[420px] relative z-10"
-      >
+    <div className="min-h-screen bg-gradient-hero relative flex flex-col">
+      <EccentricNavbar />
+      <main className="relative overflow-hidden flex-1 flex items-center justify-center p-4 pt-24">
+        {/* Subtle radial glow */}
+        <div 
+          className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" 
+          aria-hidden="true" 
+        />
+        
+        <motion.div
+          {...motionProps}
+          className="w-full max-w-[420px] relative z-10"
+        >
         {/* Back link */}
         <Link 
           to="/" 
@@ -361,7 +365,9 @@ export default function Login() {
             All you have to do is say hello.
           </p>
         </div>
-      </motion.div>
-    </main>
+        </motion.div>
+      </main>
+      <Footer />
+    </div>
   );
 }

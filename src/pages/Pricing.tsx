@@ -313,6 +313,18 @@ export default function Pricing() {
       <section className="pt-24 sm:pt-28 lg:pt-32 pb-8 sm:pb-12 bg-background relative">
         <HeroBackground />
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm mb-8">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <span aria-hidden="true">←</span>
+              Back to Home
+            </Link>
+            <Button asChild variant="cta" size="sm">
+              <Link to="/get-started">Continue</Link>
+            </Button>
+          </div>
           <motion.div
             {...fadeIn}
             className="max-w-2xl mx-auto"

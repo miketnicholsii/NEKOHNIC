@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase";
 import { Loader2, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { EccentricNavbar } from "@/components/EccentricNavbar";
+import { Footer } from "@/components/Footer";
 
 export default function ForgotPassword() {
   const { toast } = useToast();
@@ -58,13 +60,15 @@ export default function ForgotPassword() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
-      >
+    <div className="min-h-screen bg-gradient-hero flex flex-col">
+      <EccentricNavbar />
+      <main className="flex-1 flex items-center justify-center p-4 pt-24">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md"
+        >
         {/* Back link */}
         <Link 
           to="/login" 
@@ -163,7 +167,9 @@ export default function ForgotPassword() {
             </>
           )}
         </div>
-      </motion.div>
-    </main>
+        </motion.div>
+      </main>
+      <Footer />
+    </div>
   );
 }

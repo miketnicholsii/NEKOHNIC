@@ -10,6 +10,7 @@ import { UpgradeModalProvider } from "@/components/UpgradeModalProvider";
 import { AdminPreviewIndicator } from "@/components/admin/AdminPreviewPanel";
 import { AnimatedRoutes } from "@/components/AnimatedRoutes";
 import { FloatingCTA } from "@/components/FloatingCTA";
+import ScrollManager from "@/components/ScrollManager";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -30,6 +31,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <ScrollManager />
               <UpgradeModalProvider>
                 <AnimatedRoutes />
                 <FloatingCTA />
