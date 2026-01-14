@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo, useRef } from "react";
+import { useState, useEffect, useCallback, memo, useMemo, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -7,19 +7,24 @@ import { useAuth } from "@/hooks/use-auth";
 
 // Anchor-based navigation for homepage flow - ORDER MATCHES SECTION ORDER ON PAGE
 const navLinks = [
-  { href: "/", label: "Home", isAnchor: false },
-  { href: "#services", label: "Solutions", isAnchor: true },
-  { href: "#paths", label: "How It Works", isAnchor: true },
+  { href: "#hero", label: "Home", isAnchor: true },
+  { href: "#starting-points", label: "Starting Points", isAnchor: true },
+  { href: "#how-we-help", label: "How We Help", isAnchor: true },
+  { href: "#services", label: "Services", isAnchor: true },
+  { href: "#paths", label: "Paths", isAnchor: true },
   { href: "#pricing", label: "Pricing", isAnchor: true },
+  { href: "#experience", label: "Experience", isAnchor: true },
+  { href: "#demos", label: "Demos", isAnchor: true },
   { href: "#faq", label: "FAQ", isAnchor: true },
+  { href: "#cta", label: "Get Started", isAnchor: true },
   { href: "/about", label: "About", isAnchor: false },
 ] as const;
 
 // Smooth scroll to anchor
-function scrollToAnchor(id: string) {
+function scrollToAnchor(id: string, behavior: ScrollBehavior = "smooth") {
   const element = document.getElementById(id);
   if (element) {
-    element.scrollIntoView({ behavior: "smooth", block: "start" });
+    element.scrollIntoView({ behavior, block: "start" });
   }
 }
 
@@ -87,6 +92,10 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const anchorSectionIds = useMemo(
+    () => navLinks.filter((link) => link.isAnchor).map((link) => link.href.replace("#", "")),
+    []
+  );
 
   useEffect(() => {
     let ticking = false;
@@ -94,25 +103,6 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
       if (!ticking) {
         requestAnimationFrame(() => {
           setIsScrolled(window.scrollY > 20);
-          
-          // Track active section on homepage - matches navLinks anchor order
-          if (location.pathname === "/") {
-            const sections = ["services", "paths", "pricing", "faq"];
-            let currentSection: string | null = null;
-            
-            for (const id of sections) {
-              const el = document.getElementById(id);
-              if (el) {
-                const rect = el.getBoundingClientRect();
-                if (rect.top <= 150 && rect.bottom > 150) {
-                  currentSection = id;
-                  break;
-                }
-              }
-            }
-            setActiveSection(currentSection);
-          }
-          
           ticking = false;
         });
         ticking = true;
@@ -121,13 +111,48 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [location.pathname]);
+  }, []);
 
   useEffect(() => {
     if (location.pathname !== "/") {
       setActiveSection(null);
+      return;
     }
-  }, [location.pathname]);
+
+    const elements = anchorSectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => Boolean(el));
+
+    if (!elements.length) return;
+
+    const entries = new Map<string, IntersectionObserverEntry>();
+    const observer = new IntersectionObserver(
+      (observerEntries) => {
+        observerEntries.forEach((entry) => {
+          entries.set(entry.target.id, entry);
+        });
+
+        const visible = Array.from(entries.values()).filter((entry) => entry.isIntersecting);
+        if (!visible.length) return;
+
+        visible.sort(
+          (a, b) =>
+            b.intersectionRatio - a.intersectionRatio ||
+            a.boundingClientRect.top - b.boundingClientRect.top
+        );
+
+        setActiveSection(visible[0]?.target.id ?? null);
+      },
+      {
+        rootMargin: "-30% 0px -55% 0px",
+        threshold: [0.15, 0.4, 0.6, 0.85],
+      }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [anchorSectionIds, location.pathname]);
 
   useEffect(() => {
     setIsOpen(false);
@@ -162,15 +187,16 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
   const closeMenu = useCallback(() => setIsOpen(false), []);
 
   const handleAnchorClick = useCallback((id: string) => {
+    const targetHash = `#${id}`;
     if (location.pathname !== "/") {
-      // Navigate to homepage first, then scroll
-      navigate("/");
-      setTimeout(() => scrollToAnchor(id), 100);
+      navigate({ pathname: "/", hash: targetHash });
+    } else if (location.hash !== targetHash) {
+      navigate({ hash: targetHash });
     } else {
-      scrollToAnchor(id);
+      scrollToAnchor(id, "smooth");
     }
     closeMenu();
-  }, [location.pathname, navigate, closeMenu]);
+  }, [closeMenu, location.hash, location.pathname, navigate]);
 
   const isHeroPage = location.pathname === "/" || location.pathname === "/about";
   const showDarkText = !isHeroPage || isScrolled;
@@ -179,7 +205,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "py-2" : "py-3 sm:py-4"}`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 safe-area-top ${isScrolled ? "py-2" : "py-3 sm:py-4"}`}
         aria-label="Main navigation"
       >
         <div className={`absolute inset-0 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" : isHeroPage ? "bg-transparent" : "bg-background/90 backdrop-blur-lg border-b border-border/50"}`} />

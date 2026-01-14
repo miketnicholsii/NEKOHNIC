@@ -1,6 +1,6 @@
-import { memo, useMemo } from "react";
+import { lazy, memo, Suspense, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { MotionConfig, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
@@ -8,9 +8,10 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { SectionIndicator, MobileProgressBar } from "@/components/SectionIndicator";
 import { AnimatedSection, AnimatedStagger, staggerItem, staggerCardItem } from "@/components/AnimatedSection";
 import { HomePricing } from "@/components/HomePricing";
-import { DashboardPreview } from "@/components/previews/DashboardPreview";
-import { BusinessCreditPreview } from "@/components/previews/BusinessCreditPreview";
-import { PersonalBrandPreview } from "@/components/previews/PersonalBrandPreview";
+import { LazyMount } from "@/components/LazyMount";
+import { PreviewErrorBoundary } from "@/components/previews/PreviewErrorBoundary";
+import { PreviewPlaceholder } from "@/components/previews/PreviewPlaceholder";
+import { usePerformanceMode } from "@/hooks/use-performance-mode";
 import {
   Accordion,
   AccordionContent,
@@ -33,6 +34,22 @@ import {
   Wallet,
   Users
 } from "lucide-react";
+
+const DashboardPreview = lazy(() =>
+  import("@/components/previews/DashboardPreview").then((module) => ({
+    default: module.DashboardPreview,
+  }))
+);
+const BusinessCreditPreview = lazy(() =>
+  import("@/components/previews/BusinessCreditPreview").then((module) => ({
+    default: module.BusinessCreditPreview,
+  }))
+);
+const PersonalBrandPreview = lazy(() =>
+  import("@/components/previews/PersonalBrandPreview").then((module) => ({
+    default: module.PersonalBrandPreview,
+  }))
+);
 
 // Service packages with real business credit terminology
 const businessServices = [
@@ -139,15 +156,16 @@ const NekoLogo = memo(function NekoLogo() {
 });
 
 // Parallax hero background
-const HeroBackground = memo(function HeroBackground() {
+const HeroBackground = memo(function HeroBackground({ reduceMotion }: { reduceMotion: boolean }) {
   const prefersReducedMotion = useReducedMotion();
   const { scrollY } = useScroll();
+  const shouldReduceMotion = prefersReducedMotion || reduceMotion;
   
-  const y1 = useTransform(scrollY, [0, 500], [0, prefersReducedMotion ? 0 : 80]);
-  const y2 = useTransform(scrollY, [0, 500], [0, prefersReducedMotion ? 0 : -60]);
-  const y3 = useTransform(scrollY, [0, 500], [0, prefersReducedMotion ? 0 : 40]);
-  const opacity = useTransform(scrollY, [0, 400], [1, prefersReducedMotion ? 1 : 0.3]);
-  const scale = useTransform(scrollY, [0, 500], [1, prefersReducedMotion ? 1 : 1.1]);
+  const y1 = useTransform(scrollY, [0, 500], [0, shouldReduceMotion ? 0 : 80]);
+  const y2 = useTransform(scrollY, [0, 500], [0, shouldReduceMotion ? 0 : -60]);
+  const y3 = useTransform(scrollY, [0, 500], [0, shouldReduceMotion ? 0 : 40]);
+  const opacity = useTransform(scrollY, [0, 400], [1, shouldReduceMotion ? 1 : 0.3]);
+  const scale = useTransform(scrollY, [0, 500], [1, shouldReduceMotion ? 1 : 1.1]);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
@@ -210,6 +228,7 @@ const ServiceCard = memo(function ServiceCard({
 
 export default function Index() {
   const prefersReducedMotion = useReducedMotion();
+  const performanceMode = usePerformanceMode();
   
   const fadeIn = useMemo(() => prefersReducedMotion 
     ? { initial: {}, animate: {}, transition: {} }
@@ -228,7 +247,7 @@ export default function Index() {
       {/* Hero Section */}
       <section id="hero" className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-16">
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
-        <HeroBackground />
+        <HeroBackground reduceMotion={performanceMode.reduceMotion} />
 
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="max-w-4xl mx-auto">
@@ -645,49 +664,135 @@ export default function Index() {
             />
           </AnimatedSection>
 
-          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
-            <AnimatedSection direction="left" delay={0}>
-              <DashboardPreview />
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="text-center mt-5"
-              >
-                <p className="font-display font-bold text-foreground">Your Dashboard</p>
-                <p className="text-sm text-muted-foreground mt-1">Track progress, manage tasks, and see your journey at a glance.</p>
-              </motion.div>
-            </AnimatedSection>
-            
-            <AnimatedSection direction="none" delay={0.1}>
-              <BusinessCreditPreview />
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-                className="text-center mt-5"
-              >
-                <p className="font-display font-bold text-foreground">Credit Builder</p>
-                <p className="text-sm text-muted-foreground mt-1">Build tradelines with vendors that report to business bureaus.</p>
-              </motion.div>
-            </AnimatedSection>
-            
-            <AnimatedSection direction="right" delay={0.2}>
-              <PersonalBrandPreview />
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-                className="text-center mt-5"
-              >
-                <p className="font-display font-bold text-foreground">Personal Brand</p>
-                <p className="text-sm text-muted-foreground mt-1">Create your Digital CV and professional landing page.</p>
-              </motion.div>
-            </AnimatedSection>
-          </div>
+          <MotionConfig reducedMotion={performanceMode.reduceMotion ? "always" : "user"}>
+            <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+              <AnimatedSection direction="left" delay={0}>
+                <LazyMount
+                  className="min-h-[420px] lg:min-h-[460px]"
+                  fallback={
+                    <PreviewPlaceholder
+                      title="Building fundability preview"
+                      description="Your business foundation and underwriting review journey, loading now."
+                    />
+                  }
+                >
+                  <PreviewErrorBoundary
+                    fallback={
+                      <PreviewPlaceholder
+                        title="Building fundability preview"
+                        description="Your business foundation and underwriting review journey, loading now."
+                      />
+                    }
+                  >
+                    <Suspense
+                      fallback={
+                        <PreviewPlaceholder
+                          title="Building fundability preview"
+                          description="Your business foundation and underwriting review journey, loading now."
+                        />
+                      }
+                    >
+                      <DashboardPreview />
+                    </Suspense>
+                  </PreviewErrorBoundary>
+                </LazyMount>
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                  className="text-center mt-5"
+                >
+                  <p className="font-display font-bold text-foreground">Your Dashboard</p>
+                  <p className="text-sm text-muted-foreground mt-1">Track progress, manage tasks, and see your journey at a glance.</p>
+                </motion.div>
+              </AnimatedSection>
+              
+              <AnimatedSection direction="none" delay={0.1}>
+                <LazyMount
+                  className="min-h-[420px] lg:min-h-[460px]"
+                  fallback={
+                    <PreviewPlaceholder
+                      title="Tradelines preview"
+                      description="Net-30 tradelines and Paydex score insights are on the way."
+                    />
+                  }
+                >
+                  <PreviewErrorBoundary
+                    fallback={
+                      <PreviewPlaceholder
+                        title="Tradelines preview"
+                        description="Net-30 tradelines and Paydex score insights are on the way."
+                      />
+                    }
+                  >
+                    <Suspense
+                      fallback={
+                        <PreviewPlaceholder
+                          title="Tradelines preview"
+                          description="Net-30 tradelines and Paydex score insights are on the way."
+                        />
+                      }
+                    >
+                      <BusinessCreditPreview />
+                    </Suspense>
+                  </PreviewErrorBoundary>
+                </LazyMount>
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 }}
+                  className="text-center mt-5"
+                >
+                  <p className="font-display font-bold text-foreground">Credit Builder</p>
+                  <p className="text-sm text-muted-foreground mt-1">Build tradelines with vendors that report to business bureaus.</p>
+                </motion.div>
+              </AnimatedSection>
+              
+              <AnimatedSection direction="right" delay={0.2}>
+                <LazyMount
+                  className="min-h-[420px] lg:min-h-[460px]"
+                  fallback={
+                    <PreviewPlaceholder
+                      title="Digital CV preview"
+                      description="Your professional online presence with SEO optimization is loading."
+                    />
+                  }
+                >
+                  <PreviewErrorBoundary
+                    fallback={
+                      <PreviewPlaceholder
+                        title="Digital CV preview"
+                        description="Your professional online presence with SEO optimization is loading."
+                      />
+                    }
+                  >
+                    <Suspense
+                      fallback={
+                        <PreviewPlaceholder
+                          title="Digital CV preview"
+                          description="Your professional online presence with SEO optimization is loading."
+                        />
+                      }
+                    >
+                      <PersonalBrandPreview />
+                    </Suspense>
+                  </PreviewErrorBoundary>
+                </LazyMount>
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 }}
+                  className="text-center mt-5"
+                >
+                  <p className="font-display font-bold text-foreground">Personal Brand</p>
+                  <p className="text-sm text-muted-foreground mt-1">Create your Digital CV and professional landing page.</p>
+                </motion.div>
+              </AnimatedSection>
+            </div>
+          </MotionConfig>
 
           <AnimatedSection delay={0.3} className="text-center mt-12 sm:mt-14">
             <Link to="/get-started">
