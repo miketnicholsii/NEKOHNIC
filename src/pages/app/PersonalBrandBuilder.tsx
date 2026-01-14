@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase";
 import { toast } from "sonner";
-import { FeatureGate, useFeatureGate } from "@/components/FeatureGate";
+import { FeatureGate } from "@/components/FeatureGate";
+import { useFeatureGate } from "@/hooks/use-feature-gate";
 import { PageLoader } from "@/components/LoadingStates";
 import ProfileEditor from "@/components/personal-brand/ProfileEditor";
 import ProjectsEditor from "@/components/personal-brand/ProjectsEditor";
@@ -78,11 +79,7 @@ export default function PersonalBrandBuilder() {
   const seoAccess = useFeatureGate("personal_brand_seo");
   const publishAccess = useFeatureGate("personal_brand_publish");
 
-  useEffect(() => {
-    loadCV();
-  }, [user]);
-
-  const loadCV = async () => {
+  const loadCV = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -139,7 +136,11 @@ export default function PersonalBrandBuilder() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    loadCV();
+  }, [loadCV]);
 
   const handleSave = async () => {
     if (!user || !cv) return;

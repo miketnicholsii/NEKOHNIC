@@ -266,24 +266,6 @@ export function FeatureGate({
 }
 
 /**
- * useFeatureGate - Hook version for programmatic access control
- * 
- * Use when you need to conditionally render based on feature access
- * without the declarative component wrapper.
- * 
- * @example
- * ```tsx
- * const { hasAccess, upgradeMessage } = useFeatureGate("analytics_advanced");
- * if (!hasAccess) {
- *   return <UpgradePrompt message={upgradeMessage} />;
- * }
- * ```
- */
-export function useFeatureGate(feature: Feature) {
-  return useFeatureAccess(feature);
-}
-
-/**
  * RequireFeature - Strict feature gate that renders nothing or fallback when locked
  * 
  * Stricter version of FeatureGate for cases where you want to completely

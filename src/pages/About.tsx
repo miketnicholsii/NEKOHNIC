@@ -5,7 +5,8 @@ import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
+import { AnimatedSection, AnimatedStagger } from "@/components/AnimatedSection";
+import { staggerItem } from "@/components/animated-section-variants";
 import { ArrowRight, Target, Heart, Lightbulb, Users } from "lucide-react";
 
 const values = [

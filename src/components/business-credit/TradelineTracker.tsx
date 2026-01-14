@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -74,11 +74,7 @@ export default function TradelineTracker({ userId }: Props) {
     notes: "",
   });
 
-  useEffect(() => {
-    loadTradelines();
-  }, [userId]);
-
-  const loadTradelines = async () => {
+  const loadTradelines = useCallback(async () => {
     if (!userId) return;
     
     try {
@@ -96,7 +92,11 @@ export default function TradelineTracker({ userId }: Props) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    loadTradelines();
+  }, [loadTradelines]);
 
   const handleBureauToggle = (bureau: string) => {
     setFormData(prev => ({

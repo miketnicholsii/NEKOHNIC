@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -64,11 +64,7 @@ export default function ScoreMonitoring({ userId }: Props) {
     notes: "",
   });
 
-  useEffect(() => {
-    loadScores();
-  }, [userId]);
-
-  const loadScores = async () => {
+  const loadScores = useCallback(async () => {
     if (!userId) return;
     
     try {
@@ -86,7 +82,11 @@ export default function ScoreMonitoring({ userId }: Props) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    loadScores();
+  }, [loadScores]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

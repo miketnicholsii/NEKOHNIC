@@ -6,7 +6,8 @@ import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SectionIndicator, MobileProgressBar } from "@/components/SectionIndicator";
-import { AnimatedSection, AnimatedStagger, staggerItem, staggerCardItem } from "@/components/AnimatedSection";
+import { AnimatedSection, AnimatedStagger } from "@/components/AnimatedSection";
+import { staggerCardItem, staggerItem } from "@/components/animated-section-variants";
 import { HomePricing } from "@/components/HomePricing";
 import { LazyMount } from "@/components/LazyMount";
 import { PreviewErrorBoundary } from "@/components/previews/PreviewErrorBoundary";
@@ -310,7 +311,7 @@ export default function Index() {
       </section>
 
       {/* Sound Familiar Section */}
-      <section id="starting-points" className="py-12 sm:py-16 lg:py-24 bg-muted/30 relative scroll-mt-20">
+      <section id="starting-points" className="py-12 sm:py-16 lg:py-24 bg-muted/30 relative">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="max-w-3xl mx-auto text-center mb-10 sm:mb-12">
@@ -344,7 +345,7 @@ export default function Index() {
       </section>
 
       {/* How We Help Section */}
-      <section id="how-we-help" className="py-12 sm:py-16 lg:py-28 bg-background relative scroll-mt-20">
+      <section id="how-we-help" className="py-12 sm:py-16 lg:py-28 bg-background relative">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             <AnimatedSection direction="left">
@@ -404,7 +405,7 @@ export default function Index() {
       </section>
 
       {/* Solutions Section */}
-      <section id="services" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative scroll-mt-20">
+      <section id="services" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-10 sm:mb-12">
@@ -469,7 +470,7 @@ export default function Index() {
       </section>
 
       {/* How It Works / Paths Section */}
-      <section id="paths" className="py-12 sm:py-16 lg:py-24 bg-tertiary relative overflow-hidden scroll-mt-20">
+      <section id="paths" className="py-12 sm:py-16 lg:py-24 bg-tertiary relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative">
           <AnimatedSection direction="none">
@@ -611,7 +612,7 @@ export default function Index() {
       <HomePricing />
 
       {/* The Experience Section */}
-      <section id="experience" className="py-12 sm:py-16 lg:py-28 bg-background relative scroll-mt-20">
+      <section id="experience" className="py-12 sm:py-16 lg:py-28 bg-background relative">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
@@ -647,7 +648,7 @@ export default function Index() {
       </section>
 
       {/* Product Demos Section */}
-      <section id="demos" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative scroll-mt-20 overflow-hidden">
+      <section id="demos" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           <div className="absolute top-1/4 left-[5%] w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-[5%] w-80 h-80 bg-secondary/5 rounded-full blur-3xl" />
@@ -806,7 +807,7 @@ export default function Index() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-12 sm:py-16 lg:py-28 bg-background relative scroll-mt-20">
+      <section id="faq" className="py-12 sm:py-16 lg:py-28 bg-background relative">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
@@ -853,7 +854,7 @@ export default function Index() {
       </section>
 
       {/* CTA Section */}
-      <section id="cta" className="py-12 sm:py-16 lg:py-24 bg-tertiary relative overflow-hidden scroll-mt-20">
+      <section id="cta" className="py-12 sm:py-16 lg:py-24 bg-tertiary relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>

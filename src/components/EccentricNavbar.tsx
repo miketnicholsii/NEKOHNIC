@@ -60,7 +60,7 @@ const NavPill = memo(function NavPill({
         aria-current={isActive ? "location" : undefined}
         className="relative group cursor-pointer"
       >
-        <span className={`relative z-10 block px-3.5 py-1.5 text-sm font-medium transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
+        <span className={`relative z-10 block px-2.5 xl:px-3.5 py-1.5 text-xs xl:text-sm 2xl:text-base font-medium whitespace-nowrap transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
           {label}
         </span>
         {isActive && (
@@ -73,7 +73,7 @@ const NavPill = memo(function NavPill({
 
   return (
     <Link to={href} className="relative group" aria-current={isActive ? "page" : undefined}>
-      <span className={`relative z-10 block px-3.5 py-1.5 text-sm font-medium transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
+      <span className={`relative z-10 block px-2.5 xl:px-3.5 py-1.5 text-xs xl:text-sm 2xl:text-base font-medium whitespace-nowrap transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
         {label}
       </span>
       {isActive && (
@@ -210,9 +210,9 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
       >
         <div className={`absolute inset-0 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" : isHeroPage ? "bg-transparent" : "bg-background/90 backdrop-blur-lg border-b border-border/50"}`} />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="flex items-center justify-between h-11 lg:h-12">
+          <div className="flex items-center justify-between h-11 lg:h-12 min-w-0">
             {/* Left side - Logo */}
-            <div className="hidden lg:flex items-center w-56 flex-shrink-0">
+            <div className="hidden lg:flex items-center w-48 xl:w-56 flex-shrink-0">
               <Link to="/" className="flex items-center relative z-10" title="NÈKO - pronounced 'ē-ko'">
                 <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
               </Link>
@@ -224,8 +224,11 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
             </Link>
 
             {/* Centered navigation */}
-            <div className="hidden lg:flex items-center justify-center">
-              <div className="flex items-center gap-0.5 px-1.5 py-1 rounded-full" style={{ background: showDarkText ? "hsl(var(--muted) / 0.5)" : "hsl(0 0% 100% / 0.1)", backdropFilter: "blur(8px)" }}>
+            <div className="hidden lg:flex items-center justify-center flex-1 min-w-0 px-2">
+              <div
+                className="flex items-center flex-nowrap gap-0.5 lg:gap-1 xl:gap-1.5 px-1.5 py-1 rounded-full max-w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                style={{ background: showDarkText ? "hsl(var(--muted) / 0.5)" : "hsl(0 0% 100% / 0.1)", backdropFilter: "blur(8px)" }}
+              >
                 {navLinks.map((link) => (
                   <NavPill 
                     key={link.href} 
@@ -241,7 +244,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
             </div>
 
             {/* Right side - CTAs */}
-            <div className="hidden lg:flex items-center justify-end gap-3 min-w-fit flex-shrink-0 relative z-10">
+            <div className="hidden lg:flex items-center justify-end gap-2 xl:gap-3 min-w-fit flex-shrink-0 relative z-10">
               {user ? (
                 <>
                   <span className={`text-xs font-medium ${showDarkText ? "text-muted-foreground" : "text-white/60"}`}>
@@ -315,7 +318,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                           handleAnchorClick(link.href.replace("#", ""));
                         }}
                         aria-current={isActive ? "location" : undefined}
-                        className={`block px-3 py-3 rounded-lg text-base font-medium transition-colors ${isActive ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
+                        className={`block px-3 py-3 rounded-lg text-base font-medium whitespace-nowrap transition-colors ${isActive ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
                       >
                         {link.label}
                       </a>
@@ -325,7 +328,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                         to={link.href} 
                         onClick={closeMenu}
                         aria-current={isActive ? "page" : undefined}
-                        className={`block px-3 py-3 rounded-lg text-base font-medium transition-colors ${isActive ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
+                        className={`block px-3 py-3 rounded-lg text-base font-medium whitespace-nowrap transition-colors ${isActive ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
                       >
                         {link.label}
                       </Link>

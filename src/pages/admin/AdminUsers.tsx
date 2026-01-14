@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -102,11 +102,7 @@ export default function AdminUsers() {
   const [viewingUser, setViewingUser] = useState<UserWithDetails | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
 
-  useEffect(() => {
-    loadUsers();
-  }, [page, filterPlan]);
-
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     setIsLoading(true);
     try {
       // Get profiles with count
@@ -171,7 +167,11 @@ export default function AdminUsers() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [page, filterPlan, pageSize]);
+
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
 
   const handleEditUser = (user: UserWithDetails) => {
     setEditingUser(user);

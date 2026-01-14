@@ -54,26 +54,3 @@ export const PageTransition = memo(function PageTransition({ children }: PageTra
     </AnimatePresence>
   );
 });
-
-// Stagger children animation for page content
-export const staggerContainer: Variants = {
-  initial: {},
-  enter: {
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-export const staggerItem: Variants = {
-  initial: { opacity: 0, y: 20 },
-  enter: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      ease: [0.25, 0.1, 0.25, 1],
-    },
-  },
-};

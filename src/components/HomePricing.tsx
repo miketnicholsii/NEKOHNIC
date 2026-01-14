@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { AnimatedSection, AnimatedStagger, staggerCardItem } from "@/components/AnimatedSection";
+import { AnimatedSection, AnimatedStagger } from "@/components/AnimatedSection";
+import { staggerCardItem } from "@/components/animated-section-variants";
 import { Check, ArrowRight, Zap, Rocket, Crown, Sparkles } from "lucide-react";
 import { SUBSCRIPTION_TIERS, SubscriptionTier } from "@/lib/subscription-tiers";
 import { cn } from "@/lib/utils";
@@ -143,7 +144,7 @@ export const HomePricing = memo(function HomePricing() {
   const tiers: SubscriptionTier[] = ["free", "starter", "pro", "elite"];
 
   return (
-    <section id="pricing" className="py-12 sm:py-16 lg:py-24 bg-muted/30 relative scroll-mt-20">
+    <section id="pricing" className="py-12 sm:py-16 lg:py-24 bg-muted/30 relative">
       <div className="container mx-auto px-5 sm:px-6 lg:px-8">
         <AnimatedSection>
           <div className="text-center mb-8 sm:mb-10">

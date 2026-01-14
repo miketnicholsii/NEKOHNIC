@@ -1,38 +1,16 @@
 import { useEffect, useRef } from "react";
-import { useLocation, useNavigationType } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 /**
- * ScrollManager handles scroll position restoration and scroll-to-top behavior.
- * - On route PUSH/REPLACE: scrolls to top (or hash target)
- * - On route POP (back/forward): restores previous scroll position
+ * ScrollManager handles scroll position and anchor alignment.
+ * - On pathname/search change: scrolls to top (or hash target)
+ * - On hash navigation: scrolls to the anchor with proper offset
  * - Fixes breakout pages loading at bottom
  */
 export default function ScrollManager() {
   const location = useLocation();
-  const navType = useNavigationType();
-  const positionsRef = useRef<Map<string, number>>(new Map());
-  const isFirstRender = useRef(true);
   const prefersReducedMotion = useRef(false);
-
-  // Track scroll position for current location
-  useEffect(() => {
-    const key = location.key;
-    let ticking = false;
-    
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          positionsRef.current.set(key, window.scrollY || window.pageYOffset || 0);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [location.key]);
+  const lastPathRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -51,57 +29,47 @@ export default function ScrollManager() {
 
   // Handle scroll position on navigation
   useEffect(() => {
-    const key = location.key;
+    const pathKey = `${location.pathname}${location.search}`;
+    const pathChanged = lastPathRef.current !== pathKey;
+    if (pathChanged) {
+      lastPathRef.current = pathKey;
+    }
+
     const hash = location.hash;
     const id = hash ? decodeURIComponent(hash.replace("#", "")) : null;
+    const behavior = prefersReducedMotion.current ? "auto" : "smooth";
 
-    const scrollToHash = (behavior: ScrollBehavior) => {
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    };
+
+    const scrollToHash = () => {
       if (!id) return false;
       const el = document.getElementById(id);
       if (!el) return false;
-      requestAnimationFrame(() => {
-        el.scrollIntoView({ behavior, block: "start" });
-      });
+      el.scrollIntoView({ behavior, block: "start" });
       return true;
     };
 
-    // Skip scroll handling on first render if we're at the top already
-    // This prevents flash of content jumping
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      
-      // On first render, handle hash or scroll to top
-      if (scrollToHash("auto")) return;
-      
-      // Ensure we start at top on first load for non-hash routes
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-      return;
-    }
-
-    // Handle back/forward navigation - restore position
-    if (navType === "POP") {
-      const y = positionsRef.current.get(key);
-      if (typeof y === "number") {
-        // Use requestAnimationFrame to ensure smooth restoration
-        requestAnimationFrame(() => {
-          window.scrollTo({ top: y, left: 0, behavior: "auto" });
-        });
-        return;
-      }
-    }
-
-    // Handle hash navigation (anchor links)
     if (id) {
-      const behavior = prefersReducedMotion.current ? "auto" : "smooth";
-      if (scrollToHash(behavior)) return;
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      let attempts = 0;
+      const tryScroll = () => {
+        if (scrollToHash()) return;
+        attempts += 1;
+        if (attempts < 12) {
+          requestAnimationFrame(tryScroll);
+        } else if (pathChanged) {
+          scrollToTop();
+        }
+      };
+      requestAnimationFrame(tryScroll);
       return;
     }
 
-    // Default: scroll to top for new navigation (PUSH/REPLACE)
-    // This fixes breakout pages loading at bottom
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [location.pathname, location.search, location.hash, location.key, navType]);
+    if (pathChanged) {
+      scrollToTop();
+    }
+  }, [location.pathname, location.search, location.hash]);
 
   return null;
 }

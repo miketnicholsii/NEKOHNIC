@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase";
 import { useTasks } from "@/hooks/use-tasks";
-import { FeatureGate, useFeatureGate } from "@/components/FeatureGate";
+import { FeatureGate } from "@/components/FeatureGate";
+import { useFeatureGate } from "@/hooks/use-feature-gate";
 import { PageLoader } from "@/components/LoadingStates";
 import {
   LineChart,

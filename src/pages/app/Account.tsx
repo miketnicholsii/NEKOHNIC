@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -98,11 +98,7 @@ export default function Account() {
   }, [profile]);
 
   // Fetch add-ons on mount
-  useEffect(() => {
-    fetchAddons();
-  }, [user]);
-
-  const fetchAddons = async () => {
+  const fetchAddons = useCallback(async () => {
     if (!user) {
       setIsLoadingAddons(false);
       return;
@@ -117,7 +113,11 @@ export default function Account() {
     } finally {
       setIsLoadingAddons(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    fetchAddons();
+  }, [fetchAddons]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
