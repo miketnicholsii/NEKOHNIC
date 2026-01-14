@@ -1,5 +1,5 @@
-import { memo, useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence, useReducedMotion, useScroll, useSpring } from "framer-motion";
+import { memo, useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { motion, AnimatePresence, useMotionValueEvent, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface Section {
@@ -28,46 +28,74 @@ export const SectionIndicator = memo(function SectionIndicator() {
   const [activeSection, setActiveSection] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const prefersReducedMotion = useReducedMotion();
+  const sectionIds = useMemo(() => sections.map((section) => section.id), []);
+  const entriesRef = useRef<Map<string, IntersectionObserverEntry>>(new Map());
 
   useEffect(() => {
-    let ticking = false;
+    const hero = document.getElementById("hero");
+    if (!hero) {
+      setIsVisible(true);
+      return;
+    }
 
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          const viewportHeight = window.innerHeight;
-
-          // Show indicator after scrolling past 20% of viewport
-          setIsVisible(scrollY > viewportHeight * 0.2);
-
-          // Find which section is currently in view
-          const sectionElements = sections.map(s => document.getElementById(s.id));
-          
-          let currentIndex = 0;
-          for (let i = 0; i < sectionElements.length; i++) {
-            const el = sectionElements[i];
-            if (el) {
-              const rect = el.getBoundingClientRect();
-              // Section is "active" when its top is within the top 40% of the viewport
-              if (rect.top <= viewportHeight * 0.4) {
-                currentIndex = i;
-              }
-            }
-          }
-          
-          setActiveSection(currentIndex);
-          ticking = false;
-        });
-        ticking = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(!entry.isIntersecting);
+      },
+      {
+        rootMargin: "-20% 0px 0px 0px",
+        threshold: 0.2,
       }
-    };
+    );
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    observer.observe(hero);
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const elements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => Boolean(el));
+
+    if (!elements.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entriesRef.current.set(entry.target.id, entry);
+        });
+
+        const visible = Array.from(entriesRef.current.values()).filter(
+          (entry) => entry.isIntersecting
+        );
+
+        if (!visible.length) return;
+
+        visible.sort(
+          (a, b) =>
+            b.intersectionRatio - a.intersectionRatio ||
+            a.boundingClientRect.top - b.boundingClientRect.top
+        );
+
+        const activeId = visible[0]?.target.id;
+        if (!activeId) return;
+
+        const index = sectionIds.indexOf(activeId);
+        if (index >= 0) {
+          setActiveSection(index);
+        }
+      },
+      {
+        rootMargin: "-35% 0px -50% 0px",
+        threshold: [0.2, 0.4, 0.6, 0.8],
+      }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [sectionIds]);
 
   const scrollToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -169,8 +197,11 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
   const [sectionProgress, setSectionProgress] = useState(0);
-  const { scrollYProgress } = useScroll();
+  const { scrollY, scrollYProgress } = useScroll();
   const prefersReducedMotion = useReducedMotion();
+  const sectionIds = useMemo(() => sections.map((section) => section.id), []);
+  const positionsRef = useRef<{ top: number; height: number }[]>([]);
+  const entriesRef = useRef<Map<string, IntersectionObserverEntry>>(new Map());
   
   // Smooth spring animation for the progress bar
   const scaleX = useSpring(scrollYProgress, {
@@ -179,61 +210,116 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
     restDelta: 0.001
   });
 
+  const updatePositions = useCallback(() => {
+    positionsRef.current = sectionIds.map((id) => {
+      const element = document.getElementById(id);
+      if (!element) return { top: 0, height: 0 };
+      const rect = element.getBoundingClientRect();
+      return { top: rect.top + window.scrollY, height: rect.height };
+    });
+  }, [sectionIds]);
+
   useEffect(() => {
-    let ticking = false;
+    const hero = document.getElementById("hero");
+    if (!hero) {
+      setIsVisible(true);
+      return;
+    }
 
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          const viewportHeight = window.innerHeight;
-
-          // Show after scrolling past hero
-          setIsVisible(scrollY > viewportHeight * 0.5);
-
-          // Track active section and calculate progress within section
-          const sectionElements = sections.map(s => document.getElementById(s.id));
-          let currentIndex = 0;
-          let progress = 0;
-          
-          for (let i = 0; i < sectionElements.length; i++) {
-            const el = sectionElements[i];
-            const nextEl = sectionElements[i + 1];
-            
-            if (el) {
-              const rect = el.getBoundingClientRect();
-              if (rect.top <= viewportHeight * 0.4) {
-                currentIndex = i;
-                
-                // Calculate progress within current section
-                if (nextEl) {
-                  const nextRect = nextEl.getBoundingClientRect();
-                  const sectionHeight = nextRect.top - rect.top;
-                  const scrolledInSection = viewportHeight * 0.4 - rect.top;
-                  progress = Math.min(1, Math.max(0, scrolledInSection / sectionHeight));
-                } else {
-                  // Last section - calculate based on remaining scroll
-                  const docHeight = document.documentElement.scrollHeight;
-                  const remaining = docHeight - (scrollY + viewportHeight);
-                  progress = remaining < 100 ? 1 : Math.min(0.8, (viewportHeight * 0.4 - rect.top) / viewportHeight);
-                }
-              }
-            }
-          }
-          
-          setActiveSection(currentIndex);
-          setSectionProgress(progress);
-          ticking = false;
-        });
-        ticking = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(!entry.isIntersecting);
+      },
+      {
+        rootMargin: "-35% 0px 0px 0px",
+        threshold: 0.2,
       }
-    };
+    );
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    observer.observe(hero);
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const elements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => Boolean(el));
+
+    if (!elements.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entriesRef.current.set(entry.target.id, entry);
+        });
+
+        const visible = Array.from(entriesRef.current.values()).filter(
+          (entry) => entry.isIntersecting
+        );
+
+        if (!visible.length) return;
+
+        visible.sort(
+          (a, b) =>
+            b.intersectionRatio - a.intersectionRatio ||
+            a.boundingClientRect.top - b.boundingClientRect.top
+        );
+
+        const activeId = visible[0]?.target.id;
+        if (!activeId) return;
+
+        const index = sectionIds.indexOf(activeId);
+        if (index >= 0) {
+          setActiveSection(index);
+        }
+      },
+      {
+        rootMargin: "-40% 0px -45% 0px",
+        threshold: [0.2, 0.4, 0.6, 0.8],
+      }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [sectionIds]);
+
+  useEffect(() => {
+    const handleResize = () => updatePositions();
+    updatePositions();
+    window.addEventListener("resize", handleResize, { passive: true });
+    window.addEventListener("orientationchange", handleResize, { passive: true });
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
+    };
+  }, [updatePositions]);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const positions = positionsRef.current;
+    const current = positions[activeSection];
+    if (!current) return;
+
+    const next = positions[activeSection + 1];
+    const viewportHeight = window.innerHeight;
+    const pivot = latest + viewportHeight * 0.4;
+
+    let progress = 0;
+    if (next) {
+      const sectionHeight = Math.max(1, next.top - current.top);
+      progress = (pivot - current.top) / sectionHeight;
+    } else {
+      const docHeight = document.documentElement.scrollHeight;
+      const remaining = docHeight - (latest + viewportHeight);
+      progress =
+        remaining < 120
+          ? 1
+          : (pivot - current.top) / Math.max(current.height || viewportHeight, 1);
+    }
+
+    setSectionProgress(Math.min(1, Math.max(0, progress)));
+  });
 
   // Haptic feedback helper - triggers vibration on supported devices
   const triggerHaptic = useCallback((pattern: number | number[] = 10) => {

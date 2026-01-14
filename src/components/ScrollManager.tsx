@@ -1,4 +1,4 @@
-import { useEffect, useRef, useLayoutEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 
 /**
@@ -12,6 +12,7 @@ export default function ScrollManager() {
   const navType = useNavigationType();
   const positionsRef = useRef<Map<string, number>>(new Map());
   const isFirstRender = useRef(true);
+  const prefersReducedMotion = useRef(false);
 
   // Track scroll position for current location
   useEffect(() => {
@@ -33,9 +34,36 @@ export default function ScrollManager() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [location.key]);
 
-  // Handle scroll position on navigation - use useLayoutEffect to run before paint
-  useLayoutEffect(() => {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const media = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    if (!media) return;
+
+    const updatePreference = () => {
+      prefersReducedMotion.current = media.matches;
+    };
+
+    updatePreference();
+    media.addEventListener("change", updatePreference);
+
+    return () => media.removeEventListener("change", updatePreference);
+  }, []);
+
+  // Handle scroll position on navigation
+  useEffect(() => {
     const key = location.key;
+    const hash = location.hash;
+    const id = hash ? decodeURIComponent(hash.replace("#", "")) : null;
+
+    const scrollToHash = (behavior: ScrollBehavior) => {
+      if (!id) return false;
+      const el = document.getElementById(id);
+      if (!el) return false;
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior, block: "start" });
+      });
+      return true;
+    };
 
     // Skip scroll handling on first render if we're at the top already
     // This prevents flash of content jumping
@@ -43,22 +71,7 @@ export default function ScrollManager() {
       isFirstRender.current = false;
       
       // On first render, handle hash or scroll to top
-      if (location.hash) {
-        const id = decodeURIComponent(location.hash.replace("#", ""));
-        // Small delay to ensure DOM is ready
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            const el = document.getElementById(id);
-            if (el) {
-              const headerOffset = 80; // Account for fixed header
-              const elementPosition = el.getBoundingClientRect().top;
-              const offsetPosition = elementPosition + window.scrollY - headerOffset;
-              window.scrollTo({ top: offsetPosition, left: 0, behavior: "auto" });
-            }
-          });
-        });
-        return;
-      }
+      if (scrollToHash("auto")) return;
       
       // Ensure we start at top on first load for non-hash routes
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -78,20 +91,10 @@ export default function ScrollManager() {
     }
 
     // Handle hash navigation (anchor links)
-    if (location.hash) {
-      const id = decodeURIComponent(location.hash.replace("#", ""));
-      requestAnimationFrame(() => {
-        const el = document.getElementById(id);
-        if (el) {
-          const headerOffset = 80; // Account for fixed header
-          const elementPosition = el.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.scrollY - headerOffset;
-          window.scrollTo({ top: offsetPosition, left: 0, behavior: "smooth" });
-        } else {
-          // Fallback to top if element not found
-          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-        }
-      });
+    if (id) {
+      const behavior = prefersReducedMotion.current ? "auto" : "smooth";
+      if (scrollToHash(behavior)) return;
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
       return;
     }
 

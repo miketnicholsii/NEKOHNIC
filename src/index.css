@@ -49,6 +49,7 @@
     --ring: 168 65% 42%;
 
     --radius: 0.875rem;
+    --scroll-offset: 6rem;
 
     /* Progress tiers */
     --tier-0: 200 15% 75%;
@@ -93,6 +94,24 @@
     --sidebar-accent-foreground: 168 65% 28%;
     --sidebar-border: 200 20% 92%;
     --sidebar-ring: 168 65% 42%;
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --scroll-offset: 5.5rem;
+    }
+  }
+
+  html {
+    scroll-padding-top: var(--scroll-offset);
+  }
+
+  section[id] {
+    scroll-margin-top: var(--scroll-offset);
+  }
+
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
   }
 
   .dark {

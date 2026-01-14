@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Maximize2, X, Sparkles, Play } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { usePerformanceMode } from "@/hooks/use-performance-mode";
 
 interface PreviewWrapperProps {
   children: ReactNode;
@@ -20,6 +21,11 @@ export const PreviewWrapper = memo(function PreviewWrapper({
   const [isHovered, setIsHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const prefersReducedMotion = useReducedMotion();
+  const performanceMode = usePerformanceMode();
+  const shouldReduceMotion = prefersReducedMotion || performanceMode.reduceMotion;
+  const hoverTransition = shouldReduceMotion
+    ? { duration: 0.15 }
+    : { type: "spring", stiffness: 400, damping: 25 };
 
   const accentGradients = {
     primary: "from-primary/30 via-primary/15 to-primary/5",
@@ -37,11 +43,11 @@ export const PreviewWrapper = memo(function PreviewWrapper({
     <>
       <motion.div
         className="relative cursor-pointer group"
-        onHoverStart={() => !prefersReducedMotion && setIsHovered(true)}
+        onHoverStart={() => !shouldReduceMotion && setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
-        whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -8 }}
+        whileHover={shouldReduceMotion ? {} : { scale: 1.02, y: -8 }}
         whileTap={{ scale: 0.98 }}
-        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        transition={hoverTransition}
         onClick={() => setIsModalOpen(true)}
       >
         {/* Animated border glow - NEKO branded */}
@@ -51,7 +57,7 @@ export const PreviewWrapper = memo(function PreviewWrapper({
             opacity: isHovered ? 0.9 : 0,
             scale: isHovered ? 1.02 : 1
           }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: shouldReduceMotion ? 0.2 : 0.4 }}
         />
         
         {/* Outer glow ring */}
@@ -60,12 +66,12 @@ export const PreviewWrapper = memo(function PreviewWrapper({
           animate={{ 
             opacity: isHovered ? 1 : 0,
           }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: shouldReduceMotion ? 0.2 : 0.3 }}
         />
         
         {/* Subtle shimmer effect on hover */}
         <AnimatePresence>
-          {isHovered && !prefersReducedMotion && (
+          {isHovered && !shouldReduceMotion && (
             <motion.div
               className="absolute inset-0 overflow-hidden rounded-2xl z-10 pointer-events-none"
               initial={{ opacity: 0 }}
@@ -75,7 +81,7 @@ export const PreviewWrapper = memo(function PreviewWrapper({
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 to-transparent skew-x-12"
                 animate={{ x: ["-100%", "100%"] }}
-                transition={{ duration: 1.5, ease: "easeInOut" }}
+                transition={{ duration: shouldReduceMotion ? 0.8 : 1.5, ease: "easeInOut" }}
               />
             </motion.div>
           )}
