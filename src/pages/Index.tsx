@@ -500,16 +500,56 @@ export default function Index() {
           </div>
         </div>
 
-        <div className="hidden sm:flex absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2" aria-hidden="true">
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.5 }}
-            className="w-5 h-8 rounded-full border-2 border-primary-foreground/20 flex items-start justify-center p-1.5"
+        {/* Enhanced scroll indicator */}
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
+          className="hidden sm:flex flex-col items-center gap-2 absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2"
+          aria-hidden="true"
+        >
+          <motion.span 
+            animate={{ opacity: [0.4, 0.7, 0.4] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="text-[10px] font-medium tracking-[0.2em] uppercase text-primary-foreground/40"
           >
-            <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }} className="w-1 h-1.5 bg-primary-foreground/40 rounded-full" />
+            Scroll
+          </motion.span>
+          <motion.div 
+            animate={{ y: [0, 4, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            className="relative w-6 h-10 rounded-full border-2 border-primary-foreground/20 flex items-start justify-center p-2"
+          >
+            {/* Animated dot */}
+            <motion.div 
+              animate={{ 
+                y: [0, 12, 0],
+                opacity: [1, 0.6, 1],
+                scale: [1, 0.8, 1]
+              }} 
+              transition={{ 
+                duration: 1.8, 
+                repeat: Infinity, 
+                ease: "easeInOut",
+                times: [0, 0.5, 1]
+              }} 
+              className="w-1.5 h-1.5 bg-primary-foreground/50 rounded-full"
+            />
+            {/* Subtle glow effect */}
+            <motion.div 
+              animate={{ 
+                opacity: [0.1, 0.3, 0.1],
+                scale: [1, 1.5, 1]
+              }}
+              transition={{ 
+                duration: 1.8, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+              className="absolute inset-0 rounded-full bg-primary-foreground/5 blur-sm"
+            />
           </motion.div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Sound Familiar Section */}
