@@ -31,7 +31,8 @@ export const PricingCard = memo(function PricingCard({
   const isCurrentPlan = subscription.tier === tierKey;
 
   return (
-    <div
+    <article
+      aria-label={`${name} plan${isCurrentPlan ? ' - Your current plan' : ''} - ${price}${price !== "Free" ? period : ''}`}
       className={cn(
         "relative rounded-2xl border transition-all duration-500 ease-out-expo overflow-hidden h-full flex flex-col",
         highlighted
@@ -53,7 +54,7 @@ export const PricingCard = memo(function PricingCard({
       {isCurrentPlan && (
         <div className="absolute top-0 right-0">
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[9px] font-semibold tracking-wide uppercase rounded-bl-md bg-primary text-primary-foreground">
-            <Check className="h-2 w-2" />
+            <Check className="h-2 w-2" aria-hidden="true" />
             Current
           </span>
         </div>
@@ -97,7 +98,7 @@ export const PricingCard = memo(function PricingCard({
         </div>
 
         {/* Features */}
-        <ul className="space-y-2 sm:space-y-2.5 flex-1">
+        <ul className="space-y-2 sm:space-y-2.5 flex-1" role="list" aria-label={`${name} plan features`}>
           {features.map((feature, index) => (
             <li
               key={index}
@@ -109,12 +110,12 @@ export const PricingCard = memo(function PricingCard({
               <Check className={cn(
                 "h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0 mt-0.5",
                 highlighted ? "text-primary" : "text-primary"
-              )} />
+              )} aria-hidden="true" />
               <span className="leading-snug">{feature}</span>
             </li>
           ))}
         </ul>
       </div>
-    </div>
+    </article>
   );
 });

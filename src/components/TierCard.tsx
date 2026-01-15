@@ -45,7 +45,8 @@ export function TierCard({
   const isCurrent = status === "current";
   
   return (
-    <div
+    <article
+      aria-label={`${title} tier - ${status === 'locked' ? 'Locked' : status === 'current' ? `Current tier, ${progress}% complete` : 'Unlocked'}`}
       className={cn(
         "relative rounded-2xl border transition-all duration-500 overflow-hidden",
         isLocked
@@ -58,6 +59,11 @@ export function TierCard({
     >
       {/* Tier indicator */}
       <div
+        role="progressbar"
+        aria-label={`Tier ${tier} progress`}
+        aria-valuenow={isCurrent ? progress : status === "unlocked" ? 100 : 0}
+        aria-valuemin={0}
+        aria-valuemax={100}
         className={cn(
           "absolute top-0 left-0 right-0 h-1.5",
           getTierColor(tier)
@@ -88,8 +94,8 @@ export function TierCard({
               {title}
             </h3>
           </div>
-          {isLocked && <Lock className="h-5 w-5 text-muted-foreground/50" />}
-          {status === "unlocked" && <Check className="h-5 w-5 text-primary" />}
+          {isLocked && <Lock className="h-5 w-5 text-muted-foreground/50" aria-hidden="true" />}
+          {status === "unlocked" && <Check className="h-5 w-5 text-primary" aria-label="Completed" />}
         </div>
 
         {/* Description */}
@@ -101,10 +107,17 @@ export function TierCard({
         {isCurrent && (
           <div className="mb-6">
             <div className="flex justify-between text-xs mb-2">
-              <span className="text-muted-foreground">Progress</span>
-              <span className="font-medium text-foreground">{progress}%</span>
+              <span className="text-muted-foreground" id={`tier-${tier}-progress-label`}>Progress</span>
+              <span className="font-medium text-foreground" aria-hidden="true">{progress}%</span>
             </div>
-            <div className="h-2 bg-muted rounded-full overflow-hidden">
+            <div 
+              className="h-2 bg-muted rounded-full overflow-hidden"
+              role="progressbar"
+              aria-labelledby={`tier-${tier}-progress-label`}
+              aria-valuenow={progress}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
               <div
                 className={cn("h-full rounded-full transition-all duration-500", getTierColor(tier))}
                 style={{ width: `${progress}%` }}
@@ -114,7 +127,7 @@ export function TierCard({
         )}
 
         {/* Features */}
-        <ul className="space-y-3 mb-6">
+        <ul className="space-y-3 mb-6" role="list" aria-label={`${title} tier features`}>
           {features.map((feature, index) => (
             <li
               key={index}
@@ -128,6 +141,7 @@ export function TierCard({
                   "h-4 w-4 mt-0.5 flex-shrink-0",
                   isLocked ? "text-muted-foreground/30" : "text-primary"
                 )}
+                aria-hidden="true"
               />
               {feature}
             </li>
@@ -139,12 +153,13 @@ export function TierCard({
           <Button
             variant={isCurrent ? "cta" : "tier"}
             className="w-full group"
+            aria-label={isCurrent ? `Continue progress on ${title} tier` : `View details for ${title} tier`}
           >
             {isCurrent ? "Continue Progress" : "View Details"}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </Button>
         )}
       </div>
-    </div>
+    </article>
   );
 }
