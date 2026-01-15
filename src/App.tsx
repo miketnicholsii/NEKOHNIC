@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AuthProvider } from "@/components/AuthProvider";
 import { AdminPreviewProvider } from "@/components/AdminPreviewProvider";
 import { UpgradeModalProvider } from "@/components/UpgradeModalProvider";
@@ -48,6 +49,7 @@ const App = () => (
                     <AdminPreviewIndicator />
                   </UpgradeModalProvider>
                 </BrowserRouter>
+                <SpeedInsights />
               </AdminPreviewProvider>
             </AuthProvider>
           ) : (
