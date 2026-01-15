@@ -2,12 +2,33 @@
 
 This directory contains end-to-end tests for critical user flows using [Playwright](https://playwright.dev/).
 
+## Test Modes
+
+### 1. Mocked Tests (Recommended for CI)
+Tests that use API mocking to simulate backend responses. These are fast, reliable, and don't require backend setup.
+
+```bash
+npx playwright test e2e/mocked/
+```
+
+### 2. Real Backend Tests
+Tests that run against the actual backend. Require seeded test users.
+
+```bash
+npx playwright test e2e/auth/ e2e/dashboard/
+```
+
 ## Test Structure
 
 ```
 e2e/
 ├── fixtures/
-│   └── test-fixtures.ts    # Shared test utilities and fixtures
+│   ├── test-fixtures.ts    # Shared test utilities
+│   ├── test-users.ts       # Test user credentials
+│   ├── mock-data.ts        # Mock data factories
+│   └── api-mocker.ts       # Supabase API interceptor
+├── mocked/
+│   └── mocked-flows.spec.ts # Tests using API mocking
 ├── auth/
 │   ├── signup.spec.ts      # User registration tests
 │   ├── login.spec.ts       # User login tests
@@ -18,8 +39,10 @@ e2e/
 │   └── checkout.spec.ts    # Pricing and subscription tests
 ├── dashboard/
 │   └── navigation.spec.ts  # Dashboard navigation tests
-└── public/
-    └── public-pages.spec.ts # Public page tests
+├── public/
+│   └── public-pages.spec.ts # Public page tests
+└── scripts/
+    └── seed-test-data.ts   # Test data seeding script
 ```
 
 ## Running Tests
