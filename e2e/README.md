@@ -66,6 +66,46 @@ npx playwright test --debug
 npx playwright test --project=mobile-chrome
 ```
 
+## Test Data Seeding
+
+Before running authenticated tests, seed the test database with consistent test users:
+
+### Prerequisites
+
+1. Set the `SEED_SECRET_KEY` secret in your backend (Settings → Secrets)
+2. Set `ALLOW_TEST_SEEDING=true` secret to enable seeding
+
+### Seed Test Users
+
+```bash
+# Using the edge function directly
+curl -X POST "${SUPABASE_URL}/functions/v1/seed-test-data" \
+  -H "Content-Type: application/json" \
+  -d '{"action": "seed", "seed_key": "your-secret-key"}'
+
+# Or using the TypeScript script
+SEED_SECRET_KEY=your-secret npx ts-node e2e/scripts/seed-test-data.ts seed
+```
+
+### Cleanup Test Users
+
+```bash
+SEED_SECRET_KEY=your-secret npx ts-node e2e/scripts/seed-test-data.ts cleanup
+```
+
+### Available Test Users
+
+| Email | Tier | Admin | Onboarded |
+|-------|------|-------|-----------|
+| test-free@neko-test.local | Free | No | Yes |
+| test-starter@neko-test.local | Starter | No | Yes |
+| test-pro@neko-test.local | Pro | No | Yes |
+| test-elite@neko-test.local | Elite | No | Yes |
+| test-new@neko-test.local | Free | No | No |
+| test-admin@neko-test.local | Elite | Yes | Yes |
+
+All test users use password: `TestPassword123!`
+
 ## Test Categories
 
 ### 1. Authentication Tests (`e2e/auth/`)
