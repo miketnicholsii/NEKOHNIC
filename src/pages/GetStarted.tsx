@@ -1,455 +1,90 @@
-import { useState, useRef, useCallback } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
-import { AnimatedSection } from "@/components/AnimatedSection";
-import { supabase } from "@/integrations/supabase";
-import { TurnstileWidget } from "@/components/TurnstileWidget";
-import { 
-  CheckCircle2, 
-  Building2, 
-  User, 
-  TrendingUp,
-  Mail,
-  Send,
-  Loader2
-} from "lucide-react";
-
-const journeyOptions = [
-  { value: "starting", label: "Just starting out", icon: Building2 },
-  { value: "building", label: "Building my business", icon: User },
-  { value: "scaling", label: "Ready to scale", icon: TrendingUp },
-];
-
-const goalOptions = [
-  "Form my LLC properly",
-  "Get my EIN",
-  "Build business credit",
-  "Create my personal brand",
-  "Build a web presence",
-  "All of the above",
-];
-
-const nextSteps = [
-  {
-    step: "1",
-    title: "We review your submission",
-    description: "Our team reviews your goals and current stage to understand how we can best support you.",
-  },
-  {
-    step: "2",
-    title: "Invite sent",
-    description: "If you're a good fit, we'll send you an invite with login details and a personalized guide.",
-  },
-  {
-    step: "3",
-    title: "Start your journey",
-    description: "Begin with the business starter flow or jump to where you are in your journey.",
-  },
-];
-
-const expectations = [
-  "Clear, structured guidance",
-  "No hype or false promises",
-  "Progress you can track",
-  "Invite-only community",
-];
+import { Mail, Sparkles } from "lucide-react";
 
 export default function GetStarted() {
-  const { toast } = useToast();
   const prefersReducedMotion = useReducedMotion();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    businessName: "",
-    stage: "",
-    goal: "",
-    message: "",
-    website: "", // Honeypot
-  });
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const turnstileRef = useRef<{ reset: () => void } | null>(null);
 
-  const handleTurnstileVerify = useCallback((token: string) => {
-    setTurnstileToken(token);
-  }, []);
-
-  const handleTurnstileExpire = useCallback(() => {
-    setTurnstileToken(null);
-  }, []);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Client-side validation
-    const name = formData.name.trim();
-    const email = formData.email.trim();
-    
-    if (!name || name.length < 2) {
-      toast({
-        title: "We'd love to know your name",
-        description: "Just 2 characters or more will do.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      toast({
-        title: "We need a valid email",
-        description: "So we can get back to you.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!turnstileToken) {
-      toast({
-        title: "One quick security check",
-        description: "This helps us keep things safe.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    try {
-      const { data, error } = await supabase.functions.invoke("contact-submit", {
-        body: {
-          name,
-          email,
-          businessName: formData.businessName.trim(),
-          stage: formData.stage,
-          goal: formData.goal,
-          message: formData.message.trim(),
-          website: formData.website, // Honeypot
-          turnstileToken,
-        },
-      });
-
-      if (error) {
-        console.error("Submission error:", error);
-        toast({
-          title: "That didn't quite work",
-          description: "Feel free to try again, or reach out directly at neko@helloneko.co",
-          variant: "destructive",
-        });
-        turnstileRef.current?.reset();
-        setTurnstileToken(null);
-        return;
-      }
-
-      if (data?.error) {
-        toast({
-          title: "We couldn't process that",
-          description: data.error,
-          variant: "destructive",
-        });
-        turnstileRef.current?.reset();
-        setTurnstileToken(null);
-        return;
-      }
-    
-      toast({
-        title: "You're all set!",
-        description: data?.message || "We'll be in touch soon to help you get started.",
-      });
-      
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        businessName: "",
-        stage: "",
-        goal: "",
-        message: "",
-        website: "",
-      });
-      setTurnstileToken(null);
-      turnstileRef.current?.reset();
-    } catch (err) {
-      console.error("Unexpected error:", err);
-      toast({
-        title: "Something unexpected happened",
-        description: "Please try again in a moment.",
-        variant: "destructive",
-      });
-      turnstileRef.current?.reset();
-      setTurnstileToken(null);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Easing as tuple for type compatibility
   const easeOut: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
+
   const fadeIn = prefersReducedMotion 
     ? {} 
     : { 
-        initial: { opacity: 0, y: 16 }, 
+        initial: { opacity: 0, y: 20 }, 
         animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.5, ease: easeOut }
+        transition: { duration: 0.6, ease: easeOut }
+      };
+
+  const stagger = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 16 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.5, ease: easeOut, delay: 0.2 }
       };
 
   return (
     <main className="min-h-screen bg-background overflow-x-hidden">
       <EccentricNavbar />
 
-      {/* Hero */}
-      <section className="pt-28 sm:pt-32 pb-8 sm:pb-12 bg-background">
+      <section className="min-h-[calc(100vh-200px)] flex items-center justify-center py-20 sm:py-32">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div {...fadeIn} className="max-w-2xl">
-            <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-3 sm:mb-4">
-              Welcome
-            </span>
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tightest text-foreground mb-4 sm:mb-6 text-balance">
-              It's nice to meet you.
-            </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-              Tell us a bit about yourself and where you are. We'll help you figure out the next step — no pressure, no rush.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+          <div className="max-w-2xl mx-auto text-center">
+            {/* Invite Only Badge */}
+            <motion.div 
+              {...fadeIn}
+              className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 border border-primary/20 mb-8 sm:mb-10"
+            >
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium tracking-wide text-foreground">
+                Invite Only
+              </span>
+            </motion.div>
 
-      {/* Form Section */}
-      <section className="py-8 sm:py-12 lg:py-20 bg-background">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-20">
-            {/* Form */}
-            <AnimatedSection direction="left">
-              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
-                {/* Honeypot field - hidden from humans */}
-                <div className="absolute -left-[9999px]" aria-hidden="true">
-                  <Label htmlFor="website">Website</Label>
-                  <Input
-                    id="website"
-                    name="website"
-                    type="text"
-                    value={formData.website}
-                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                    tabIndex={-1}
-                    autoComplete="off"
-                  />
-                </div>
+            {/* Heading */}
+            <motion.h1 
+              {...fadeIn}
+              className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tightest text-foreground mb-6"
+            >
+              We're selective about
+              <br />
+              <span className="text-primary">who we work with.</span>
+            </motion.h1>
 
-                {/* Name & Email */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Your Name *</Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Jane Doe"
-                      className="h-11 sm:h-12"
-                      maxLength={100}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Address *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="jane@example.com"
-                      className="h-11 sm:h-12"
-                      maxLength={255}
-                      required
-                    />
-                  </div>
-                </div>
+            {/* Description */}
+            <motion.p 
+              {...stagger}
+              className="text-lg sm:text-xl text-muted-foreground leading-relaxed mb-10 sm:mb-12 max-w-lg mx-auto"
+            >
+              Neko is built for serious founders ready to build something real. 
+              If that's you, we'd love to hear from you.
+            </motion.p>
 
-                {/* Business Name */}
-                <div className="space-y-2">
-                  <Label htmlFor="businessName">Business Name (if you have one)</Label>
-                  <Input
-                    id="businessName"
-                    value={formData.businessName}
-                    onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                    placeholder="ACME LLC"
-                    className="h-11 sm:h-12"
-                    maxLength={200}
-                  />
-                </div>
+            {/* Email CTA */}
+            <motion.div
+              initial={prefersReducedMotion ? undefined : { opacity: 0, y: 16 }}
+              animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: easeOut, delay: 0.35 }}
+            >
+              <a
+                href="mailto:neko@helloneko.co?subject=Interested%20in%20joining%20Neko"
+                className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-foreground text-background font-medium text-base sm:text-lg transition-all duration-300 hover:bg-primary hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+              >
+                <Mail className="h-5 w-5 transition-transform group-hover:-rotate-6" />
+                neko@helloneko.co
+              </a>
+            </motion.div>
 
-                {/* Stage */}
-                <div className="space-y-2">
-                  <Label>Where are you in your journey?</Label>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {journeyOptions.map((option) => (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, stage: option.value })}
-                        className={`p-3 sm:p-4 rounded-xl border text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 ${
-                          formData.stage === option.value
-                            ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                            : "border-border hover:border-primary/30 hover:bg-muted/50"
-                        }`}
-                      >
-                        <option.icon className={`h-4 w-4 sm:h-5 sm:w-5 mb-2 ${
-                          formData.stage === option.value ? "text-primary" : "text-muted-foreground"
-                        }`} />
-                        <p className={`text-xs sm:text-sm font-medium ${
-                          formData.stage === option.value ? "text-primary" : "text-foreground"
-                        }`}>
-                          {option.label}
-                        </p>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Goal */}
-                <div className="space-y-2">
-                  <Label htmlFor="goal">What's your primary goal?</Label>
-                  <Select
-                    value={formData.goal}
-                    onValueChange={(value) => setFormData({ ...formData, goal: value })}
-                  >
-                    <SelectTrigger className="h-11 sm:h-12">
-                      <SelectValue placeholder="Select your main goal" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {goalOptions.map((goal) => (
-                        <SelectItem key={goal} value={goal}>
-                          {goal}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Message */}
-                <div className="space-y-2">
-                  <Label htmlFor="message">Anything else you'd like to share?</Label>
-                  <Textarea
-                    id="message"
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Tell us more about your business idea or goals..."
-                    rows={4}
-                    className="resize-none"
-                    maxLength={2000}
-                  />
-                </div>
-
-                {/* Turnstile CAPTCHA */}
-                <div className="flex justify-center">
-                  <TurnstileWidget
-                    ref={turnstileRef}
-                    onVerify={handleTurnstileVerify}
-                    onExpire={handleTurnstileExpire}
-                  />
-                </div>
-
-                {/* Security Check Passed Callout */}
-                {turnstileToken && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-full bg-primary/10 border border-primary/20 mx-auto w-fit"
-                  >
-                    <CheckCircle2 className="h-4 w-4 text-primary" />
-                    <span className="text-sm text-primary font-medium">Security check passed</span>
-                  </motion.div>
-                )}
-
-                {/* Submit */}
-                <Button
-                  type="submit"
-                  variant="cta"
-                  size="xl"
-                  className="w-full group"
-                  disabled={isSubmitting || !turnstileToken}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                      Submitting...
-                    </>
-                  ) : (
-                    <>
-                      Start Your Journey
-                      <Send className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-                    </>
-                  )}
-                </Button>
-              </form>
-            </AnimatedSection>
-
-            {/* Benefits */}
-            <AnimatedSection direction="right" delay={0.15} className="lg:pl-8">
-              <div className="sticky top-28 space-y-5 sm:space-y-6">
-                {/* Invite Only Badge */}
-                <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-secondary/10 border border-secondary/20 w-fit">
-                  <div className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-                  <span className="text-xs font-semibold text-secondary uppercase tracking-wide">Invite Only</span>
-                </div>
-
-                <div className="p-5 sm:p-6 lg:p-8 rounded-2xl bg-muted/50 border border-border">
-                  <h3 className="font-display font-bold text-lg sm:text-xl mb-5 sm:mb-6">What happens next?</h3>
-                  
-                  <div className="space-y-5 sm:space-y-6">
-                    {nextSteps.map((item) => (
-                      <div key={item.step} className="flex gap-3 sm:gap-4">
-                        <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs sm:text-sm">
-                          {item.step}
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-sm sm:text-base text-foreground mb-1">{item.title}</h4>
-                          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{item.description}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Trust indicators */}
-                <div className="p-4 sm:p-5 lg:p-6 rounded-xl bg-card border border-border">
-                  <p className="text-xs sm:text-sm font-medium text-foreground mb-3 sm:mb-4">What you can expect:</p>
-                  <ul className="space-y-2 sm:space-y-3">
-                    {expectations.map((item) => (
-                      <li key={item} className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                        <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary flex-shrink-0" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Contact alternative */}
-                <div className="p-3 sm:p-4 rounded-xl bg-primary/5 border border-primary/20 text-center">
-                  <p className="text-xs sm:text-sm text-muted-foreground mb-2">
-                    Prefer to reach out directly?
-                  </p>
-                  <a
-                    href="mailto:neko@helloneko.co"
-                    className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary/20 rounded"
-                  >
-                    <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                    neko@helloneko.co
-                  </a>
-                </div>
-              </div>
-            </AnimatedSection>
+            {/* Subtle note */}
+            <motion.p
+              initial={prefersReducedMotion ? undefined : { opacity: 0 }}
+              animate={prefersReducedMotion ? undefined : { opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5, ease: easeOut }}
+              className="mt-8 text-sm text-muted-foreground/70"
+            >
+              Tell us about yourself and what you're building.
+            </motion.p>
           </div>
         </div>
       </section>
