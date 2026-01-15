@@ -212,7 +212,7 @@ const HeroBackground = memo(function HeroBackground({ reduceMotion }: { reduceMo
   );
 });
 
-// Service card component
+// Service card component - mobile: centered layout, desktop: horizontal layout
 const ServiceCard = memo(function ServiceCard({ 
   icon: Icon, 
   title, 
@@ -228,14 +228,28 @@ const ServiceCard = memo(function ServiceCard({
   
   return (
     <div className="group p-5 sm:p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300">
-      <div className="flex items-start gap-4">
-        <div className={`flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center transition-transform duration-300 ${!prefersReducedMotion ? 'group-hover:scale-110' : ''}`} aria-hidden="true">
+      {/* Mobile: Centered vertical layout */}
+      <div className="flex flex-col items-center text-center sm:hidden">
+        <div className={`w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 transition-transform duration-300 ${!prefersReducedMotion ? 'group-hover:scale-110' : ''}`} aria-hidden="true">
+          <Icon className="h-5 w-5" />
+        </div>
+        <h3 className="font-display font-semibold text-base text-foreground mb-2 transition-colors duration-200 group-hover:text-primary">{title}</h3>
+        <p className="text-sm text-muted-foreground leading-relaxed mb-3">{description}</p>
+        <div className="flex items-center justify-center gap-2 text-xs text-primary font-medium">
+          <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
+          <span>{outcome}</span>
+        </div>
+      </div>
+      
+      {/* Desktop: Horizontal layout */}
+      <div className="hidden sm:flex items-start gap-4">
+        <div className={`flex-shrink-0 w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center transition-transform duration-300 ${!prefersReducedMotion ? 'group-hover:scale-110' : ''}`} aria-hidden="true">
           <Icon className="h-5 w-5" />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-display font-semibold text-base sm:text-lg text-foreground mb-2 transition-colors duration-200 group-hover:text-primary">{title}</h3>
+          <h3 className="font-display font-semibold text-lg text-foreground mb-2 transition-colors duration-200 group-hover:text-primary">{title}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed mb-3">{description}</p>
-          <div className="flex items-center gap-2 text-xs sm:text-sm text-primary font-medium">
+          <div className="flex items-center gap-2 text-sm text-primary font-medium">
             <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
             <span className="truncate">{outcome}</span>
           </div>
