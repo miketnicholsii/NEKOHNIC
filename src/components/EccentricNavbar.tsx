@@ -41,7 +41,7 @@ const NavPill = memo(function NavPill({
         href={href} 
         onClick={handleClick}
         aria-current={isActive ? "location" : undefined}
-        className="relative group cursor-pointer"
+        className="relative group cursor-pointer transition-transform duration-200 hover:scale-105"
       >
         <span className={`relative z-10 block px-2.5 xl:px-3.5 py-1.5 text-xs xl:text-sm 2xl:text-base font-medium whitespace-nowrap transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
           {label}
@@ -59,7 +59,7 @@ const NavPill = memo(function NavPill({
   }
 
   return (
-    <Link to={href} className="relative group" aria-current={isActive ? "page" : undefined}>
+    <Link to={href} className="relative group transition-transform duration-200 hover:scale-105" aria-current={isActive ? "page" : undefined}>
       <span className={`relative z-10 block px-2.5 xl:px-3.5 py-1.5 text-xs xl:text-sm 2xl:text-base font-medium whitespace-nowrap transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
         {label}
       </span>
