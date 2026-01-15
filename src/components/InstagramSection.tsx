@@ -81,23 +81,25 @@ export const InstagramSection = memo(function InstagramSection() {
         href={INSTAGRAM_URL}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label={`Follow us on Instagram ${INSTAGRAM_HANDLE}${data?.formatted ? ` - ${data.formatted} followers` : ''}`}
         className="group flex flex-col items-start gap-2 transition-opacity hover:opacity-80"
       >
         <div className="flex items-center gap-3">
-          <Instagram className="h-5 w-5 text-primary-foreground/80" />
+          <Instagram className="h-5 w-5 text-primary-foreground/80" aria-hidden="true" />
           <span className="font-display text-base tracking-wide text-primary-foreground">
             {INSTAGRAM_HANDLE}
           </span>
         </div>
         
         {loading ? (
-          <Skeleton className="h-4 w-20 bg-primary-foreground/10" />
+          <Skeleton className="h-4 w-20 bg-primary-foreground/10" aria-label="Loading follower count" />
         ) : data?.formatted ? (
           <motion.span 
             className="text-sm text-primary-foreground/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
+            aria-hidden="true"
           >
             {data.formatted} followers
           </motion.span>
@@ -129,14 +131,15 @@ export const InstagramBadge = memo(function InstagramBadge() {
       href={INSTAGRAM_URL}
       target="_blank"
       rel="noopener noreferrer"
+      aria-label={`Follow us on Instagram ${INSTAGRAM_HANDLE}${data?.formatted ? ` - ${data.formatted} followers` : ''}`}
       className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-secondary/50 px-4 py-2 text-sm transition-all hover:border-primary/30 hover:bg-secondary"
     >
-      <Instagram className="h-4 w-4 text-primary" />
+      <Instagram className="h-4 w-4 text-primary" aria-hidden="true" />
       <span className="font-medium text-foreground">{INSTAGRAM_HANDLE}</span>
       {loading ? (
-        <Skeleton className="h-3 w-12" />
+        <Skeleton className="h-3 w-12" aria-label="Loading follower count" />
       ) : data?.formatted ? (
-        <span className="text-muted-foreground">• {data.formatted}</span>
+        <span className="text-muted-foreground" aria-hidden="true">• {data.formatted}</span>
       ) : null}
     </a>
   );

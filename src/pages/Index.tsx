@@ -380,14 +380,14 @@ const ServiceCard = memo(function ServiceCard({
   return (
     <div className="group p-5 sm:p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300">
       <div className="flex items-start gap-4">
-        <div className={`flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center transition-transform duration-300 ${!prefersReducedMotion ? 'group-hover:scale-110' : ''}`}>
+        <div className={`flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center transition-transform duration-300 ${!prefersReducedMotion ? 'group-hover:scale-110' : ''}`} aria-hidden="true">
           <Icon className="h-5 w-5" />
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="font-display font-semibold text-base sm:text-lg text-foreground mb-2 transition-colors duration-200 group-hover:text-primary">{title}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed mb-3">{description}</p>
           <div className="flex items-center gap-2 text-xs sm:text-sm text-primary font-medium">
-            <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" />
+            <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
             <span className="truncate">{outcome}</span>
           </div>
         </div>
@@ -1006,9 +1006,9 @@ export default function Index() {
 
           <AnimatedSection delay={0.3} className="text-center mt-12 sm:mt-14">
             <Link to="/get-started">
-              <Button variant="default" size="lg" className="group shadow-lg shadow-primary/20 min-h-[48px]">
+              <Button variant="default" size="lg" className="group shadow-lg shadow-primary/20 min-h-[48px]" aria-label="Start building your business today">
                 Start Building Today
-                <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
+                <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
               </Button>
             </Link>
           </AnimatedSection>
@@ -1016,7 +1016,7 @@ export default function Index() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-12 sm:py-16 lg:py-28 bg-background relative">
+      <section id="faq" className="py-12 sm:py-16 lg:py-28 bg-background relative" aria-labelledby="faq-heading">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
@@ -1078,13 +1078,13 @@ export default function Index() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
               <Link to="/get-started" className="w-full sm:w-auto">
-                <Button variant="hero" size="lg" className="w-full sm:w-auto group min-h-[48px]">
+                <Button variant="hero" size="lg" className="w-full sm:w-auto group min-h-[48px]" aria-label="Get started building your business">
                   Get Started
-                  <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
+                  <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
                 </Button>
               </Link>
               <Link to="/pricing" className="w-full sm:w-auto">
-                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto min-h-[48px]">View Pricing</Button>
+                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto min-h-[48px]" aria-label="View pricing plans">View Pricing</Button>
               </Link>
             </div>
           </AnimatedSection>

@@ -22,7 +22,7 @@ const footerLinks = {
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
   return (
-    <footer ref={ref} className="relative bg-tertiary text-tertiary-foreground overflow-hidden">
+    <footer ref={ref} role="contentinfo" aria-label="Site footer" className="relative bg-tertiary text-tertiary-foreground overflow-hidden">
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-dark opacity-50 pointer-events-none" aria-hidden="true" />
       <div className="absolute inset-0 bg-gradient-glow opacity-30 pointer-events-none" aria-hidden="true" />
@@ -45,11 +45,11 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           </div>
 
           {/* Platform Links */}
-          <div>
+          <nav aria-label="Platform links">
             <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-primary-foreground/80 mb-4 sm:mb-6 uppercase">
               Platform
             </h4>
-            <ul className="space-y-2.5 sm:space-y-3.5">
+            <ul className="space-y-2.5 sm:space-y-3.5" role="list">
               {footerLinks.platform.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -62,14 +62,14 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Company Links */}
-          <div>
+          <nav aria-label="Company links">
             <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-primary-foreground/80 mb-4 sm:mb-6 uppercase">
               Company
             </h4>
-            <ul className="space-y-2.5 sm:space-y-3.5">
+            <ul className="space-y-2.5 sm:space-y-3.5" role="list">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -82,7 +82,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 </li>
               ))}
             </ul>
-            <ul className="space-y-2.5 sm:space-y-3.5 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-primary-foreground/10">
+            <ul className="space-y-2.5 sm:space-y-3.5 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-primary-foreground/10" role="list">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -94,7 +94,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Instagram */}
           <div className="col-span-2 sm:col-span-1">

@@ -56,12 +56,15 @@ const CompactTierCard = memo(function CompactTierCard({
   const price = isFree ? 0 : isAnnual ? Math.round(tier.annualPrice / 12) : tier.price;
 
   return (
-    <div className={cn(
-      "relative rounded-xl border p-5 transition-all duration-300 h-full flex flex-col",
-      isHighlighted
-        ? "bg-tertiary border-tertiary text-tertiary-foreground shadow-lg scale-[1.02]"
-        : "bg-card border-border hover:border-primary/30 hover:shadow-md",
-    )}>
+    <article 
+      aria-label={`${config.name} plan - ${isFree ? 'Free' : `$${price} per month`}`}
+      className={cn(
+        "relative rounded-xl border p-5 transition-all duration-300 h-full flex flex-col",
+        isHighlighted
+          ? "bg-tertiary border-tertiary text-tertiary-foreground shadow-lg scale-[1.02]"
+          : "bg-card border-border hover:border-primary/30 hover:shadow-md",
+      )}
+    >
       {/* Badge */}
       {'badge' in config && config.badge && (
         <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
@@ -121,7 +124,7 @@ const CompactTierCard = memo(function CompactTierCard({
       </div>
 
       {/* Key Features */}
-      <ul className="space-y-1.5 flex-1 mb-4">
+      <ul className="space-y-1.5 flex-1 mb-4" role="list" aria-label={`${config.name} plan features`}>
         {config.highlights.map((feature, index) => (
           <li
             key={index}
@@ -130,12 +133,12 @@ const CompactTierCard = memo(function CompactTierCard({
               isHighlighted ? "text-tertiary-foreground/80" : "text-muted-foreground"
             )}
           >
-            <Check className="h-3 w-3 flex-shrink-0 mt-0.5 text-primary" />
+            <Check className="h-3 w-3 flex-shrink-0 mt-0.5 text-primary" aria-hidden="true" />
             <span className="leading-snug">{feature}</span>
           </li>
         ))}
       </ul>
-    </div>
+    </article>
   );
 });
 
@@ -144,14 +147,14 @@ export const HomePricing = memo(function HomePricing() {
   const tiers: SubscriptionTier[] = ["free", "starter", "pro", "elite"];
 
   return (
-    <section id="pricing" className="py-12 sm:py-16 lg:py-24 bg-muted/30 relative">
+    <section id="pricing" className="py-12 sm:py-16 lg:py-24 bg-muted/30 relative" aria-labelledby="pricing-heading">
       <div className="container mx-auto px-5 sm:px-6 lg:px-8">
         <AnimatedSection>
           <div className="text-center mb-8 sm:mb-10">
-            <p className="text-xs sm:text-sm font-medium tracking-widest uppercase text-primary mb-3">
+            <p className="text-xs sm:text-sm font-medium tracking-widest uppercase text-primary mb-3" aria-hidden="true">
               Simple Pricing
             </p>
-            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3">
+            <h2 id="pricing-heading" className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3">
               Pick what fits your journey.
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto mb-6">
@@ -159,7 +162,8 @@ export const HomePricing = memo(function HomePricing() {
             </p>
 
             {/* Billing Toggle */}
-            <div className="flex items-center justify-center gap-3">
+            <fieldset className="flex items-center justify-center gap-3">
+              <legend className="sr-only">Choose billing period</legend>
               <Label 
                 htmlFor="home-billing-toggle" 
                 className={cn(
@@ -174,6 +178,7 @@ export const HomePricing = memo(function HomePricing() {
                 checked={isAnnual}
                 onCheckedChange={setIsAnnual}
                 className="scale-90"
+                aria-describedby="billing-savings"
               />
               <Label 
                 htmlFor="home-billing-toggle" 
@@ -183,11 +188,11 @@ export const HomePricing = memo(function HomePricing() {
                 )}
               >
                 Annual
-                <span className="px-1.5 py-0.5 text-[9px] font-semibold uppercase rounded-full bg-primary text-primary-foreground">
+                <span id="billing-savings" className="px-1.5 py-0.5 text-[9px] font-semibold uppercase rounded-full bg-primary text-primary-foreground">
                   -17%
                 </span>
               </Label>
-            </div>
+            </fieldset>
           </div>
         </AnimatedSection>
 
@@ -207,9 +212,9 @@ export const HomePricing = memo(function HomePricing() {
         <AnimatedSection delay={0.2} className="text-center mt-8">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link to="/get-started">
-              <Button variant="cta" size="default" className="group">
+              <Button variant="cta" size="default" className="group" aria-label="Get started with a free account">
                 Get Started Free
-                <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
+                <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
               </Button>
             </Link>
             <Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
