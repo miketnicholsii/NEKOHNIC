@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 
 /**
  * Floating CTA that appears after user scrolls past the hero section.
- * Encourages exploration first, then presents the "Get Started" CTA.
+ * Only shows on larger screens (lg+) to avoid conflicts with mobile nav.
  */
 export const FloatingCTA = memo(function FloatingCTA() {
   const [isVisible, setIsVisible] = useState(false);
@@ -15,12 +15,13 @@ export const FloatingCTA = memo(function FloatingCTA() {
   const location = useLocation();
   const prefersReducedMotion = useReducedMotion();
 
-  // Only show on marketing pages, not in the app
+  // Only show on marketing pages, not in the app or contact page (already has CTA)
   const isMarketingPage = !location.pathname.startsWith("/app") && 
                           !location.pathname.startsWith("/admin") &&
                           !location.pathname.startsWith("/login") &&
                           !location.pathname.startsWith("/signup") &&
-                          !location.pathname.startsWith("/forgot-password");
+                          !location.pathname.startsWith("/forgot-password") &&
+                          location.pathname !== "/contact";
 
   useEffect(() => {
     if (!isMarketingPage || user) return;
@@ -55,7 +56,7 @@ export const FloatingCTA = memo(function FloatingCTA() {
           animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
           exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-6 right-6 z-40 hidden sm:block"
+          className="fixed bottom-6 right-6 z-30 hidden lg:block"
           role="complementary"
           aria-label="Quick action"
         >
