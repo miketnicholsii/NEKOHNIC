@@ -27,7 +27,7 @@ const STRATEGY_BANNER_DISMISSED_KEY = "neko-strategy-banner-dismissed";
 
 export default function Dashboard() {
   const { refreshSubscription, isAdmin } = useAuth();
-  const { tier, isPreviewMode } = useSubscriptionTier();
+  const { tier } = useSubscriptionTier();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("overview");

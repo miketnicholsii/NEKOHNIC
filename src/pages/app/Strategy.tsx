@@ -88,7 +88,8 @@ export default function Strategy() {
     }
   };
 
-  const hasAccess = (resourceTier: string): boolean => {
+  // Access check available for future tier-gated content
+  const _hasAccess = (resourceTier: string): boolean => {
     return tierMeetsRequirement(effectiveTier, resourceTier);
   };
 
@@ -197,7 +198,7 @@ export default function Strategy() {
               {resources.map((resource, index) => {
                 const isActive = index === activeStep;
                 const isCompleted = completedSteps.has(resource.id);
-                const Icon = STEP_ICONS[index] || BookOpen;
+                const _Icon = STEP_ICONS[index] || BookOpen;
 
                 return (
                   <button
