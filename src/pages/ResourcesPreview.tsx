@@ -108,7 +108,10 @@ export default function ResourcesPreview() {
         />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background overflow-x-hidden">
+        {/* Skip link for accessibility */}
+        <a href="#main-content" className="skip-link">Skip to main content</a>
+        
         {/* Hero Section */}
         <section className="relative overflow-hidden border-b border-border">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
@@ -176,36 +179,39 @@ export default function ResourcesPreview() {
         </section>
 
         {/* Main Content */}
-        <section className="max-w-6xl mx-auto px-4 py-12">
+        <section id="main-content" className="max-w-6xl mx-auto px-4 py-12" tabIndex={-1}>
           {/* Search and Filter */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-8">
-            <div className="relative flex-1 max-w-md">
+          <div className="flex flex-col gap-4 mb-8">
+            <div className="relative w-full max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search resources..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 h-12"
+                aria-label="Search resources"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1"
+                  aria-label="Clear search"
                 >
                   <X className="h-4 w-4" />
                 </button>
               )}
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
               {CATEGORIES.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] ${
                     selectedCategory === category.id
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-muted-foreground hover:bg-muted/80"
                   }`}
+                  aria-pressed={selectedCategory === category.id}
                 >
                   {category.label}
                 </button>

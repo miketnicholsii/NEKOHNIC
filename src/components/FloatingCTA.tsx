@@ -56,16 +56,19 @@ export const FloatingCTA = memo(function FloatingCTA() {
           exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="fixed bottom-6 right-6 z-40 hidden sm:block"
+          role="complementary"
+          aria-label="Quick action"
         >
           <Link to="/contact">
             <Button 
               variant="cta" 
               size="lg" 
               className="shadow-xl group"
+              aria-label="Contact us - Say Hello"
             >
               <span className="flex items-center gap-2">
                 Say Hello
-                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
               </span>
             </Button>
           </Link>

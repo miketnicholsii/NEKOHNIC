@@ -204,20 +204,23 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Improve scroll performance */
+    /* Prevent horizontal scroll globally */
     overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
     text-rendering: optimizeLegibility;
-    /* Prevent layout shift */
+    /* Prevent layout shift and horizontal scroll */
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
   /* Optimize images globally */
   img, video {
     content-visibility: auto;
+    max-width: 100%;
+    height: auto;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -225,7 +228,7 @@
     text-wrap: balance;
   }
 
-  /* Focus styles */
+  /* Focus styles - accessible and visible */
   :focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
@@ -233,6 +236,11 @@
   /* Selection */
   ::selection {
     @apply bg-primary/20 text-foreground;
+  }
+
+  /* Skip to content link for accessibility */
+  .skip-link {
+    @apply absolute left-4 z-[100] -translate-y-full bg-primary text-primary-foreground px-4 py-2 rounded-b-lg font-medium transition-transform focus:translate-y-0;
   }
 }
 
@@ -511,11 +519,38 @@
     contain: paint;
   }
 
-  /* Touch-friendly tap targets */
+  /* Touch-friendly tap targets - WCAG 2.5.5 */
   .touch-target {
     min-height: 44px;
     min-width: 44px;
   }
+
+  /* Ensure buttons meet tap target requirements */
+  button, a, [role="button"] {
+    min-height: 44px;
+  }
+
+  /* But allow smaller inline links */
+  p a, li a, span a {
+    min-height: auto;
+  }
+
+  /* Prevent text clipping in flex containers */
+  .flex > * {
+    min-width: 0;
+  }
+
+  /* Safe overflow handling */
+  .safe-text {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  /* Truncation utilities */
+  .line-clamp-1 { @apply overflow-hidden; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
+  .line-clamp-2 { @apply overflow-hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .line-clamp-3 { @apply overflow-hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
 
   /* Disable hover effects on touch devices for better performance */
   @media (hover: none) {

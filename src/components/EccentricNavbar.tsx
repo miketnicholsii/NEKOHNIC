@@ -142,8 +142,9 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 safe-area-top ${isScrolled ? "py-2" : "py-3 sm:py-4"}`}
         aria-label="Main navigation"
+        role="navigation"
       >
-        <div className={`absolute inset-0 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" : isHeroPage ? "bg-transparent" : "bg-background/90 backdrop-blur-lg border-b border-border/50"}`} />
+        <div className={`absolute inset-0 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" : isHeroPage ? "bg-transparent" : "bg-background/90 backdrop-blur-lg border-b border-border/50"}`} aria-hidden="true" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-between h-11 lg:h-12 min-w-0">
             {/* Left side - Logo */}
@@ -206,13 +207,13 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
 
             <button
               ref={menuButtonRef}
-              className={`lg:hidden p-2 rounded-lg transition-colors relative z-10 ${showDarkText ? "text-foreground hover:bg-muted" : "text-white hover:bg-white/10"}`}
+              className={`lg:hidden p-2.5 rounded-lg transition-colors relative z-10 min-h-[44px] min-w-[44px] flex items-center justify-center ${showDarkText ? "text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring" : "text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"}`}
               onClick={toggleMenu}
-              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
             >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
             </button>
           </div>
         </div>

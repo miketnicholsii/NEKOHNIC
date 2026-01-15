@@ -410,17 +410,19 @@ export default function Index() {
 
   return (
     <main className="min-h-screen overflow-x-hidden pb-16 lg:pb-0">
+      {/* Skip to main content for accessibility */}
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <EccentricNavbar />
       <SectionIndicator />
       <MobileProgressBar />
       
       {/* Hero Section */}
-      <section id="hero" className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-16">
+      <section id="hero" className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-12 sm:pt-24 sm:pb-16 px-4">
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
         <HeroBackground reduceMotion={performanceMode.reduceMotion} />
 
-        <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10 text-center">
-          <div className="max-w-4xl mx-auto">
+        <div id="main-content" className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center w-full max-w-4xl">
+          <div className="w-full">
             {/* Hello, NÈKO. - brand signature with centered NÈKO */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -428,45 +430,47 @@ export default function Index() {
               transition={{ duration: 0.6, delay: 0.1, ease: easeOutExpo }}
               className="mb-4 sm:mb-6"
             >
-              {/* Mobile: Stack layout (Hello, above NÈKO) */}
-              <div className="sm:hidden flex flex-col items-center gap-1">
+              {/* Mobile: Stack layout - Hello above, NÈKO centered */}
+              <div className="sm:hidden flex flex-col items-center gap-2">
                 <motion.span 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.4, delay: 0.2 }}
-                  className="text-primary-foreground/50 font-normal text-sm tracking-[0.25em] uppercase"
+                  className="text-primary-foreground/60 font-normal text-xs tracking-[0.3em] uppercase"
+                  aria-hidden="true"
                 >
                   Hello,
                 </motion.span>
-                <h1 className="font-logo font-bold tracking-tighter text-primary-foreground text-[clamp(3.5rem,15vw,5rem)] leading-[0.9]">
+                <h1 className="font-logo font-bold tracking-tighter text-primary-foreground text-[clamp(3rem,14vw,4.5rem)] leading-[0.9]">
                   <NekoLogo />
                   <span className="neko-dot">.</span>
                 </h1>
               </div>
               
               {/* Desktop: 3-column grid to center NÈKO perfectly */}
-              <div className="hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-0">
+              <div className="hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-0 w-full">
                 {/* Left column: Hello, - right aligned */}
                 <motion.div 
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.2 }}
-                  className="flex justify-end pr-2 md:pr-3"
+                  className="flex justify-end pr-3 md:pr-4"
+                  aria-hidden="true"
                 >
-                  <span className="text-primary-foreground/50 font-normal text-sm md:text-base lg:text-lg tracking-[0.2em] uppercase self-center">
+                  <span className="text-primary-foreground/60 font-normal text-sm md:text-base lg:text-lg tracking-[0.25em] uppercase self-center whitespace-nowrap">
                     Hello,
                   </span>
                 </motion.div>
                 
                 {/* Center column: NÈKO - perfectly centered */}
-                <h1 className="font-logo font-bold tracking-tighter text-primary-foreground text-[clamp(4rem,10vw,7rem)] leading-[0.9] whitespace-nowrap">
+                <h1 className="font-logo font-bold tracking-tighter text-primary-foreground text-[clamp(4rem,9vw,6.5rem)] leading-[0.9] whitespace-nowrap">
                   <NekoLogo />
                   <span className="neko-dot">.</span>
                 </h1>
                 
                 {/* Right column: invisible spacer matching Hello width */}
-                <div className="flex justify-start pl-2 md:pl-3">
-                  <span className="invisible text-sm md:text-base lg:text-lg tracking-[0.2em] uppercase" aria-hidden="true">
+                <div className="flex justify-start pl-3 md:pl-4" aria-hidden="true">
+                  <span className="invisible text-sm md:text-base lg:text-lg tracking-[0.25em] uppercase whitespace-nowrap">
                     Hello,
                   </span>
                 </div>
