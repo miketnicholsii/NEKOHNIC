@@ -11,38 +11,46 @@ import { AdminPreviewIndicator } from "@/components/admin/AdminPreviewPanel";
 import { AnimatedRoutes } from "@/components/AnimatedRoutes";
 import { FloatingCTA } from "@/components/FloatingCTA";
 import ScrollManager from "@/components/ScrollManager";
+import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes
       gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
-      retry: 1,
+      retry: 2, // Retry failed queries twice
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
       refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: 1,
     },
   },
 });
 
 const App = () => (
-  <HelmetProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AuthProvider>
-          <AdminPreviewProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <ScrollManager />
-              <UpgradeModalProvider>
-                <AnimatedRoutes />
-                <FloatingCTA />
-                <AdminPreviewIndicator />
-              </UpgradeModalProvider>
-            </BrowserRouter>
-          </AdminPreviewProvider>
-        </AuthProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </HelmetProvider>
+  <GlobalErrorBoundary>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <AuthProvider>
+            <AdminPreviewProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <ScrollManager />
+                <UpgradeModalProvider>
+                  <AnimatedRoutes />
+                  <FloatingCTA />
+                  <AdminPreviewIndicator />
+                </UpgradeModalProvider>
+              </BrowserRouter>
+            </AdminPreviewProvider>
+          </AuthProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
+  </GlobalErrorBoundary>
 );
 
 export default App;

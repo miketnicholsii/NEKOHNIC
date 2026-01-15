@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { InstagramSection } from "./InstagramSection";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, MessageCircle } from "lucide-react";
 
 const footerLinks = {
   platform: [
@@ -13,6 +13,9 @@ const footerLinks = {
     { href: "/about", label: "About" },
     { href: "/get-started", label: "Get Started" },
     { href: "/login", label: "Member Login" },
+  ],
+  support: [
+    { href: "mailto:support@helloneko.co", label: "Report a Problem", external: true },
   ],
   legal: [
     { href: "/legal/privacy", label: "Privacy" },
@@ -82,7 +85,20 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 </li>
               ))}
             </ul>
+            {/* Support & Legal */}
             <ul className="space-y-2.5 sm:space-y-3.5 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-primary-foreground/10" role="list">
+              {footerLinks.support.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    className="group inline-flex items-center gap-1.5 text-xs sm:text-sm text-primary-foreground/60 hover:text-primary transition-colors duration-300"
+                    aria-label={link.label}
+                  >
+                    <MessageCircle className="h-3 w-3" aria-hidden="true" />
+                    {link.label}
+                  </a>
+                </li>
+              ))}
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
                   <Link

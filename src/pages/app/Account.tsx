@@ -35,6 +35,7 @@ import {
   X,
   AlertTriangle,
 } from "lucide-react";
+import { ReportProblemButton } from "@/components/ReportProblemButton";
 import { DeleteAccountDialog } from "@/components/account/DeleteAccountDialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
@@ -72,7 +73,7 @@ function getAddOnIcon(id: string) {
 }
 
 export default function Account() {
-  const { user, profile, subscription, refreshSubscription, refreshProfile } = useAuth();
+  const { user, profile, refreshSubscription, refreshProfile } = useAuth();
   const { tier, subscriptionEnd, cancelAtPeriodEnd } = useSubscriptionTier();
   const [addons, setAddons] = useState<Record<string, AddonStatus>>({});
   const [isLoadingAddons, setIsLoadingAddons] = useState(true);
@@ -495,6 +496,18 @@ export default function Account() {
                   </p>
                 </div>
                 <div className="space-y-2">
+                  <Label>Password</Label>
+                  <div className="flex gap-2">
+                    <Input value="••••••••" disabled className="bg-muted flex-1" />
+                    <Button variant="outline" size="sm" asChild>
+                      <a href="/forgot-password">Reset</a>
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Reset your password via email
+                  </p>
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="full_name">Full Name</Label>
                   {isEditing ? (
                     <Input
@@ -565,7 +578,30 @@ export default function Account() {
             </CardContent>
           </Card>
 
-          {/* Danger Zone */}
+          {/* Support & Danger Zone */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="h-5 w-5 text-primary" />
+                Support
+              </CardTitle>
+              <CardDescription>
+                Get help or report issues
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between p-4 rounded-lg border bg-muted/30">
+                <div>
+                  <h4 className="font-medium">Need Help?</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Report a problem or get support
+                  </p>
+                </div>
+                <ReportProblemButton variant="outline" />
+              </div>
+            </CardContent>
+          </Card>
+
           <Card className="border-destructive/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-destructive">

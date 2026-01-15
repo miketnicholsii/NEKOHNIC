@@ -4,6 +4,7 @@ import type { Session, User } from "@supabase/supabase-js";
 import { AuthContext, AuthContextType } from "@/contexts/auth-context";
 import type { SubscriptionTier } from "@/lib/subscription-tiers";
 import { toast } from "@/hooks/use-toast";
+import logger from "@/lib/logger";
 
 // Cache subscription data in memory to prevent excessive API calls
 const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
@@ -52,16 +53,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkAdminRole = useCallback(async (userId: string) => {
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", userId)
         .eq("role", "admin")
         .maybeSingle();
 
+      if (error) {
+        logger.dataError("Failed to check admin role", { error: error.message });
+      }
       setIsAdmin(!!data);
     } catch (error) {
-      console.error("Error checking admin role:", error);
+      logger.authFailure("Error checking admin role", { 
+        error: error instanceof Error ? error.message : "Unknown error" 
+      });
       setIsAdmin(false);
     }
   }, []);
@@ -80,13 +86,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .maybeSingle();
 
       if (error) {
-        console.error("Error fetching profile:", error);
+        logger.dataError("Error fetching profile", { error: error.message });
         return;
       }
 
       setProfile(data);
     } catch (error) {
-      console.error("Error refreshing profile:", error);
+      logger.dataError("Error refreshing profile", { 
+        error: error instanceof Error ? error.message : "Unknown error" 
+      });
     }
   }, [session]);
 
@@ -129,10 +137,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       lastCheckTime.current = now;
 
       try {
-        const { data, error } = await supabase.functions.invoke("check-subscription");
+      const { data, error } = await supabase.functions.invoke("check-subscription");
 
         if (error) {
-          console.error("Error checking subscription:", error);
+          logger.dataError("Error checking subscription", { error: error.message });
           isCheckingSubscription.current = false;
           return;
         }
@@ -155,7 +163,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setSubscription(subscriptionData);
         }
       } catch (error) {
-        console.error("Error refreshing subscription:", error);
+        logger.dataError("Error refreshing subscription", { 
+          error: error instanceof Error ? error.message : "Unknown error" 
+        });
       } finally {
         isCheckingSubscription.current = false;
       }
