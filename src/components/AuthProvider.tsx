@@ -3,6 +3,7 @@ import { supabase, logAuthEventOnce } from "@/integrations/supabase";
 import type { Session, User } from "@supabase/supabase-js";
 import { AuthContext, AuthContextType } from "@/contexts/auth-context";
 import type { SubscriptionTier } from "@/lib/subscription-tiers";
+import { toast } from "@/hooks/use-toast";
 
 // Cache subscription data in memory to prevent excessive API calls
 const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
@@ -180,6 +181,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  // Track if we've shown the welcome toast for this session
+  const hasShownWelcomeToast = useRef(false);
+
   useEffect(() => {
     // Set up auth state listener FIRST
     const {
@@ -192,6 +196,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const nextUserId = newSession?.user?.id ?? null;
       const userChanged = nextUserId !== lastUserId.current;
       lastUserId.current = nextUserId;
+
+      // Show personalized welcome toast for OAuth sign-ins
+      if (event === "SIGNED_IN" && newSession?.user && !hasShownWelcomeToast.current) {
+        hasShownWelcomeToast.current = true;
+        const userMeta = newSession.user.user_metadata;
+        const provider = newSession.user.app_metadata?.provider;
+        
+        // Get the user's name from OAuth metadata
+        const displayName = userMeta?.full_name || userMeta?.name || userMeta?.email?.split("@")[0];
+        
+        if (provider && provider !== "email") {
+          // OAuth login - show personalized welcome
+          toast({
+            title: displayName ? `Welcome, ${displayName}!` : "Welcome!",
+            description: "You're now signed in. Let's get started.",
+          });
+        }
+      }
+
+      // Reset toast flag on sign out
+      if (event === "SIGNED_OUT") {
+        hasShownWelcomeToast.current = false;
+      }
 
       // Defer Supabase calls with setTimeout
       if (newSession?.user) {
