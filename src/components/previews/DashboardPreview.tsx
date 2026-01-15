@@ -70,9 +70,9 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
   const prefersReducedMotion = useReducedMotion();
   
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card via-card to-primary/5 shadow-xl">
+    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl">
       {showOverlay && (
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background via-background/95 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-tertiary via-tertiary/95 to-transparent z-10 pointer-events-none" />
       )}
       
       <div className="p-5 sm:p-6">
@@ -87,27 +87,27 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               initial={prefersReducedMotion ? {} : { scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center ring-2 ring-primary/10"
+              className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center"
             >
               <Sparkles className="h-5 w-5 text-primary" />
             </motion.div>
             <div>
-              <h3 className="font-display text-lg font-bold text-foreground">Good morning, Alex</h3>
-              <p className="text-xs text-muted-foreground">Here's your progress overview</p>
+              <h3 className="font-display text-lg font-bold text-tertiary-foreground">Good morning, Alex</h3>
+              <p className="text-xs text-tertiary-foreground/60">Here's your progress overview</p>
             </div>
           </div>
           <motion.div 
             initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-secondary/15 to-secondary/5 border border-secondary/30"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary text-primary-foreground"
           >
             <motion.div
               animate={prefersReducedMotion ? {} : { scale: [1, 1.2, 1] }}
               transition={{ repeat: Infinity, duration: 1 }}
             >
-              <Flame className="h-4 w-4 text-secondary" />
+              <Flame className="h-4 w-4" />
             </motion.div>
-            <span className="text-xs font-semibold text-secondary">7 day streak</span>
+            <span className="text-xs font-semibold">7 day streak</span>
           </motion.div>
         </motion.div>
 
@@ -123,18 +123,18 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               key={stat.label}
               variants={prefersReducedMotion ? {} : staggerItem}
               whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -2 }}
-              className="p-2.5 sm:p-3.5 rounded-xl bg-card border border-border shadow-sm relative overflow-hidden group"
+              className="p-2.5 sm:p-3.5 rounded-xl bg-tertiary-foreground/5 border border-tertiary-foreground/10 relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative">
-                <p className="text-[9px] sm:text-[10px] text-muted-foreground mb-1 flex items-center gap-1 sm:gap-1.5 truncate">
-                  <stat.icon className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-primary/70 flex-shrink-0" />
+                <p className="text-[9px] sm:text-[10px] text-tertiary-foreground/60 mb-1 flex items-center gap-1 sm:gap-1.5 truncate">
+                  <stat.icon className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-primary flex-shrink-0" />
                   <span className="truncate">{stat.label}</span>
                 </p>
                 <div className="flex items-baseline gap-0.5 sm:gap-1">
-                  <span className="text-lg sm:text-xl font-bold text-foreground">{stat.value}</span>
+                  <span className="text-lg sm:text-xl font-bold text-tertiary-foreground">{stat.value}</span>
                   {stat.suffix && (
-                    <span className="text-[9px] sm:text-xs text-muted-foreground">{stat.suffix}</span>
+                    <span className="text-[9px] sm:text-xs text-tertiary-foreground/60">{stat.suffix}</span>
                   )}
                 </div>
                 {stat.change && (
@@ -151,10 +151,10 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
             initial={prefersReducedMotion ? {} : { opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-card border border-border rounded-xl p-4 shadow-sm"
+            className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl p-4"
           >
             <div className="flex items-center justify-between mb-3.5">
-              <h4 className="text-xs font-semibold text-foreground flex items-center gap-2">
+              <h4 className="text-xs font-semibold text-tertiary-foreground flex items-center gap-2">
                 <LayoutGrid className="h-3.5 w-3.5 text-primary" />
                 Continue Building
               </h4>
@@ -170,26 +170,26 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   key={action.label}
                   variants={prefersReducedMotion ? {} : staggerItem}
                   whileHover={prefersReducedMotion ? {} : { scale: 1.02, x: 3 }}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-all cursor-pointer group"
+                  className="flex items-center gap-3 p-3 rounded-xl bg-tertiary-foreground/5 hover:bg-tertiary-foreground/10 transition-all cursor-pointer group"
                 >
-                  <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center ring-1 ring-primary/10">
+                  <div className="w-9 h-9 rounded-lg bg-primary/20 flex items-center justify-center">
                     <action.icon className="h-4 w-4 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-foreground group-hover:text-primary transition-colors">{action.label}</p>
+                    <p className="text-xs font-medium text-tertiary-foreground group-hover:text-primary transition-colors">{action.label}</p>
                     <div className="mt-1.5 flex items-center gap-2">
-                      <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div className="flex-1 h-1.5 bg-tertiary-foreground/10 rounded-full overflow-hidden">
                         <motion.div 
                           initial={prefersReducedMotion ? { width: `${action.progress}%` } : { width: 0 }}
                           animate={{ width: `${action.progress}%` }}
                           transition={{ duration: 0.8, delay: 0.3 }}
-                          className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full"
+                          className="h-full bg-primary rounded-full"
                         />
                       </div>
-                      <span className="text-[10px] text-muted-foreground">{action.progress}%</span>
+                      <span className="text-[10px] text-tertiary-foreground/60">{action.progress}%</span>
                     </div>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <ChevronRight className="h-4 w-4 text-tertiary-foreground/40 group-hover:text-primary transition-colors" />
                 </motion.div>
               ))}
             </motion.div>
@@ -200,10 +200,10 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
             initial={prefersReducedMotion ? {} : { opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-card border border-border rounded-xl p-4 shadow-sm"
+            className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl p-4"
           >
             <div className="flex items-center justify-between mb-3.5">
-              <h4 className="text-xs font-semibold text-foreground flex items-center gap-2">
+              <h4 className="text-xs font-semibold text-tertiary-foreground flex items-center gap-2">
                 <ListChecks className="h-3.5 w-3.5 text-primary" />
                 Recent Activity
               </h4>
@@ -218,7 +218,7 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                 <motion.div
                   key={index}
                   variants={prefersReducedMotion ? {} : staggerItem}
-                  className="flex items-start gap-3 py-2.5 border-b border-border last:border-0"
+                  className="flex items-start gap-3 py-2.5 border-b border-tertiary-foreground/10 last:border-0"
                 >
                   <motion.div 
                     initial={prefersReducedMotion ? {} : { scale: 0 }}
@@ -229,8 +229,8 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                     }`}
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-foreground">{item.text}</p>
-                    <p className="text-[10px] text-muted-foreground">{item.time}</p>
+                    <p className="text-xs text-tertiary-foreground">{item.text}</p>
+                    <p className="text-[10px] text-tertiary-foreground/60">{item.time}</p>
                   </div>
                 </motion.div>
               ))}

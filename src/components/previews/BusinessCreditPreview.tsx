@@ -67,9 +67,9 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
   const prefersReducedMotion = useReducedMotion();
   
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card via-card to-secondary/5 shadow-xl">
+    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl">
       {showOverlay && (
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background via-background/95 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-tertiary via-tertiary/95 to-transparent z-10 pointer-events-none" />
       )}
       
       <div className="p-5 sm:p-6">
@@ -84,22 +84,22 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               initial={prefersReducedMotion ? {} : { scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary/20 to-secondary/5 flex items-center justify-center ring-2 ring-secondary/10"
+              className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center"
             >
-              <CreditCard className="h-5 w-5 text-secondary" />
+              <CreditCard className="h-5 w-5 text-primary" />
             </motion.div>
             <div>
-              <h3 className="font-display text-base font-bold text-foreground">Business Credit Builder</h3>
-              <p className="text-xs text-muted-foreground">Tier 1 in progress</p>
+              <h3 className="font-display text-base font-bold text-tertiary-foreground">Business Credit Builder</h3>
+              <p className="text-xs text-tertiary-foreground/60">Tier 1 in progress</p>
             </div>
           </div>
           <motion.div 
             initial={prefersReducedMotion ? {} : { opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary text-primary-foreground"
           >
-            <TrendingUp className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-semibold text-primary">Building</span>
+            <TrendingUp className="h-3.5 w-3.5" />
+            <span className="text-xs font-semibold">Building</span>
           </motion.div>
         </motion.div>
 
@@ -117,16 +117,16 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               whileHover={prefersReducedMotion ? {} : { scale: 1.03, y: -2 }}
               className={`relative p-2 sm:p-3 rounded-lg sm:rounded-xl text-center transition-all ${
                 tier.status === "complete" 
-                  ? "bg-primary/10 border-2 border-primary/40" 
+                  ? "bg-primary/20 border-2 border-primary/40" 
                   : tier.status === "active"
-                    ? "bg-card border-2 border-primary shadow-lg shadow-primary/10"
-                    : "bg-muted/30 border border-border opacity-50"
+                    ? "bg-tertiary-foreground/5 border-2 border-primary"
+                    : "bg-tertiary-foreground/5 border border-tertiary-foreground/20 opacity-50"
               }`}
             >
               <div className={`text-sm sm:text-lg font-bold mb-0.5 ${
                 tier.status === "complete" || tier.status === "active" 
                   ? "text-primary" 
-                  : "text-muted-foreground"
+                  : "text-tertiary-foreground/40"
               }`}>
                 {tier.status === "locked" ? (
                   <Lock className="h-3 w-3 sm:h-4 sm:w-4 mx-auto" />
@@ -134,14 +134,14 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   `T${tier.tier}`
                 )}
               </div>
-              <p className="text-[8px] sm:text-[10px] text-muted-foreground truncate leading-tight">{tier.name}</p>
+              <p className="text-[8px] sm:text-[10px] text-tertiary-foreground/60 truncate leading-tight">{tier.name}</p>
               {tier.status === "active" && (
-                <div className="mt-1.5 sm:mt-2 h-1 sm:h-1.5 bg-muted rounded-full overflow-hidden">
+                <div className="mt-1.5 sm:mt-2 h-1 sm:h-1.5 bg-tertiary-foreground/10 rounded-full overflow-hidden">
                   <motion.div 
                     initial={prefersReducedMotion ? { width: `${tier.progress}%` } : { width: 0 }}
                     animate={{ width: `${tier.progress}%` }}
                     transition={{ duration: 1, delay: 0.4 }}
-                    className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full"
+                    className="h-full bg-primary rounded-full"
                   />
                 </div>
               )}
@@ -163,33 +163,33 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
           initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-card border border-border rounded-xl overflow-hidden shadow-sm"
+          className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl overflow-hidden"
         >
-          <div className="px-4 py-3 border-b border-border bg-gradient-to-r from-muted/50 to-transparent flex items-center justify-between">
-            <h4 className="text-xs font-semibold text-foreground">Active Tradelines</h4>
-            <span className="text-[10px] text-muted-foreground px-2 py-0.5 bg-muted rounded-full">{tradelines.length} accounts</span>
+          <div className="px-4 py-3 border-b border-tertiary-foreground/10 flex items-center justify-between">
+            <h4 className="text-xs font-semibold text-tertiary-foreground">Active Tradelines</h4>
+            <span className="text-[10px] text-tertiary-foreground/60 px-2 py-0.5 bg-tertiary-foreground/10 rounded-full">{tradelines.length} accounts</span>
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-tertiary-foreground/10">
             {tradelines.map((line, index) => (
               <motion.div
                 key={line.vendor}
                 initial={prefersReducedMotion ? {} : { opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 + index * 0.08 }}
-                whileHover={prefersReducedMotion ? {} : { backgroundColor: "hsl(var(--muted) / 0.3)" }}
+                whileHover={prefersReducedMotion ? {} : { backgroundColor: "hsl(var(--tertiary-foreground) / 0.05)" }}
                 className="flex items-center justify-between px-4 py-3 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-xs font-bold text-primary ring-1 ring-primary/10">
+                  <div className="w-9 h-9 rounded-lg bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
                     {line.vendor[0]}
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-foreground">{line.vendor}</p>
-                    <p className="text-[10px] text-muted-foreground">{line.status}</p>
+                    <p className="text-xs font-medium text-tertiary-foreground">{line.vendor}</p>
+                    <p className="text-[10px] text-tertiary-foreground/60">{line.status}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs font-semibold text-foreground">{line.limit}</p>
+                  <p className="text-xs font-semibold text-tertiary-foreground">{line.limit}</p>
                   {line.reporting && (
                     <p className="text-[10px] text-primary flex items-center gap-1 justify-end">
                       <Star className="h-2.5 w-2.5 fill-current" /> Reporting
