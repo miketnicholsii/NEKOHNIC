@@ -33,7 +33,9 @@ import {
   Save,
   Pencil,
   X,
+  AlertTriangle,
 } from "lucide-react";
+import { DeleteAccountDialog } from "@/components/account/DeleteAccountDialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
 import { supabase } from "@/integrations/supabase";
@@ -560,6 +562,30 @@ export default function Account() {
                   </Button>
                 </div>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Danger Zone */}
+          <Card className="border-destructive/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-destructive">
+                <AlertTriangle className="h-5 w-5" />
+                Danger Zone
+              </CardTitle>
+              <CardDescription>
+                Irreversible actions that permanently affect your account
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between p-4 rounded-lg border border-destructive/30 bg-destructive/5">
+                <div>
+                  <h4 className="font-medium">Delete Account</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Permanently delete your account and all associated data
+                  </p>
+                </div>
+                <DeleteAccountDialog />
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
