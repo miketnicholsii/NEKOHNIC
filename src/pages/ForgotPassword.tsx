@@ -32,7 +32,7 @@ export default function ForgotPassword() {
     setIsLoading(true);
     
     try {
-      const redirectUrl = `${window.location.origin}/login`;
+      const redirectUrl = `${window.location.origin}/reset-password`;
       
       const { error } = await supabase.auth.resetPasswordForEmail(trimmedEmail, {
         redirectTo: redirectUrl,

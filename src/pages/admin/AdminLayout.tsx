@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
+import { Outlet, useNavigate, useLocation, Link, Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import {
   LayoutDashboard,
@@ -13,6 +12,7 @@ import {
   ChevronRight,
   Shield,
   Home,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -31,21 +31,9 @@ export default function AdminLayout() {
   const { user, isLoading, isAdmin, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      navigate("/login");
-    }
-  }, [isLoading, user, navigate]);
-
-  useEffect(() => {
-    if (!isLoading && user && !isAdmin) {
-      navigate("/app");
-    }
-  }, [isLoading, user, isAdmin, navigate]);
-
   const handleSignOut = async () => {
     await signOut();
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   const isActive = (href: string, exact = false) => {
@@ -55,16 +43,25 @@ export default function AdminLayout() {
     return location.pathname.startsWith(href);
   };
 
+  // Show loading state while checking auth
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="text-muted-foreground text-sm">Verifying access...</p>
       </div>
     );
   }
 
+  // Redirect to login with preserved location for post-login redirect
   if (!user) {
-    return null;
+    return (
+      <Navigate 
+        to="/login" 
+        replace 
+        state={{ from: location.pathname + location.search }} 
+      />
+    );
   }
 
   if (!isAdmin) {

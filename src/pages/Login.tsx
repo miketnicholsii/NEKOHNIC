@@ -1,5 +1,5 @@
 import { useState, useEffect, useId } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,6 +51,7 @@ const getErrorMessage = (error: string): { title: string; description: string } 
 export default function Login() {
   const { user, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const prefersReducedMotion = useReducedMotion();
   
@@ -66,12 +67,15 @@ export default function Login() {
   const passwordId = useId();
   const rememberId = useId();
 
+  // Get the intended destination from location state
+  const from = (location.state as { from?: string })?.from || "/app";
+
   // Redirect if already logged in
   useEffect(() => {
     if (!authLoading && user) {
-      navigate("/app");
+      navigate(from, { replace: true });
     }
-  }, [authLoading, user, navigate]);
+  }, [authLoading, user, navigate, from]);
 
   const validateForm = (): boolean => {
     let isValid = true;
@@ -125,7 +129,7 @@ export default function Login() {
         description: "Good to see you again.",
       });
       
-      navigate("/app");
+      navigate(from, { replace: true });
     } catch {
       toast({
         title: "Something unexpected happened",
