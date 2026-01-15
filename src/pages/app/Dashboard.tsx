@@ -100,9 +100,9 @@ export default function Dashboard() {
               </p>
             </div>
             
-            <Link to="/app/resources?category=strategy" className="flex-shrink-0 w-full sm:w-auto">
+            <Link to="/app/strategy" className="flex-shrink-0 w-full sm:w-auto">
               <Button variant="outline" className="w-full sm:w-auto group">
-                Explore Strategy
+                Start the Guide
                 <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Button>
             </Link>
