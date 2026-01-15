@@ -4,12 +4,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
@@ -30,6 +24,9 @@ import {
   ChevronRight,
   ArrowRight,
   Gift,
+  Sparkles,
+  Star,
+  Compass,
 } from "lucide-react";
 
 interface Resource {
@@ -66,6 +63,14 @@ const TIER_BADGES: Record<string, { label: string; className: string }> = {
   scale: { label: "Elite", className: "bg-accent text-accent-foreground" },
 };
 
+// Featured "Start Here" resources by ID (ordered)
+const START_HERE_TITLES = [
+  "What Is Business Credit?",
+  "Business Legitimacy Checklist",
+  "Understanding DUNS & Dun & Bradstreet",
+  "Net-30 Vendor Starter Guide",
+];
+
 export default function Resources() {
   const { subscription } = useAuth();
   const { tier: effectiveTier, isPreviewMode } = useSubscriptionTier();
@@ -73,7 +78,6 @@ export default function Resources() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
   const userTier = normalizeTier(subscription?.tier);
@@ -104,6 +108,13 @@ export default function Resources() {
   const hasResourceAccess = (resourceTier: string): boolean => {
     return tierMeetsRequirement(effectiveTier, resourceTier);
   };
+
+  // Get "Start Here" resources
+  const startHereResources = useMemo(() => {
+    return START_HERE_TITLES
+      .map(title => resources.find(r => r.title === title))
+      .filter((r): r is Resource => r !== undefined);
+  }, [resources]);
 
   // Filter resources based on search and category
   const filteredResources = useMemo(() => {
@@ -140,14 +151,40 @@ export default function Resources() {
     return CATEGORIES.find((c) => c.id === categoryId) || CATEGORIES[0];
   };
 
-  const handleResourceClick = (resource: Resource) => {
-    if (hasResourceAccess(resource.tier_required)) {
-      setSelectedResource(resource);
-    }
-  };
-
   if (isLoading) {
     return <PageLoader message="Loading resources..." />;
+  }
+
+  // Empty state for when no resources exist
+  if (resources.length === 0) {
+    return (
+      <div className="max-w-3xl mx-auto text-center py-16">
+        <div className="p-4 rounded-full bg-primary/10 inline-flex mb-6">
+          <BookOpen className="h-12 w-12 text-primary" />
+        </div>
+        <h1 className="font-display text-2xl font-bold text-foreground mb-4">
+          Knowledge Library Coming Soon
+        </h1>
+        <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+          We're curating valuable resources to help you build business credit with confidence. 
+          Check back soon — great content is on the way.
+        </p>
+        <div className="flex items-center justify-center gap-3">
+          <Link to="/app">
+            <Button variant="outline">
+              <ArrowRight className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </Link>
+          <Link to="/app/strategy">
+            <Button>
+              <Gift className="h-4 w-4 mr-2" />
+              View Strategy Guide
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -155,12 +192,95 @@ export default function Resources() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-2">
-          Resources
+          Knowledge Library
         </h1>
         <p className="text-muted-foreground">
-          Guides, templates, and checklists — created to help you move forward with confidence.
+          Everything you need to build business credit — curated guides, checklists, and strategies.
         </p>
       </div>
+
+      {/* Start Here Section - Only show when not searching */}
+      {searchQuery === "" && selectedCategory === "all" && startHereResources.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-10"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
+              <Compass className="h-4 w-4" />
+            </div>
+            <h2 className="font-semibold text-foreground">Start Here</h2>
+            <Badge variant="outline" className="text-xs">Recommended</Badge>
+          </div>
+          
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {startHereResources.map((resource, index) => (
+              <Link
+                key={resource.id}
+                to={`/app/resources/${resource.id}`}
+                className="group relative bg-gradient-to-br from-primary/5 via-background to-accent/5 border border-primary/20 rounded-xl p-4 hover:border-primary/40 hover:shadow-lg transition-all"
+              >
+                <div className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
+                  {index + 1}
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-primary/10 text-primary flex-shrink-0 mt-1">
+                    <Star className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-foreground text-sm mb-1 line-clamp-2 group-hover:text-primary transition-colors">
+                      {resource.title}
+                    </h3>
+                    {resource.read_time_minutes && (
+                      <span className="text-xs text-muted-foreground">
+                        {resource.read_time_minutes} min read
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Featured Strategy Banner - Only show when not filtering */}
+      {searchQuery === "" && selectedCategory === "all" && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-10"
+        >
+          <Link
+            to="/app/strategy"
+            className="block relative overflow-hidden bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border border-primary/20 rounded-xl p-6 hover:border-primary/40 hover:shadow-lg transition-all group"
+          >
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="p-3 rounded-xl bg-primary/10 text-primary flex-shrink-0">
+                <Gift className="h-8 w-8" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="font-display text-lg font-semibold text-foreground">
+                    The Art of Generous First Impressions
+                  </h3>
+                  <Badge className="bg-primary/20 text-primary">Free</Badge>
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  A complete playbook for building trust through value. Learn the NÈKO approach to creating irresistible offers.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 text-primary group-hover:translate-x-1 transition-transform">
+                <span className="text-sm font-medium hidden sm:inline">Start Learning</span>
+                <ArrowRight className="h-5 w-5" />
+              </div>
+            </div>
+            <Sparkles className="absolute -top-4 -right-4 h-24 w-24 text-primary/5" />
+          </Link>
+        </motion.div>
+      )}
 
       {/* Search and Filter Bar */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
@@ -298,6 +418,16 @@ export default function Resources() {
                   ? "Try adjusting your search terms"
                   : "Check back soon for new content"}
               </p>
+              {searchQuery && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSearchQuery("")}
+                  className="mt-4"
+                >
+                  Clear Search
+                </Button>
+              )}
             </div>
           ) : (
             <div className="space-y-8">
@@ -313,6 +443,9 @@ export default function Resources() {
                         <h2 className="font-semibold text-foreground">
                           {categoryInfo.label}
                         </h2>
+                        <span className="text-xs text-muted-foreground">
+                          ({categoryResources.length})
+                        </span>
                       </div>
                     )}
 
@@ -323,7 +456,6 @@ export default function Resources() {
                           resource={resource}
                           hasAccess={hasResourceAccess(resource.tier_required)}
                           isPreviewMode={isPreviewMode}
-                          onClick={() => handleResourceClick(resource)}
                         />
                       ))}
                     </div>
@@ -334,124 +466,23 @@ export default function Resources() {
           )}
         </div>
       </div>
-
-      {/* Resource Detail Modal */}
-      <Dialog
-        open={!!selectedResource}
-        onOpenChange={(open) => !open && setSelectedResource(null)}
-      >
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-          {selectedResource && (
-            <>
-              <DialogHeader>
-                <div className="flex items-center gap-2 mb-2">
-                  {selectedResource.tier_required !== "free" && (
-                    <Badge className={TIER_BADGES[selectedResource.tier_required]?.className}>
-                      {TIER_BADGES[selectedResource.tier_required]?.label}
-                    </Badge>
-                  )}
-                  {selectedResource.read_time_minutes && (
-                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Clock className="h-3 w-3" />
-                      {selectedResource.read_time_minutes} min read
-                    </span>
-                  )}
-                  {isPreviewMode && (
-                    <Badge variant="outline" className="text-xs bg-warning/10 text-warning border-warning/30">
-                      Preview Mode
-                    </Badge>
-                  )}
-                </div>
-                <DialogTitle className="text-xl">
-                  {selectedResource.title}
-                </DialogTitle>
-                <p className="text-muted-foreground">
-                  {selectedResource.description}
-                </p>
-              </DialogHeader>
-
-              <div className="mt-4 prose prose-sm max-w-none dark:prose-invert">
-                <div className="whitespace-pre-wrap text-foreground leading-relaxed">
-                  {selectedResource.content}
-                </div>
-              </div>
-
-              {/* Related Resources */}
-              <div className="mt-8 pt-6 border-t border-border">
-                <h4 className="font-semibold text-foreground mb-3">
-                  More in {getCategoryInfo(selectedResource.category).label}
-                </h4>
-                <div className="space-y-2">
-                  {resources
-                    .filter(
-                      (r) =>
-                        r.category === selectedResource.category &&
-                        r.id !== selectedResource.id
-                    )
-                    .slice(0, 3)
-                    .map((resource) => {
-                      const canAccess = hasResourceAccess(resource.tier_required);
-                      const tierBadge = TIER_BADGES[resource.tier_required];
-                      return (
-                        <button
-                          key={resource.id}
-                          onClick={() => canAccess && setSelectedResource(resource)}
-                          disabled={!canAccess}
-                          className={`w-full flex items-center justify-between p-3 rounded-lg border text-left transition-colors ${
-                            canAccess
-                              ? "border-border hover:border-primary/50"
-                              : "border-border/50 opacity-60 cursor-not-allowed"
-                          }`}
-                        >
-                          <div className="flex-1 min-w-0">
-                            <p className="font-medium text-sm text-foreground truncate">
-                              {resource.title}
-                            </p>
-                          </div>
-                          {canAccess ? (
-                            <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                          ) : (
-                            <div className="flex items-center gap-1 text-xs text-muted-foreground flex-shrink-0">
-                              <Lock className="h-3 w-3" />
-                              <span>{tierBadge?.label}</span>
-                            </div>
-                          )}
-                        </button>
-                      );
-                    })}
-                </div>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
 
-// Resource Card Component with FeatureGate-style locked state
+// Resource Card Component - now links to detail page
 interface ResourceCardProps {
   resource: Resource;
   hasAccess: boolean;
   isPreviewMode: boolean;
-  onClick: () => void;
 }
 
-function ResourceCard({ resource, hasAccess, isPreviewMode, onClick }: ResourceCardProps) {
+function ResourceCard({ resource, hasAccess, isPreviewMode }: ResourceCardProps) {
   const tierBadge = TIER_BADGES[resource.tier_required];
   const isLocked = !hasAccess;
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`relative bg-card border rounded-xl p-4 transition-all ${
-        hasAccess
-          ? "border-border cursor-pointer hover:border-primary/50 hover:shadow-md"
-          : "border-dashed border-muted-foreground/30 bg-muted/30"
-      }`}
-      onClick={hasAccess ? onClick : undefined}
-    >
+  const cardContent = (
+    <>
       {/* Preview mode badge */}
       {hasAccess && isPreviewMode && resource.tier_required !== "free" && (
         <div className="absolute -top-2 -right-2 z-10">
@@ -503,15 +534,42 @@ function ResourceCard({ resource, hasAccess, isPreviewMode, onClick }: ResourceC
               <Lock className="h-3.5 w-3.5" />
               <span>Upgrade to {tierBadge?.label} to access</span>
             </div>
-            <Button variant="ghost" size="sm" className="h-7 text-xs gap-1" asChild>
-              <Link to="/pricing">
-                View Plans
-                <ArrowRight className="h-3 w-3" />
-              </Link>
-            </Button>
           </div>
         </div>
       )}
+    </>
+  );
+
+  if (hasAccess) {
+    return (
+      <Link to={`/app/resources/${resource.id}`}>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative bg-card border border-border rounded-xl p-4 transition-all cursor-pointer hover:border-primary/50 hover:shadow-md"
+        >
+          {cardContent}
+        </motion.div>
+      </Link>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="relative bg-card border-dashed border-muted-foreground/30 bg-muted/30 rounded-xl p-4"
+    >
+      {cardContent}
+      <Link 
+        to="/pricing" 
+        className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 bg-background/80 rounded-xl transition-opacity"
+      >
+        <Button size="sm">
+          View Plans
+          <ArrowRight className="h-4 w-4 ml-1" />
+        </Button>
+      </Link>
     </motion.div>
   );
 }
