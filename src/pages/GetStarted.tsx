@@ -109,7 +109,9 @@ export default function GetStarted() {
               className="flex justify-center"
             >
               <a
-                href="mailto:neko@helloneko.co?subject=Hello%20from%20a%20founder"
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=neko@helloneko.co"
+                target="_blank"
+                rel="noreferrer"
                 className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-base sm:text-lg transition-all duration-300 hover:bg-primary/90 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background shadow-lg shadow-primary/25"
               >
                 <Mail className="h-5 w-5 transition-transform group-hover:-rotate-6" />
