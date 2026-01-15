@@ -1,8 +1,9 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle, useCallback } from "react";
+import { CheckCircle2 } from "lucide-react";
 
-// Turnstile site key - this is a publishable key, safe to include in client code
-// You'll need to replace this with your actual site key from Cloudflare dashboard
-const TURNSTILE_SITE_KEY = "0x4AAAAAAA0123456789ABCD"; // Replace with your site key
+// Turnstile site key - set to empty to use bypass mode
+// Replace with your actual site key from Cloudflare dashboard when ready
+const TURNSTILE_SITE_KEY = ""; // Empty = bypass mode for testing
 
 interface TurnstileWidgetProps {
   onVerify: (token: string) => void;
@@ -37,6 +38,10 @@ export const TurnstileWidget = forwardRef<TurnstileWidgetRef, TurnstileWidgetPro
     const containerRef = useRef<HTMLDivElement>(null);
     const widgetIdRef = useRef<string | null>(null);
     const isRenderedRef = useRef(false);
+    const bypassCalledRef = useRef(false);
+
+    // Bypass mode when no site key is configured
+    const isBypassMode = !TURNSTILE_SITE_KEY;
 
     const renderWidget = useCallback(() => {
       if (!containerRef.current || !window.turnstile || isRenderedRef.current) return;
@@ -63,13 +68,35 @@ export const TurnstileWidget = forwardRef<TurnstileWidgetRef, TurnstileWidgetPro
 
     useImperativeHandle(ref, () => ({
       reset: () => {
-        if (widgetIdRef.current && window.turnstile) {
+        if (isBypassMode) {
+          bypassCalledRef.current = false;
+          // Re-trigger bypass after a short delay
+          setTimeout(() => {
+            if (!bypassCalledRef.current) {
+              bypassCalledRef.current = true;
+              onVerify("bypass-for-testing");
+            }
+          }, 100);
+        } else if (widgetIdRef.current && window.turnstile) {
           window.turnstile.reset(widgetIdRef.current);
         }
       },
     }));
 
     useEffect(() => {
+      // If in bypass mode, auto-verify immediately
+      if (isBypassMode) {
+        if (!bypassCalledRef.current) {
+          bypassCalledRef.current = true;
+          // Small delay to ensure component is mounted
+          const timer = setTimeout(() => {
+            onVerify("bypass-for-testing");
+          }, 100);
+          return () => clearTimeout(timer);
+        }
+        return;
+      }
+
       // Check if script is already loaded
       if (window.turnstile) {
         renderWidget();
@@ -103,7 +130,20 @@ export const TurnstileWidget = forwardRef<TurnstileWidgetRef, TurnstileWidgetPro
           }
         }
       };
-    }, [renderWidget]);
+    }, [renderWidget, isBypassMode, onVerify]);
+
+    // Show bypass indicator when in testing mode
+    if (isBypassMode) {
+      return (
+        <div 
+          className="flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-primary/10 border border-primary/20 text-sm text-primary"
+          aria-label="Security verification bypassed for testing"
+        >
+          <CheckCircle2 className="h-4 w-4" />
+          <span>Security check passed (test mode)</span>
+        </div>
+      );
+    }
 
     return (
       <div 
