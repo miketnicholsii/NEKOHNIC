@@ -1,31 +1,15 @@
-import { useState, useEffect, useCallback, memo, useMemo, useRef } from "react";
+import { useState, useEffect, useCallback, memo, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-
-// Anchor-based navigation for homepage flow - ORDER MATCHES SECTION ORDER ON PAGE
-// Simplified nav items - only key sections to reduce crowding
-const navLinks = [
-  { href: "#hero", label: "Home", isAnchor: true },
-  { href: "#services", label: "Solutions", isAnchor: true },
-  { href: "#paths", label: "Paths", isAnchor: true },
-  { href: "#pricing", label: "Pricing", isAnchor: true },
-  { href: "#demos", label: "Demos", isAnchor: true },
-  { href: "#faq", label: "FAQ", isAnchor: true },
-  { href: "/about", label: "About", isAnchor: false },
-] as const;
-
-type NavHref = typeof navLinks[number]["href"];
-
-// Smooth scroll to anchor
-function scrollToAnchor(id: string, behavior: ScrollBehavior = "smooth") {
-  const element = document.getElementById(id);
-  if (element) {
-    element.scrollIntoView({ behavior, block: "start" });
-  }
-}
+import { 
+  NAV_LINKS, 
+  useSectionScrollspy, 
+  useScrollPosition, 
+  scrollToSection 
+} from "@/hooks/use-section-scrollspy";
 
 // Simplified nav pill with anchor support
 const NavPill = memo(function NavPill({ 
@@ -63,7 +47,11 @@ const NavPill = memo(function NavPill({
           {label}
         </span>
         {isActive && (
-          <div className={`absolute inset-0 rounded-full transition-colors duration-200 ${showDarkText ? "bg-primary" : "bg-white"}`} />
+          <motion.div 
+            layoutId="nav-active-pill"
+            className={`absolute inset-0 rounded-full transition-colors duration-200 ${showDarkText ? "bg-primary" : "bg-white"}`}
+            transition={{ type: "spring", stiffness: 500, damping: 35 }}
+          />
         )}
         {!isActive && <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${showDarkText ? "bg-muted/50" : "bg-white/10"}`} />}
       </a>
@@ -76,7 +64,11 @@ const NavPill = memo(function NavPill({
         {label}
       </span>
       {isActive && (
-        <div className={`absolute inset-0 rounded-full transition-colors duration-200 ${showDarkText ? "bg-primary" : "bg-white"}`} />
+        <motion.div 
+          layoutId="nav-active-pill"
+          className={`absolute inset-0 rounded-full transition-colors duration-200 ${showDarkText ? "bg-primary" : "bg-white"}`}
+          transition={{ type: "spring", stiffness: 500, damping: 35 }}
+        />
       )}
       {!isActive && <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${showDarkText ? "bg-muted/50" : "bg-white/10"}`} />}
     </Link>
@@ -86,99 +78,21 @@ const NavPill = memo(function NavPill({
 export const EccentricNavbar = memo(function EccentricNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  // All section IDs that exist on the homepage - observe all for accurate scrollspy
-  const allSectionIds = useMemo(
-    () => ["hero", "starting-points", "how-we-help", "services", "paths", "pricing", "experience", "demos", "faq", "cta"],
-    []
-  );
-  // Nav-visible sections (for highlighting)
-  const anchorSectionIds = useMemo(
-    () => navLinks.filter((link) => link.isAnchor).map((link) => link.href.replace("#", "")),
-    []
-  );
+  
+  // Use unified scrollspy hook
+  const isHome = location.pathname === "/";
+  const activeSection = useSectionScrollspy({ enabled: isHome });
+  const isScrolled = useScrollPosition(20);
 
-  useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 20);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (location.pathname !== "/") {
-      setActiveSection(null);
-      return;
-    }
-
-    // Observe ALL sections on the page for accurate detection
-    const elements = allSectionIds
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => Boolean(el));
-
-    if (!elements.length) return;
-
-    const entries = new Map<string, IntersectionObserverEntry>();
-    const observer = new IntersectionObserver(
-      (observerEntries) => {
-        observerEntries.forEach((entry) => {
-          entries.set(entry.target.id, entry);
-        });
-
-        const visible = Array.from(entries.values()).filter((entry) => entry.isIntersecting);
-        if (!visible.length) return;
-
-        visible.sort(
-          (a, b) =>
-            b.intersectionRatio - a.intersectionRatio ||
-            a.boundingClientRect.top - b.boundingClientRect.top
-        );
-
-        const detectedSection = visible[0]?.target.id ?? null;
-        
-        // Map detected section to the closest nav item
-        // If detected section is not in nav, find the nearest nav section
-        if (detectedSection && anchorSectionIds.includes(detectedSection)) {
-          setActiveSection(detectedSection);
-        } else if (detectedSection) {
-          // Map non-nav sections to their parent nav category
-          const sectionMapping: Record<string, string> = {
-            "starting-points": "services",
-            "how-we-help": "services", 
-            "experience": "demos",
-            "cta": "faq",
-          };
-          setActiveSection(sectionMapping[detectedSection] || detectedSection);
-        }
-      },
-      {
-        rootMargin: "-25% 0px -50% 0px",
-        threshold: [0.1, 0.25, 0.5, 0.75],
-      }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, [allSectionIds, anchorSectionIds, location.pathname]);
-
+  // Close menu on route change
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
+  // Handle escape key
   useEffect(() => {
     if (!isOpen) return;
 
@@ -193,6 +107,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen]);
 
+  // Lock body scroll when menu is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -214,14 +129,13 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
     } else if (location.hash !== targetHash) {
       navigate({ hash: targetHash });
     } else {
-      scrollToAnchor(id, "smooth");
+      scrollToSection(id, "smooth");
     }
     closeMenu();
   }, [closeMenu, location.hash, location.pathname, navigate]);
 
   const isHeroPage = location.pathname === "/" || location.pathname === "/about";
   const showDarkText = !isHeroPage || isScrolled;
-  const isHome = location.pathname === "/";
 
   return (
     <>
@@ -246,11 +160,12 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
 
             {/* Centered navigation */}
             <div className="hidden lg:flex items-center justify-center flex-1 min-w-0 px-2">
-              <div
+              <motion.div
+                layout
                 className="flex items-center flex-nowrap gap-0.5 lg:gap-1 xl:gap-1.5 px-1.5 py-1 rounded-full max-w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                 style={{ background: showDarkText ? "hsl(var(--muted) / 0.5)" : "hsl(0 0% 100% / 0.1)", backdropFilter: "blur(8px)" }}
               >
-                  {navLinks.map((link) => (
+                {NAV_LINKS.map((link) => (
                   <NavPill 
                     key={link.href} 
                     href={link.href} 
@@ -261,7 +176,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                     onAnchorClick={handleAnchorClick}
                   />
                 ))}
-              </div>
+              </motion.div>
             </div>
 
             {/* Right side - CTAs (simplified - no Get Started button, only login) */}
@@ -318,7 +233,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
             >
               <div className="flex flex-col h-full pt-16 pb-6 px-5">
                 <nav className="flex-1 space-y-1" aria-label="Primary">
-                  {navLinks.map((link) => {
+                  {NAV_LINKS.map((link) => {
                     const anchorActive = activeSection === link.href.replace("#", "");
                     const routeActive = !link.isAnchor && location.pathname === link.href;
                     const isActive = link.isAnchor ? anchorActive : routeActive;

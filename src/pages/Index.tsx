@@ -141,17 +141,26 @@ const faqItems = [
 
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-// Premium NEKO logo component
+// Premium NEKO logo component with enhanced styling
 const NekoLogo = memo(function NekoLogo() {
   return (
     <motion.span
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.2, ease: easeOutExpo }}
-      className="inline-block cursor-default select-none"
+      className="inline-block cursor-default select-none relative"
       title="NÈKO - pronounced 'neh-ko'"
     >
-      NÈKO
+      <span className="relative">
+        N
+        <motion.span 
+          className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-primary/0 via-primary/60 to-primary/0"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ delay: 0.8, duration: 0.6, ease: easeOutExpo }}
+        />
+      </span>
+      ÈKO
     </motion.span>
   );
 });
@@ -412,17 +421,19 @@ export default function Index() {
 
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="max-w-4xl mx-auto">
+            {/* Hello accent - brand emphasis */}
             <motion.p 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1, ease: easeOutExpo }}
-              className="text-xs sm:text-sm font-medium tracking-[0.25em] sm:tracking-[0.3em] uppercase text-primary-foreground/40 mb-4 sm:mb-6"
+              className="text-xs sm:text-sm font-medium tracking-[0.25em] sm:tracking-[0.3em] uppercase mb-4 sm:mb-6"
             >
-              Hello
+              <span className="text-primary-foreground/40">Hey, it's </span>
+              <span className="text-primary font-semibold tracking-[0.2em]">Hello</span>
             </motion.p>
             
             <motion.h1 
-              className="font-logo font-medium tracking-tight text-primary-foreground mb-4 sm:mb-6 text-[clamp(3rem,11vw,8rem)] leading-[0.9] neko-title"
+              className="font-logo font-bold tracking-tighter text-primary-foreground mb-4 sm:mb-6 text-[clamp(3.5rem,12vw,9rem)] leading-[0.85] neko-title"
             >
               <NekoLogo />
               <span className="neko-dot">.</span>

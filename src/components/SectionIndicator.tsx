@@ -1,25 +1,7 @@
 import { memo, useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { motion, AnimatePresence, useMotionValueEvent, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { cn } from "@/lib/utils";
-
-interface Section {
-  id: string;
-  label: string;
-}
-
-// Section order matches actual page layout and simplified nav
-const sections: Section[] = [
-  { id: "hero", label: "Home" },
-  { id: "starting-points", label: "Start" },
-  { id: "how-we-help", label: "About" },
-  { id: "services", label: "Solutions" },
-  { id: "paths", label: "Paths" },
-  { id: "pricing", label: "Pricing" },
-  { id: "experience", label: "Experience" },
-  { id: "demos", label: "Demos" },
-  { id: "faq", label: "FAQ" },
-  { id: "cta", label: "Start" },
-];
+import { HOMEPAGE_SECTIONS } from "@/hooks/use-section-scrollspy";
 
 /**
  * Desktop: Vertical dot indicator on the right side
@@ -28,7 +10,7 @@ export const SectionIndicator = memo(function SectionIndicator() {
   const [activeSection, setActiveSection] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const prefersReducedMotion = useReducedMotion();
-  const sectionIds = useMemo(() => sections.map((section) => section.id), []);
+  const sectionIds = useMemo(() => HOMEPAGE_SECTIONS.map((section) => section.id), []);
   const entriesRef = useRef<Map<string, IntersectionObserverEntry>>(new Map());
 
   useEffect(() => {
@@ -60,6 +42,8 @@ export const SectionIndicator = memo(function SectionIndicator() {
 
     if (!elements.length) return;
 
+    entriesRef.current.clear();
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -87,8 +71,8 @@ export const SectionIndicator = memo(function SectionIndicator() {
         }
       },
       {
-        rootMargin: "-35% 0px -50% 0px",
-        threshold: [0.2, 0.4, 0.6, 0.8],
+        rootMargin: "-20% 0px -55% 0px",
+        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
       }
     );
 
@@ -117,7 +101,7 @@ export const SectionIndicator = memo(function SectionIndicator() {
       className="fixed right-4 sm:right-6 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-end gap-2"
       aria-label="Page sections"
     >
-      {sections.map((section, index) => {
+      {HOMEPAGE_SECTIONS.map((section, index) => {
         const isActive = index === activeSection;
         const isPast = index < activeSection;
 
@@ -179,10 +163,10 @@ export const SectionIndicator = memo(function SectionIndicator() {
         <motion.div
           className="absolute top-0 left-0 w-full bg-primary origin-top"
           style={{ 
-            height: `${((activeSection + 1) / sections.length) * 100}%`,
+            height: `${((activeSection + 1) / HOMEPAGE_SECTIONS.length) * 100}%`,
           }}
           initial={false}
-          animate={{ height: `${((activeSection + 1) / sections.length) * 100}%` }}
+          animate={{ height: `${((activeSection + 1) / HOMEPAGE_SECTIONS.length) * 100}%` }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
         />
       </div>
@@ -199,7 +183,7 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
   const [sectionProgress, setSectionProgress] = useState(0);
   const { scrollY, scrollYProgress } = useScroll();
   const prefersReducedMotion = useReducedMotion();
-  const sectionIds = useMemo(() => sections.map((section) => section.id), []);
+  const sectionIds = useMemo(() => HOMEPAGE_SECTIONS.map((section) => section.id), []);
   const positionsRef = useRef<{ top: number; height: number }[]>([]);
   const entriesRef = useRef<Map<string, IntersectionObserverEntry>>(new Map());
   
@@ -333,12 +317,12 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
   }, []);
 
   const scrollToSection = useCallback((sectionIndex: number) => {
-    if (sectionIndex < 0 || sectionIndex >= sections.length) return;
+    if (sectionIndex < 0 || sectionIndex >= HOMEPAGE_SECTIONS.length) return;
     
     // Trigger haptic feedback
     triggerHaptic(15);
     
-    const element = document.getElementById(sections[sectionIndex].id);
+    const element = document.getElementById(HOMEPAGE_SECTIONS[sectionIndex].id);
     if (element) {
       element.scrollIntoView({ 
         behavior: prefersReducedMotion ? "auto" : "smooth",
@@ -358,7 +342,7 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
     >
       {/* Section dot indicators */}
       <div className="flex items-center justify-center gap-1.5 pt-2.5 pb-1">
-        {sections.map((section, index) => {
+        {HOMEPAGE_SECTIONS.map((section, index) => {
           const isActive = index === activeSection;
           const isPast = index < activeSection;
           
@@ -437,7 +421,7 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
             transition={{ duration: 0.15 }}
             className="text-[10px] font-medium text-muted-foreground"
           >
-            {sections[activeSection]?.label}
+            {HOMEPAGE_SECTIONS[activeSection]?.label}
           </motion.p>
         </AnimatePresence>
       </div>

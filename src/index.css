@@ -369,38 +369,52 @@
     pointer-events: none;
   }
 
-  /* NEKO Title Styling */
+  /* NEKO Title Styling - Premium typography */
   .neko-title {
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+    font-weight: 700;
     text-shadow: 
-      0 0 80px hsl(168 65% 50% / 0.15),
-      0 0 40px hsl(168 65% 50% / 0.1);
+      0 0 120px hsl(168 65% 50% / 0.2),
+      0 0 60px hsl(168 65% 50% / 0.15),
+      0 4px 32px hsl(200 60% 8% / 0.4);
   }
 
   .neko-letter {
     display: inline-block;
-    transition: text-shadow 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .neko-letter:hover {
-    text-shadow: 0 0 40px hsl(168 65% 50% / 0.4);
+    text-shadow: 0 0 60px hsl(168 65% 50% / 0.5);
+    transform: translateY(-2px);
   }
 
   .neko-dot {
     display: inline-block;
     color: hsl(var(--primary));
-    animation: neko-dot-pulse 3s ease-in-out infinite;
+    animation: neko-dot-pulse 4s ease-in-out infinite;
+    transform-origin: center bottom;
   }
 
   @keyframes neko-dot-pulse {
     0%, 100% {
       opacity: 1;
-      text-shadow: 0 0 20px hsl(168 65% 50% / 0.5);
+      text-shadow: 0 0 30px hsl(168 65% 50% / 0.6);
+      transform: scale(1);
     }
     50% {
-      opacity: 0.7;
-      text-shadow: 0 0 40px hsl(168 65% 50% / 0.8);
+      opacity: 0.85;
+      text-shadow: 0 0 50px hsl(168 65% 50% / 0.9);
+      transform: scale(1.05);
     }
+  }
+
+  /* Hello brand accent styling */
+  .hello-accent {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 

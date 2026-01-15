@@ -124,15 +124,15 @@ export const PreviewWrapper = memo(function PreviewWrapper({
         </motion.div>
       </motion.div>
 
-      {/* Full Demo Modal */}
+      {/* Full Demo Modal - Mobile optimized */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 gap-0 bg-background border-border/50 shadow-2xl">
+        <DialogContent className="max-w-4xl w-[95vw] sm:w-auto max-h-[90vh] overflow-y-auto p-0 gap-0 bg-background border-border/50 shadow-2xl">
           <VisuallyHidden>
             <DialogTitle>{title} Demo</DialogTitle>
           </VisuallyHidden>
           
           {/* Modal Header with gradient */}
-          <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-border bg-gradient-to-r from-background via-background to-muted/30 backdrop-blur-xl">
+          <div className="sticky top-0 z-10 flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border bg-gradient-to-r from-background via-background to-muted/30 backdrop-blur-xl">
             <div className="flex items-center gap-3">
               <motion.div 
                 initial={{ scale: 0, rotate: -180 }}
