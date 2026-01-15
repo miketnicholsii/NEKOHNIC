@@ -19,12 +19,38 @@ export interface ModuleProgress {
   steps: Record<string, ProgressItem>;
 }
 
-// Define step counts for each module
-const MODULE_STEPS: Record<string, number> = {
-  business_starter: 5,
-  business_credit: 7,
-  personal_brand: 6,
+// Define step order for each module (order matters for getNextStep)
+const MODULE_STEP_ORDER: Record<string, string[]> = {
+  business_starter: [
+    "create_llc",
+    "get_ein",
+    "open_business_bank",
+    "get_business_address",
+    "setup_business_phone",
+  ],
+  business_credit: [
+    "verify_business_entity",
+    "register_duns",
+    "open_tradeline_1",
+    "open_tradeline_2",
+    "open_tradeline_3",
+    "monitor_scores",
+    "apply_for_credit",
+  ],
+  personal_brand: [
+    "create_profile",
+    "add_bio",
+    "add_skills",
+    "add_links",
+    "add_projects",
+    "publish_page",
+  ],
 };
+
+// Derive step counts from step order
+const MODULE_STEPS: Record<string, number> = Object.fromEntries(
+  Object.entries(MODULE_STEP_ORDER).map(([module, steps]) => [module, steps.length])
+);
 
 export function useProgress() {
   const { user } = useAuth();
@@ -74,7 +100,7 @@ export function useProgress() {
     const completed = moduleProgress.length;
     
     const steps: Record<string, ProgressItem> = {};
-    Object.entries(progress).forEach(([key, value]) => {
+    Object.entries(progress).forEach(([, value]) => {
       if (value.module === module) {
         steps[value.step] = value;
       }
@@ -94,9 +120,20 @@ export function useProgress() {
   };
 
   const getNextStep = (module: string): string | null => {
-    const moduleProgress = getModuleProgress(module);
-    // This would need the actual step order defined
-    return null; // Placeholder
+    const stepOrder = MODULE_STEP_ORDER[module];
+    if (!stepOrder) return null;
+
+    // Find the first step that is not completed
+    for (const step of stepOrder) {
+      const key = `${module}:${step}`;
+      const stepProgress = progress[key];
+      if (!stepProgress || !stepProgress.completed) {
+        return step;
+      }
+    }
+
+    // All steps completed
+    return null;
   };
 
   return {

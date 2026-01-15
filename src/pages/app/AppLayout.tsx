@@ -40,11 +40,12 @@ const bottomNavItems = [
   { href: "/app/support", label: "Support", icon: HelpCircle },
 ];
 
+// Plan badges configuration - uses normalized tier names from SUBSCRIPTION_TIERS
 const planBadges: Record<string, { label: string; color: string; icon?: typeof Sparkles }> = {
   free: { label: "Free", color: "bg-muted text-muted-foreground" },
-  start: { label: "Start", color: "bg-primary/10 text-primary", icon: Sparkles },
-  build: { label: "Build", color: "bg-secondary/10 text-secondary", icon: Crown },
-  scale: { label: "Scale", color: "bg-tertiary text-tertiary-foreground", icon: Crown },
+  starter: { label: "Starter", color: "bg-primary/10 text-primary", icon: Sparkles },
+  pro: { label: "Pro", color: "bg-secondary/10 text-secondary", icon: Crown },
+  elite: { label: "Elite", color: "bg-tertiary text-tertiary-foreground", icon: Crown },
 };
 
 export default function AppLayout() {
