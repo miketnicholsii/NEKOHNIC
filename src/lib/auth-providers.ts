@@ -6,6 +6,6 @@ export const isGithubOAuthEnabled = resolveFlag(import.meta.env.VITE_ENABLE_GITH
 export type OAuthProvider = "google" | "github";
 
 export const enabledOAuthProviders: OAuthProvider[] = [
-  ...(isGoogleOAuthEnabled ? ["google"] : []),
-  ...(isGithubOAuthEnabled ? ["github"] : []),
+  ...(isGoogleOAuthEnabled ? ["google" as const] : []),
+  ...(isGithubOAuthEnabled ? ["github" as const] : []),
 ];

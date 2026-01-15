@@ -22,13 +22,20 @@ const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&[data-state=open]>svg]:rotate-180",
+        // Size: 44px minimum touch target
+        "flex flex-1 items-center justify-between py-4 min-h-[44px] font-medium",
+        // Transitions
+        "transition-all",
+        // Focus
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:rounded-lg",
+        // Icon rotation
+        "[&[data-state=open]>svg]:rotate-180",
         className,
       )}
       {...props}
     >
       {children}
-      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" aria-hidden="true" />
+      <ChevronDown className="h-5 w-5 shrink-0 transition-transform duration-200 text-muted-foreground" aria-hidden="true" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
