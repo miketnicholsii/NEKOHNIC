@@ -2,8 +2,6 @@ import { memo, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { AnimatedSection, AnimatedStagger } from "@/components/AnimatedSection";
 import { staggerCardItem } from "@/components/animated-section-variants";
 import { Check, ArrowRight, Zap, Rocket, Crown, Sparkles } from "lucide-react";
@@ -161,37 +159,40 @@ export const HomePricing = memo(function HomePricing() {
               Start free, upgrade when ready. Cancel anytime.
             </p>
 
-            {/* Billing Toggle */}
-            <fieldset className="flex items-center justify-center gap-3">
+            {/* Billing Toggle - Pill Style */}
+            <fieldset className="inline-flex items-center gap-1.5 p-1 rounded-full bg-muted/60 border border-border">
               <legend className="sr-only">Choose billing period</legend>
-              <Label 
-                htmlFor="home-billing-toggle" 
+              <button
+                onClick={() => setIsAnnual(false)}
                 className={cn(
-                  "text-xs font-medium cursor-pointer transition-colors",
-                  !isAnnual ? "text-foreground" : "text-muted-foreground"
+                  "px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-300",
+                  !isAnnual 
+                    ? "bg-primary text-primary-foreground shadow-sm" 
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 Monthly
-              </Label>
-              <Switch
-                id="home-billing-toggle"
-                checked={isAnnual}
-                onCheckedChange={setIsAnnual}
-                className="scale-90"
-                aria-describedby="billing-savings"
-              />
-              <Label 
-                htmlFor="home-billing-toggle" 
+              </button>
+              <button
+                onClick={() => setIsAnnual(true)}
                 className={cn(
-                  "text-xs font-medium cursor-pointer transition-colors flex items-center gap-1.5",
-                  isAnnual ? "text-foreground" : "text-muted-foreground"
+                  "px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-300 flex items-center gap-1.5",
+                  isAnnual 
+                    ? "bg-primary text-primary-foreground shadow-sm" 
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 Annual
-                <span id="billing-savings" className="px-1.5 py-0.5 text-[9px] font-semibold uppercase rounded-full bg-primary text-primary-foreground">
+                <span 
+                  id="billing-savings"
+                  className={cn(
+                    "px-1.5 py-0.5 text-[9px] font-semibold uppercase rounded-full transition-colors",
+                    isAnnual ? "bg-primary-foreground/20 text-primary-foreground" : "bg-primary text-primary-foreground"
+                  )}
+                >
                   -17%
                 </span>
-              </Label>
+              </button>
             </fieldset>
           </div>
         </AnimatedSection>

@@ -8,8 +8,6 @@ import { Button } from "@/components/ui/button";
 import { AnimatedSection, AnimatedStagger } from "@/components/AnimatedSection";
 import { staggerItem } from "@/components/animated-section-variants";
 import { Check, HelpCircle, ArrowRight, Zap, Crown, Rocket, Sparkles } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase";
 import { toast } from "sonner";
@@ -344,34 +342,36 @@ export default function Pricing() {
               Choose what fits your journey. Upgrade, downgrade, or cancel anytime — no pressure.
             </p>
 
-            {/* Billing Toggle */}
-            <div className="flex items-center justify-center gap-3">
-              <Label 
-                htmlFor="billing-toggle" 
+            {/* Billing Toggle - Pill Style */}
+            <div className="inline-flex items-center gap-2 p-1 rounded-full bg-muted/60 border border-border">
+              <button
+                onClick={() => setIsAnnual(false)}
                 className={cn(
-                  "text-sm font-medium cursor-pointer transition-colors",
-                  !isAnnual ? "text-foreground" : "text-muted-foreground"
+                  "px-5 py-2 text-sm font-medium rounded-full transition-all duration-300",
+                  !isAnnual 
+                    ? "bg-primary text-primary-foreground shadow-sm" 
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 Monthly
-              </Label>
-              <Switch
-                id="billing-toggle"
-                checked={isAnnual}
-                onCheckedChange={setIsAnnual}
-              />
-              <Label 
-                htmlFor="billing-toggle" 
+              </button>
+              <button
+                onClick={() => setIsAnnual(true)}
                 className={cn(
-                  "text-sm font-medium cursor-pointer transition-colors flex items-center gap-2",
-                  isAnnual ? "text-foreground" : "text-muted-foreground"
+                  "px-5 py-2 text-sm font-medium rounded-full transition-all duration-300 flex items-center gap-2",
+                  isAnnual 
+                    ? "bg-primary text-primary-foreground shadow-sm" 
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 Annual
-                <span className="px-2 py-0.5 text-[10px] font-semibold uppercase rounded-full bg-primary text-primary-foreground">
+                <span className={cn(
+                  "px-2 py-0.5 text-[10px] font-semibold uppercase rounded-full transition-colors",
+                  isAnnual ? "bg-primary-foreground/20 text-primary-foreground" : "bg-primary text-primary-foreground"
+                )}>
                   Save 17%
                 </span>
-              </Label>
+              </button>
             </div>
           </motion.div>
         </div>
