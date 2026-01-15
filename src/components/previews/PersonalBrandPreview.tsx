@@ -52,9 +52,9 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
   const prefersReducedMotion = useReducedMotion();
   
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card via-card to-accent-gold/5 shadow-xl">
+    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl">
       {showOverlay && (
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background via-background/95 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-tertiary via-tertiary/95 to-transparent z-10 pointer-events-none" />
       )}
       
       <div className="p-5 sm:p-6">
@@ -69,26 +69,26 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               initial={prefersReducedMotion ? {} : { scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-gold/20 to-accent-gold/5 flex items-center justify-center ring-2 ring-accent-gold/10"
+              className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center"
             >
-              <User className="h-5 w-5 text-accent-gold" />
+              <User className="h-5 w-5 text-primary" />
             </motion.div>
             <div>
-              <h3 className="font-display text-base font-bold text-foreground">Personal Brand Builder</h3>
-              <p className="text-xs text-muted-foreground">Your Digital CV</p>
+              <h3 className="font-display text-base font-bold text-tertiary-foreground">Personal Brand Builder</h3>
+              <p className="text-xs text-tertiary-foreground/60">Your Digital CV</p>
             </div>
           </div>
           <motion.div 
             initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground"
           >
             <motion.span 
               animate={prefersReducedMotion ? {} : { scale: [1, 1.2, 1] }}
               transition={{ repeat: Infinity, duration: 2 }}
-              className="w-2 h-2 rounded-full bg-primary"
+              className="w-2 h-2 rounded-full bg-primary-foreground"
             />
-            <span className="text-[10px] font-semibold text-primary">Live</span>
+            <span className="text-[10px] font-semibold">Live</span>
           </motion.div>
         </motion.div>
 
@@ -98,22 +98,22 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-card border border-border rounded-xl p-4 shadow-sm"
+            className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl p-4"
           >
             <div className="flex items-start gap-3 mb-4">
               <motion.div 
                 whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-                className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/30 via-primary/20 to-primary/5 flex items-center justify-center text-xl font-bold text-primary ring-2 ring-primary/20"
+                className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center text-xl font-bold text-primary"
               >
                 {profile.initials}
               </motion.div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-display font-bold text-foreground text-sm">{profile.name}</h4>
+                <h4 className="font-display font-bold text-tertiary-foreground text-sm">{profile.name}</h4>
                 <p className="text-xs text-primary font-medium">{profile.headline}</p>
               </div>
             </div>
             
-            <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+            <p className="text-xs text-tertiary-foreground/60 leading-relaxed mb-4">
               {profile.bio}
             </p>
 
@@ -128,7 +128,7 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   key={skill}
                   variants={prefersReducedMotion ? {} : staggerItem}
                   whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-                  className="px-2.5 py-1 rounded-lg bg-muted hover:bg-muted/80 text-[10px] text-muted-foreground transition-colors cursor-default"
+                  className="px-2.5 py-1 rounded-lg bg-tertiary-foreground/10 text-[10px] text-tertiary-foreground/70 transition-colors cursor-default"
                 >
                   {skill}
                 </motion.span>
@@ -142,9 +142,9 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               initial={prefersReducedMotion ? {} : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-card border border-border rounded-xl p-4 shadow-sm"
+              className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl p-4"
             >
-              <h5 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-2">
+              <h5 className="text-xs font-semibold text-tertiary-foreground mb-3 flex items-center gap-2">
                 <Globe className="h-3.5 w-3.5 text-primary" />
                 Links
               </h5>
@@ -159,13 +159,13 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                     key={link.label}
                     variants={prefersReducedMotion ? {} : staggerItem}
                     whileHover={prefersReducedMotion ? {} : { scale: 1.02, x: 3 }}
-                    className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50 hover:bg-muted transition-all cursor-pointer group"
+                    className="flex items-center justify-between p-2.5 rounded-lg bg-tertiary-foreground/5 hover:bg-tertiary-foreground/10 transition-all cursor-pointer group"
                   >
                     <div className="flex items-center gap-2.5">
                       <link.icon className="h-4 w-4 text-primary" />
-                      <span className="text-xs text-foreground font-medium">{link.label}</span>
+                      <span className="text-xs text-tertiary-foreground font-medium">{link.label}</span>
                     </div>
-                    <ExternalLink className="h-3 w-3 text-muted-foreground group-hover:text-primary transition-colors" />
+                    <ExternalLink className="h-3 w-3 text-tertiary-foreground/40 group-hover:text-primary transition-colors" />
                   </motion.div>
                 ))}
               </motion.div>
@@ -176,10 +176,10 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               initial={prefersReducedMotion ? {} : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-card border border-border rounded-xl p-4 shadow-sm"
+              className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl p-4"
             >
-              <h5 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-2">
-                <Palette className="h-3.5 w-3.5 text-accent-gold" />
+              <h5 className="text-xs font-semibold text-tertiary-foreground mb-3 flex items-center gap-2">
+                <Palette className="h-3.5 w-3.5 text-primary" />
                 Projects
               </h5>
               <div className="space-y-2.5">
@@ -192,10 +192,10 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                     whileHover={prefersReducedMotion ? {} : { scale: 1.02, x: 3 }}
                     className="flex items-center gap-3 cursor-pointer group"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent-gold/30 to-accent-gold/10 group-hover:shadow-md transition-shadow ring-1 ring-accent-gold/20" />
+                    <div className="w-10 h-10 rounded-lg bg-primary/20 group-hover:shadow-md transition-shadow" />
                     <div>
-                      <p className="text-xs font-medium text-foreground group-hover:text-primary transition-colors">{project.title}</p>
-                      <p className="text-[10px] text-muted-foreground">{project.type}</p>
+                      <p className="text-xs font-medium text-tertiary-foreground group-hover:text-primary transition-colors">{project.title}</p>
+                      <p className="text-[10px] text-tertiary-foreground/60">{project.type}</p>
                     </div>
                   </motion.div>
                 ))}

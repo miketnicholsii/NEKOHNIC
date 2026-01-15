@@ -62,9 +62,9 @@ const staggerContainer = {
 
 function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card via-card to-muted/20 shadow-xl">
+    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl">
       {showOverlay && (
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-background via-background/90 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-tertiary via-tertiary/90 to-transparent z-10 pointer-events-none" />
       )}
       
       <div className="p-5 sm:p-6">
@@ -79,23 +79,23 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center"
+              className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center"
             >
               <Building2 className="h-5 w-5 text-primary" />
             </motion.div>
             <div>
-              <h3 className="font-display text-base font-bold text-foreground">Business Starter</h3>
-              <p className="text-xs text-muted-foreground">2 of 5 steps completed</p>
+              <h3 className="font-display text-base font-bold text-tertiary-foreground">Business Starter</h3>
+              <p className="text-xs text-tertiary-foreground/60">2 of 5 steps completed</p>
             </div>
           </div>
           <div className="flex flex-col items-end gap-1">
             <span className="text-lg font-bold text-primary">40%</span>
-            <div className="h-1.5 w-20 bg-muted rounded-full overflow-hidden">
+            <div className="h-1.5 w-20 bg-tertiary-foreground/10 rounded-full overflow-hidden">
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: "40%" }}
                 transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full"
+                className="h-full bg-primary rounded-full"
               />
             </div>
           </div>
@@ -115,9 +115,9 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                 variants={staggerItem}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition-all ${
                   step.current 
-                    ? "bg-primary/10 border-2 border-primary/40 shadow-sm" 
+                    ? "bg-primary/20 border-2 border-primary/40" 
                     : step.complete 
-                      ? "bg-muted/50 border border-border"
+                      ? "bg-tertiary-foreground/5 border border-tertiary-foreground/10"
                       : "border border-transparent opacity-50"
                 }`}
               >
@@ -128,7 +128,7 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                       ? "bg-primary text-primary-foreground" 
                       : step.current
                         ? "bg-primary/20 text-primary"
-                        : "bg-muted text-muted-foreground"
+                        : "bg-tertiary-foreground/10 text-tertiary-foreground/40"
                   }`}
                 >
                   {step.complete ? (
@@ -138,11 +138,11 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   )}
                 </motion.div>
                 <div className="flex-1 min-w-0">
-                  <span className={`font-medium truncate block ${step.current ? "text-foreground" : "text-muted-foreground"}`}>
+                  <span className={`font-medium truncate block ${step.current ? "text-tertiary-foreground" : "text-tertiary-foreground/60"}`}>
                     {step.title}
                   </span>
                   {step.complete && step.time && (
-                    <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                    <span className="text-[10px] text-tertiary-foreground/50 flex items-center gap-1">
                       <Clock className="h-2.5 w-2.5" /> {step.time}
                     </span>
                   )}
@@ -164,15 +164,15 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            className="bg-card border border-border rounded-xl p-4 shadow-sm"
+            className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl p-4"
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center ring-2 ring-primary/20">
+              <div className="w-11 h-11 rounded-xl bg-primary/20 flex items-center justify-center">
                 <Landmark className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h4 className="font-semibold text-sm text-foreground">Business Bank Account</h4>
-                <p className="text-xs text-muted-foreground">Separate your finances</p>
+                <h4 className="font-semibold text-sm text-tertiary-foreground">Business Bank Account</h4>
+                <p className="text-xs text-tertiary-foreground/60">Separate your finances</p>
               </div>
             </div>
             
@@ -189,16 +189,16 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   whileHover={{ scale: 1.01, x: 2 }}
                   className={`flex items-start gap-2.5 p-3 rounded-lg text-xs transition-all ${
                     item.checked 
-                      ? "bg-primary/5 border border-primary/20" 
-                      : "bg-muted/30 border border-border hover:border-muted-foreground/20"
+                      ? "bg-primary/10 border border-primary/20" 
+                      : "bg-tertiary-foreground/5 border border-tertiary-foreground/10"
                   }`}
                 >
                   {item.checked ? (
                     <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
                   ) : (
-                    <Circle className="h-4 w-4 text-muted-foreground/40 flex-shrink-0 mt-0.5" />
+                    <Circle className="h-4 w-4 text-tertiary-foreground/30 flex-shrink-0 mt-0.5" />
                   )}
-                  <span className={item.checked ? "text-foreground" : "text-muted-foreground"}>
+                  <span className={item.checked ? "text-tertiary-foreground" : "text-tertiary-foreground/60"}>
                     {item.text}
                   </span>
                 </motion.div>
