@@ -41,7 +41,7 @@ export default function ActivityFeed() {
         description: `Completed ${p.step} in ${p.module}`,
         timestamp: new Date(p.completed_at!),
         icon: CheckCircle2,
-        color: "text-emerald-600",
+        color: "text-primary",
       });
     });
 
@@ -57,7 +57,7 @@ export default function ActivityFeed() {
         description: t.title,
         timestamp: new Date(t.updated_at),
         icon: Target,
-        color: "text-blue-600",
+        color: "text-accent-foreground",
       });
     });
 
@@ -73,7 +73,7 @@ export default function ActivityFeed() {
         description: achievementDef?.name || a.achievement_id,
         timestamp: new Date(a.earned_at),
         icon: Trophy,
-        color: "text-amber-500",
+        color: "text-secondary",
       });
     });
 
