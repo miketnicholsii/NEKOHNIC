@@ -165,7 +165,7 @@ export const PreviewWrapper = memo(function PreviewWrapper({
             transition={{ delay: 0.1, duration: 0.3 }}
             className="p-3 sm:p-6"
           >
-            {expandedContent || children}
+            {expandedContent}
           </motion.div>
         </DialogContent>
       </Dialog>

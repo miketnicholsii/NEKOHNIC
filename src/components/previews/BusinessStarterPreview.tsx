@@ -60,10 +60,18 @@ const staggerContainer = {
   }
 };
 
-function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
+function PreviewContent({ showOverlay = true, isExpanded = false }: { showOverlay?: boolean; isExpanded?: boolean }) {
+  // Use light styling for expanded view, dark for card preview
+  const bgClass = isExpanded ? "bg-card" : "bg-tertiary";
+  const textClass = isExpanded ? "text-foreground" : "text-tertiary-foreground";
+  const mutedTextClass = isExpanded ? "text-muted-foreground" : "text-tertiary-foreground/60";
+  const borderClass = isExpanded ? "border-border" : "border-border/40";
+  const cardBgClass = isExpanded ? "bg-muted/50" : "bg-tertiary-foreground/5";
+  const cardBorderClass = isExpanded ? "border-border" : "border-tertiary-foreground/10";
+  
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl min-w-[320px]">
-      {showOverlay && (
+    <div className={`relative overflow-hidden rounded-2xl border ${borderClass} ${bgClass} shadow-xl min-w-[320px]`}>
+      {showOverlay && !isExpanded && (
         <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-tertiary via-tertiary/90 to-transparent z-10 pointer-events-none" />
       )}
       
@@ -84,14 +92,14 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               <Building2 className="h-5 w-5 text-primary" />
             </motion.div>
             <div>
-              <h3 className="font-display text-base font-bold text-tertiary-foreground">Business Starter</h3>
-              <p className="text-xs text-tertiary-foreground/60">2 of 5 steps completed</p>
+              <h3 className={`font-display text-base font-bold ${textClass}`}>Business Starter</h3>
+              <p className={`text-xs ${mutedTextClass}`}>2 of 5 steps completed</p>
             </div>
           </div>
           <div className="flex flex-col items-end gap-1">
             <span className="text-lg font-bold text-primary">40%</span>
-            <div className="h-1.5 w-20 bg-tertiary-foreground/10 rounded-full overflow-hidden">
-              <motion.div 
+            <div className={`h-1.5 w-20 ${isExpanded ? "bg-muted" : "bg-tertiary-foreground/10"} rounded-full overflow-hidden`}>
+              <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: "40%" }}
                 transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
@@ -117,19 +125,19 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   step.current 
                     ? "bg-primary/20 border border-primary/40" 
                     : step.complete 
-                      ? "bg-tertiary-foreground/5 border border-tertiary-foreground/10"
+                      ? `${cardBgClass} border ${cardBorderClass}`
                       : "border border-transparent opacity-50"
                 }`}
               >
                 <motion.div 
                   whileHover={{ scale: 1.1 }}
-                  className={`w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg flex items-center justify-center flex-shrink-0 ${
-                    step.complete 
-                      ? "bg-primary text-primary-foreground" 
-                      : step.current
-                        ? "bg-primary/20 text-primary"
-                        : "bg-tertiary-foreground/10 text-tertiary-foreground/40"
-                  }`}
+                    className={`w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg flex items-center justify-center flex-shrink-0 ${
+                      step.complete 
+                        ? "bg-primary text-primary-foreground" 
+                        : step.current
+                          ? "bg-primary/20 text-primary"
+                          : isExpanded ? "bg-muted text-muted-foreground" : "bg-tertiary-foreground/10 text-tertiary-foreground/40"
+                    }`}
                 >
                   {step.complete ? (
                     <CheckCircle2 className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5" />
@@ -137,14 +145,14 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                     <step.icon className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5" />
                   )}
                 </motion.div>
-                <div className="flex-1 min-w-0">
-                  <span className={`font-medium truncate block text-[9px] sm:text-xs ${step.current ? "text-tertiary-foreground" : "text-tertiary-foreground/60"}`}>
-                    {step.title}
-                  </span>
-                  {step.complete && step.time && (
-                    <span className="text-[8px] sm:text-[10px] text-tertiary-foreground/50 flex items-center gap-0.5 sm:gap-1">
-                      <Clock className="h-2 w-2 sm:h-2.5 sm:w-2.5" /> {step.time}
+                  <div className="flex-1 min-w-0">
+                    <span className={`font-medium truncate block text-[9px] sm:text-xs ${step.current ? textClass : mutedTextClass}`}>
+                      {step.title}
                     </span>
+                    {step.complete && step.time && (
+                      <span className={`text-[8px] sm:text-[10px] ${isExpanded ? "text-muted-foreground" : "text-tertiary-foreground/50"} flex items-center gap-0.5 sm:gap-1`}>
+                        <Clock className="h-2 w-2 sm:h-2.5 sm:w-2.5" /> {step.time}
+                      </span>
                   )}
                 </div>
                 {step.current && (
@@ -164,15 +172,15 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl p-4"
+            className={`${cardBgClass} border ${cardBorderClass} rounded-xl p-4`}
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-11 h-11 rounded-xl bg-primary/20 flex items-center justify-center">
                 <Landmark className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h4 className="font-semibold text-sm text-tertiary-foreground">Business Bank Account</h4>
-                <p className="text-xs text-tertiary-foreground/60">Separate your finances</p>
+                <h4 className={`font-semibold text-sm ${textClass}`}>Business Bank Account</h4>
+                <p className={`text-xs ${mutedTextClass}`}>Separate your finances</p>
               </div>
             </div>
             
@@ -187,19 +195,19 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   key={index}
                   variants={staggerItem}
                   whileHover={{ scale: 1.01, x: 2 }}
-                  className={`flex items-start gap-2.5 p-3 rounded-lg text-xs transition-all ${
-                    item.checked 
-                      ? "bg-primary/10 border border-primary/20" 
-                      : "bg-tertiary-foreground/5 border border-tertiary-foreground/10"
-                  }`}
-                >
+                    className={`flex items-start gap-2.5 p-3 rounded-lg text-xs transition-all ${
+                      item.checked 
+                        ? "bg-primary/10 border border-primary/20" 
+                        : `${cardBgClass} border ${cardBorderClass}`
+                    }`}
+                  >
                   {item.checked ? (
                     <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-                  ) : (
-                    <Circle className="h-4 w-4 text-tertiary-foreground/30 flex-shrink-0 mt-0.5" />
-                  )}
-                  <span className={item.checked ? "text-tertiary-foreground" : "text-tertiary-foreground/60"}>
-                    {item.text}
+                    ) : (
+                      <Circle className={`h-4 w-4 ${isExpanded ? "text-muted-foreground/40" : "text-tertiary-foreground/30"} flex-shrink-0 mt-0.5`} />
+                    )}
+                    <span className={item.checked ? textClass : mutedTextClass}>
+                      {item.text}
                   </span>
                 </motion.div>
               ))}

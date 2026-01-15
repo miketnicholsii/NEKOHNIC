@@ -48,12 +48,20 @@ const staggerContainer = {
   }
 };
 
-function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
+function PreviewContent({ showOverlay = true, isExpanded = false }: { showOverlay?: boolean; isExpanded?: boolean }) {
   const prefersReducedMotion = useReducedMotion();
   
+  // Use light styling for expanded view, dark for card preview
+  const bgClass = isExpanded ? "bg-card" : "bg-tertiary";
+  const textClass = isExpanded ? "text-foreground" : "text-tertiary-foreground";
+  const mutedTextClass = isExpanded ? "text-muted-foreground" : "text-tertiary-foreground/60";
+  const borderClass = isExpanded ? "border-border" : "border-border/40";
+  const cardBgClass = isExpanded ? "bg-muted/50" : "bg-tertiary-foreground/5";
+  const cardBorderClass = isExpanded ? "border-border" : "border-tertiary-foreground/10";
+  
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl min-w-[320px]">
-      {showOverlay && (
+    <div className={`relative overflow-hidden rounded-2xl border ${borderClass} ${bgClass} shadow-xl min-w-[320px]`}>
+      {showOverlay && !isExpanded && (
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-tertiary via-tertiary/95 to-transparent z-10 pointer-events-none" />
       )}
       
@@ -74,8 +82,8 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               <User className="h-5 w-5 text-primary" />
             </motion.div>
             <div>
-              <h3 className="font-display text-base font-bold text-tertiary-foreground">Personal Brand Builder</h3>
-              <p className="text-xs text-tertiary-foreground/60">Your Digital CV</p>
+              <h3 className={`font-display text-base font-bold ${textClass}`}>Personal Brand Builder</h3>
+              <p className={`text-xs ${mutedTextClass}`}>Your Digital CV</p>
             </div>
           </div>
           <motion.div 
@@ -98,7 +106,7 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl p-4"
+            className={`${cardBgClass} border ${cardBorderClass} rounded-xl p-4`}
           >
             <div className="flex items-start gap-3 mb-4">
               <motion.div 
@@ -108,12 +116,12 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                 {profile.initials}
               </motion.div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-display font-bold text-tertiary-foreground text-sm">{profile.name}</h4>
+                <h4 className={`font-display font-bold ${textClass} text-sm`}>{profile.name}</h4>
                 <p className="text-xs text-primary font-medium">{profile.headline}</p>
               </div>
             </div>
             
-            <p className="text-xs text-tertiary-foreground/60 leading-relaxed mb-4">
+            <p className={`text-xs ${mutedTextClass} leading-relaxed mb-4`}>
               {profile.bio}
             </p>
 
@@ -128,7 +136,7 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   key={skill}
                   variants={prefersReducedMotion ? {} : staggerItem}
                   whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-                  className="px-2.5 py-1 rounded-lg bg-tertiary-foreground/10 text-[10px] text-tertiary-foreground/70 transition-colors cursor-default"
+                  className={`px-2.5 py-1 rounded-lg ${isExpanded ? "bg-muted" : "bg-tertiary-foreground/10"} text-[10px] ${isExpanded ? "text-muted-foreground" : "text-tertiary-foreground/70"} transition-colors cursor-default`}
                 >
                   {skill}
                 </motion.span>
@@ -142,9 +150,9 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               initial={prefersReducedMotion ? {} : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl p-4"
+              className={`${cardBgClass} border ${cardBorderClass} rounded-xl p-4`}
             >
-              <h5 className="text-xs font-semibold text-tertiary-foreground mb-3 flex items-center gap-2">
+              <h5 className={`text-xs font-semibold ${textClass} mb-3 flex items-center gap-2`}>
                 <Globe className="h-3.5 w-3.5 text-primary" />
                 Links
               </h5>
@@ -159,13 +167,13 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                     key={link.label}
                     variants={prefersReducedMotion ? {} : staggerItem}
                     whileHover={prefersReducedMotion ? {} : { scale: 1.02, x: 3 }}
-                    className="flex items-center justify-between p-2.5 rounded-lg bg-tertiary-foreground/5 hover:bg-tertiary-foreground/10 transition-all cursor-pointer group"
+                    className={`flex items-center justify-between p-2.5 rounded-lg ${isExpanded ? "bg-muted/30 hover:bg-muted" : "bg-tertiary-foreground/5 hover:bg-tertiary-foreground/10"} transition-all cursor-pointer group`}
                   >
                     <div className="flex items-center gap-2.5">
                       <link.icon className="h-4 w-4 text-primary" />
-                      <span className="text-xs text-tertiary-foreground font-medium">{link.label}</span>
+                      <span className={`text-xs ${textClass} font-medium`}>{link.label}</span>
                     </div>
-                    <ExternalLink className="h-3 w-3 text-tertiary-foreground/40 group-hover:text-primary transition-colors" />
+                    <ExternalLink className={`h-3 w-3 ${isExpanded ? "text-muted-foreground" : "text-tertiary-foreground/40"} group-hover:text-primary transition-colors`} />
                   </motion.div>
                 ))}
               </motion.div>
@@ -176,9 +184,9 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               initial={prefersReducedMotion ? {} : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl p-4"
+              className={`${cardBgClass} border ${cardBorderClass} rounded-xl p-4`}
             >
-              <h5 className="text-xs font-semibold text-tertiary-foreground mb-3 flex items-center gap-2">
+              <h5 className={`text-xs font-semibold ${textClass} mb-3 flex items-center gap-2`}>
                 <Palette className="h-3.5 w-3.5 text-primary" />
                 Projects
               </h5>
@@ -194,8 +202,8 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   >
                     <div className="w-10 h-10 rounded-lg bg-primary/20 group-hover:shadow-md transition-shadow" />
                     <div>
-                      <p className="text-xs font-medium text-tertiary-foreground group-hover:text-primary transition-colors">{project.title}</p>
-                      <p className="text-[10px] text-tertiary-foreground/60">{project.type}</p>
+                      <p className={`text-xs font-medium ${textClass} group-hover:text-primary transition-colors`}>{project.title}</p>
+                      <p className={`text-[10px] ${mutedTextClass}`}>{project.type}</p>
                     </div>
                   </motion.div>
                 ))}

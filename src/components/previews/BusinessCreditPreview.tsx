@@ -63,12 +63,20 @@ const staggerContainer = {
   }
 };
 
-function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
+function PreviewContent({ showOverlay = true, isExpanded = false }: { showOverlay?: boolean; isExpanded?: boolean }) {
   const prefersReducedMotion = useReducedMotion();
   
+  // Use light styling for expanded view, dark for card preview
+  const bgClass = isExpanded ? "bg-card" : "bg-tertiary";
+  const textClass = isExpanded ? "text-foreground" : "text-tertiary-foreground";
+  const mutedTextClass = isExpanded ? "text-muted-foreground" : "text-tertiary-foreground/60";
+  const borderClass = isExpanded ? "border-border" : "border-border/40";
+  const cardBgClass = isExpanded ? "bg-muted/50" : "bg-tertiary-foreground/5";
+  const cardBorderClass = isExpanded ? "border-border" : "border-tertiary-foreground/10";
+  
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl min-w-[320px]">
-      {showOverlay && (
+    <div className={`relative overflow-hidden rounded-2xl border ${borderClass} ${bgClass} shadow-xl min-w-[320px]`}>
+      {showOverlay && !isExpanded && (
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-tertiary via-tertiary/95 to-transparent z-10 pointer-events-none" />
       )}
       
@@ -89,8 +97,8 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               <CreditCard className="h-5 w-5 text-primary" />
             </motion.div>
             <div>
-              <h3 className="font-display text-base font-bold text-tertiary-foreground">Business Credit Builder</h3>
-              <p className="text-xs text-tertiary-foreground/60">Tier 1 in progress</p>
+              <h3 className={`font-display text-base font-bold ${textClass}`}>Business Credit Builder</h3>
+              <p className={`text-xs ${mutedTextClass}`}>Tier 1 in progress</p>
             </div>
           </div>
           <motion.div 
@@ -119,14 +127,14 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                 tier.status === "complete" 
                   ? "bg-primary/20 border border-primary/40" 
                   : tier.status === "active"
-                    ? "bg-tertiary-foreground/5 border-2 border-primary"
-                    : "bg-tertiary-foreground/5 border border-tertiary-foreground/20 opacity-50"
+                    ? `${cardBgClass} border-2 border-primary`
+                    : `${cardBgClass} border ${cardBorderClass} opacity-50`
               }`}
             >
               <div className={`text-xs sm:text-base font-bold mb-0.5 ${
                 tier.status === "complete" || tier.status === "active" 
                   ? "text-primary" 
-                  : "text-tertiary-foreground/40"
+                  : mutedTextClass
               }`}>
                 {tier.status === "locked" ? (
                   <Lock className="h-2.5 w-2.5 sm:h-4 sm:w-4 mx-auto" />
@@ -134,9 +142,9 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   `T${tier.tier}`
                 )}
               </div>
-              <p className="text-[7px] sm:text-[10px] text-tertiary-foreground/60 truncate leading-tight">{tier.name}</p>
+              <p className={`text-[7px] sm:text-[10px] ${mutedTextClass} truncate leading-tight`}>{tier.name}</p>
               {tier.status === "active" && (
-                <div className="mt-1 sm:mt-2 h-0.5 sm:h-1.5 bg-tertiary-foreground/10 rounded-full overflow-hidden">
+                <div className={`mt-1 sm:mt-2 h-0.5 sm:h-1.5 ${isExpanded ? "bg-muted" : "bg-tertiary-foreground/10"} rounded-full overflow-hidden`}>
                   <motion.div 
                     initial={prefersReducedMotion ? { width: `${tier.progress}%` } : { width: 0 }}
                     animate={{ width: `${tier.progress}%` }}
@@ -163,20 +171,20 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
           initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-tertiary-foreground/5 border border-tertiary-foreground/10 rounded-xl overflow-hidden"
+          className={`${cardBgClass} border ${cardBorderClass} rounded-xl overflow-hidden`}
         >
-          <div className="px-4 py-3 border-b border-tertiary-foreground/10 flex items-center justify-between">
-            <h4 className="text-xs font-semibold text-tertiary-foreground">Active Tradelines</h4>
-            <span className="text-[10px] text-tertiary-foreground/60 px-2 py-0.5 bg-tertiary-foreground/10 rounded-full">{tradelines.length} accounts</span>
+          <div className={`px-4 py-3 border-b ${cardBorderClass} flex items-center justify-between`}>
+            <h4 className={`text-xs font-semibold ${textClass}`}>Active Tradelines</h4>
+            <span className={`text-[10px] ${mutedTextClass} px-2 py-0.5 ${isExpanded ? "bg-muted" : "bg-tertiary-foreground/10"} rounded-full`}>{tradelines.length} accounts</span>
           </div>
-          <div className="divide-y divide-tertiary-foreground/10">
+          <div className={`divide-y ${isExpanded ? "divide-border" : "divide-tertiary-foreground/10"}`}>
             {tradelines.map((line, index) => (
               <motion.div
                 key={line.vendor}
                 initial={prefersReducedMotion ? {} : { opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 + index * 0.08 }}
-                whileHover={prefersReducedMotion ? {} : { backgroundColor: "hsl(var(--tertiary-foreground) / 0.05)" }}
+                whileHover={prefersReducedMotion ? {} : { backgroundColor: isExpanded ? "hsl(var(--muted) / 0.5)" : "hsl(var(--tertiary-foreground) / 0.05)" }}
                 className="flex items-center justify-between px-4 py-3 transition-colors"
               >
                 <div className="flex items-center gap-3">
@@ -184,12 +192,12 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                     {line.vendor[0]}
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-tertiary-foreground">{line.vendor}</p>
-                    <p className="text-[10px] text-tertiary-foreground/60">{line.status}</p>
+                    <p className={`text-xs font-medium ${textClass}`}>{line.vendor}</p>
+                    <p className={`text-[10px] ${mutedTextClass}`}>{line.status}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs font-semibold text-tertiary-foreground">{line.limit}</p>
+                  <p className={`text-xs font-semibold ${textClass}`}>{line.limit}</p>
                   {line.reporting && (
                     <p className="text-[10px] text-primary flex items-center gap-1 justify-end">
                       <Star className="h-2.5 w-2.5 fill-current" /> Reporting
