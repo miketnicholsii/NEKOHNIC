@@ -52,12 +52,12 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
   const prefersReducedMotion = useReducedMotion();
   
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl">
+    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl min-w-[320px]">
       {showOverlay && (
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-tertiary via-tertiary/95 to-transparent z-10 pointer-events-none" />
       )}
       
-      <div className="p-5 sm:p-6">
+      <div className="p-4 sm:p-5 md:p-6">
         {/* Header */}
         <motion.div 
           initial={prefersReducedMotion ? {} : { opacity: 0, y: -8 }}

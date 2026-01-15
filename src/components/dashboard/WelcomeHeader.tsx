@@ -69,7 +69,7 @@ export default function WelcomeHeader() {
           {/* Streak indicator */}
           {!streaksLoading && streaks && streaks.login_streak_current > 0 && (
             <div 
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-secondary/10 text-secondary"
               role="status"
               aria-label={`${streaks.login_streak_current} day login streak`}
             >
@@ -86,7 +86,7 @@ export default function WelcomeHeader() {
               to="/app/account"
               className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-colors ${
                 subscription.cancelAtPeriodEnd 
-                  ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/15" 
+                  ? "bg-secondary/10 text-secondary hover:bg-secondary/15" 
                   : "bg-primary/10 text-primary hover:bg-primary/15"
               }`}
               aria-label={`${tierConfig.name} Plan - Click to manage`}

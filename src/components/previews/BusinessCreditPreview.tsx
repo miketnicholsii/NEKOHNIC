@@ -67,12 +67,12 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
   const prefersReducedMotion = useReducedMotion();
   
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl">
+    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl min-w-[320px]">
       {showOverlay && (
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-tertiary via-tertiary/95 to-transparent z-10 pointer-events-none" />
       )}
       
-      <div className="p-5 sm:p-6">
+      <div className="p-4 sm:p-5 md:p-6">
         {/* Header */}
         <motion.div 
           initial={prefersReducedMotion ? {} : { opacity: 0, y: -8 }}
@@ -103,40 +103,40 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
           </motion.div>
         </motion.div>
 
-        {/* Tier Cards - Responsive grid */}
+        {/* Tier Cards - Better responsive grid */}
         <motion.div 
           variants={prefersReducedMotion ? {} : staggerContainer}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-4 gap-1.5 sm:gap-2 mb-5"
+          className="grid grid-cols-4 gap-1 sm:gap-2 mb-4 sm:mb-5"
         >
           {tiers.map((tier) => (
             <motion.div
               key={tier.tier}
               variants={prefersReducedMotion ? {} : staggerItem}
               whileHover={prefersReducedMotion ? {} : { scale: 1.03, y: -2 }}
-              className={`relative p-2 sm:p-3 rounded-lg sm:rounded-xl text-center transition-all ${
+              className={`relative p-1.5 sm:p-2.5 rounded-md sm:rounded-xl text-center transition-all ${
                 tier.status === "complete" 
-                  ? "bg-primary/20 border-2 border-primary/40" 
+                  ? "bg-primary/20 border border-primary/40" 
                   : tier.status === "active"
                     ? "bg-tertiary-foreground/5 border-2 border-primary"
                     : "bg-tertiary-foreground/5 border border-tertiary-foreground/20 opacity-50"
               }`}
             >
-              <div className={`text-sm sm:text-lg font-bold mb-0.5 ${
+              <div className={`text-xs sm:text-base font-bold mb-0.5 ${
                 tier.status === "complete" || tier.status === "active" 
                   ? "text-primary" 
                   : "text-tertiary-foreground/40"
               }`}>
                 {tier.status === "locked" ? (
-                  <Lock className="h-3 w-3 sm:h-4 sm:w-4 mx-auto" />
+                  <Lock className="h-2.5 w-2.5 sm:h-4 sm:w-4 mx-auto" />
                 ) : (
                   `T${tier.tier}`
                 )}
               </div>
-              <p className="text-[8px] sm:text-[10px] text-tertiary-foreground/60 truncate leading-tight">{tier.name}</p>
+              <p className="text-[7px] sm:text-[10px] text-tertiary-foreground/60 truncate leading-tight">{tier.name}</p>
               {tier.status === "active" && (
-                <div className="mt-1.5 sm:mt-2 h-1 sm:h-1.5 bg-tertiary-foreground/10 rounded-full overflow-hidden">
+                <div className="mt-1 sm:mt-2 h-0.5 sm:h-1.5 bg-tertiary-foreground/10 rounded-full overflow-hidden">
                   <motion.div 
                     initial={prefersReducedMotion ? { width: `${tier.progress}%` } : { width: 0 }}
                     animate={{ width: `${tier.progress}%` }}
@@ -151,7 +151,7 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.3, type: "spring" }}
                 >
-                  <CheckCircle2 className="absolute top-1 right-1 sm:top-2 sm:right-2 h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-primary" />
+                  <CheckCircle2 className="absolute top-0.5 right-0.5 sm:top-2 sm:right-2 h-2 w-2 sm:h-3.5 sm:w-3.5 text-primary" />
                 </motion.div>
               )}
             </motion.div>

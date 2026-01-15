@@ -62,12 +62,12 @@ const staggerContainer = {
 
 function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl">
+    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-tertiary shadow-xl min-w-[320px]">
       {showOverlay && (
         <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-tertiary via-tertiary/90 to-transparent z-10 pointer-events-none" />
       )}
       
-      <div className="p-5 sm:p-6">
+      <div className="p-4 sm:p-5 md:p-6">
         {/* Header with animated progress */}
         <motion.div 
           initial={{ opacity: 0, y: -8 }}
@@ -101,21 +101,21 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-[180px_1fr] gap-3 sm:gap-4">
           {/* Step Navigation */}
           <motion.div 
             variants={staggerContainer}
             initial="hidden"
             animate="show"
-            className="space-y-2"
+            className="space-y-1.5 sm:space-y-2"
           >
             {steps.map((step) => (
               <motion.div
                 key={step.title}
                 variants={staggerItem}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition-all ${
+                className={`flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all ${
                   step.current 
-                    ? "bg-primary/20 border-2 border-primary/40" 
+                    ? "bg-primary/20 border border-primary/40" 
                     : step.complete 
                       ? "bg-tertiary-foreground/5 border border-tertiary-foreground/10"
                       : "border border-transparent opacity-50"
@@ -123,7 +123,7 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
               >
                 <motion.div 
                   whileHover={{ scale: 1.1 }}
-                  className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                  className={`w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg flex items-center justify-center flex-shrink-0 ${
                     step.complete 
                       ? "bg-primary text-primary-foreground" 
                       : step.current
@@ -132,18 +132,18 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   }`}
                 >
                   {step.complete ? (
-                    <CheckCircle2 className="h-3.5 w-3.5" />
+                    <CheckCircle2 className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5" />
                   ) : (
-                    <step.icon className="h-3.5 w-3.5" />
+                    <step.icon className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5" />
                   )}
                 </motion.div>
                 <div className="flex-1 min-w-0">
-                  <span className={`font-medium truncate block ${step.current ? "text-tertiary-foreground" : "text-tertiary-foreground/60"}`}>
+                  <span className={`font-medium truncate block text-[9px] sm:text-xs ${step.current ? "text-tertiary-foreground" : "text-tertiary-foreground/60"}`}>
                     {step.title}
                   </span>
                   {step.complete && step.time && (
-                    <span className="text-[10px] text-tertiary-foreground/50 flex items-center gap-1">
-                      <Clock className="h-2.5 w-2.5" /> {step.time}
+                    <span className="text-[8px] sm:text-[10px] text-tertiary-foreground/50 flex items-center gap-0.5 sm:gap-1">
+                      <Clock className="h-2 w-2 sm:h-2.5 sm:w-2.5" /> {step.time}
                     </span>
                   )}
                 </div>
@@ -152,7 +152,7 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                     animate={{ x: [0, 3, 0] }}
                     transition={{ repeat: Infinity, duration: 1.5 }}
                   >
-                    <ArrowRight className="h-3.5 w-3.5 text-primary" />
+                    <ArrowRight className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-primary flex-shrink-0" />
                   </motion.div>
                 )}
               </motion.div>

@@ -46,12 +46,12 @@ const nextSteps = [
   {
     step: "1",
     title: "We review your submission",
-    description: "Our team reviews your goals and current stage to understand how we can help.",
+    description: "Our team reviews your goals and current stage to understand how we can best support you.",
   },
   {
     step: "2",
-    title: "You get access",
-    description: "We'll send you login details and a personalized onboarding guide.",
+    title: "Invite sent",
+    description: "If you're a good fit, we'll send you an invite with login details and a personalized guide.",
   },
   {
     step: "3",
@@ -64,7 +64,7 @@ const expectations = [
   "Clear, structured guidance",
   "No hype or false promises",
   "Progress you can track",
-  "Support when you need it",
+  "Invite-only community",
 ];
 
 export default function GetStarted() {
@@ -360,6 +360,18 @@ export default function GetStarted() {
                   />
                 </div>
 
+                {/* Security Check Passed Callout */}
+                {turnstileToken && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-full bg-primary/10 border border-primary/20 mx-auto w-fit"
+                  >
+                    <CheckCircle2 className="h-4 w-4 text-primary" />
+                    <span className="text-sm text-primary font-medium">Security check passed</span>
+                  </motion.div>
+                )}
+
                 {/* Submit */}
                 <Button
                   type="submit"
@@ -386,6 +398,12 @@ export default function GetStarted() {
             {/* Benefits */}
             <AnimatedSection direction="right" delay={0.15} className="lg:pl-8">
               <div className="sticky top-28 space-y-5 sm:space-y-6">
+                {/* Invite Only Badge */}
+                <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-secondary/10 border border-secondary/20 w-fit">
+                  <div className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+                  <span className="text-xs font-semibold text-secondary uppercase tracking-wide">Invite Only</span>
+                </div>
+
                 <div className="p-5 sm:p-6 lg:p-8 rounded-2xl bg-muted/50 border border-border">
                   <h3 className="font-display font-bold text-lg sm:text-xl mb-5 sm:mb-6">What happens next?</h3>
                   

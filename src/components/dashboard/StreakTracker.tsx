@@ -52,8 +52,8 @@ export default function StreakTracker() {
       <div className="p-5 border-b border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
-              <Flame className="h-5 w-5 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary/80 to-secondary flex items-center justify-center">
+              <Flame className="h-5 w-5 text-secondary-foreground" />
             </div>
             <div>
               <h3 className="font-display text-lg font-bold text-foreground">Streaks</h3>

@@ -48,22 +48,22 @@ export default function DashboardStats() {
       label: "Steps Done",
       value: completedSteps.toString(),
       icon: CheckCircle2,
-      color: "text-emerald-600 dark:text-emerald-400",
-      bgColor: "bg-emerald-500/10",
+      color: "text-primary",
+      bgColor: "bg-primary/10",
     },
     {
       label: "In Progress",
       value: inProgressTasks.toString(),
       icon: Clock,
-      color: "text-amber-600 dark:text-amber-400",
-      bgColor: "bg-amber-500/10",
+      color: "text-secondary",
+      bgColor: "bg-secondary/10",
     },
     {
       label: "Completed",
       value: completedTasks.toString(),
       icon: Target,
-      color: "text-blue-600 dark:text-blue-400",
-      bgColor: "bg-blue-500/10",
+      color: "text-accent-foreground",
+      bgColor: "bg-accent/30",
     },
   ];
 
