@@ -246,72 +246,65 @@ function ExpandedContent() {
   const prefersReducedMotion = useReducedMotion();
   
   return (
-    <div className="space-y-6">
-      {/* Welcome Header */}
+    <div className="space-y-4 sm:space-y-6">
+      {/* Welcome Header - Mobile responsive */}
       <motion.div 
         initial={prefersReducedMotion ? {} : { opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between p-6 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20"
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20"
       >
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center ring-2 ring-primary/20">
-            <Sparkles className="h-7 w-7 text-primary" />
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center ring-2 ring-primary/20 flex-shrink-0">
+            <Sparkles className="h-5 w-5 sm:h-7 sm:w-7 text-primary" />
           </div>
           <div>
-            <h2 className="font-display text-2xl font-bold text-foreground">Good morning, Alex</h2>
-            <p className="text-muted-foreground">Let's keep building your business foundation.</p>
+            <h2 className="font-display text-lg sm:text-2xl font-bold text-foreground">Good morning, Alex</h2>
+            <p className="text-xs sm:text-base text-muted-foreground">Let's keep building your business foundation.</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-secondary/15 to-secondary/5 border border-secondary/30">
-            <Flame className="h-5 w-5 text-secondary" />
-            <span className="font-semibold text-secondary">7 day streak</span>
+        <div className="flex items-center gap-2 sm:gap-3 ml-auto sm:ml-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2.5 rounded-full bg-gradient-to-r from-secondary/15 to-secondary/5 border border-secondary/30">
+            <Flame className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />
+            <span className="text-xs sm:text-base font-semibold text-secondary">7 day streak</span>
           </div>
-          <motion.button 
-            whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="p-2.5 rounded-xl hover:bg-muted transition-colors"
-          >
-            <Bell className="h-5 w-5 text-muted-foreground" />
-          </motion.button>
         </div>
       </motion.div>
 
-      {/* Stats Grid */}
+      {/* Stats Grid - Mobile responsive */}
       <motion.div 
         variants={prefersReducedMotion ? {} : staggerContainer}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-4 gap-4"
+        className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4"
       >
         {expandedStats.map((stat) => (
           <motion.div
             key={stat.label}
             variants={prefersReducedMotion ? {} : staggerItem}
             whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -2 }}
-            className="p-5 rounded-2xl bg-card border border-border relative overflow-hidden group"
+            className="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-card border border-border relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative">
-              <div className="flex items-center gap-2 mb-2.5">
-                <stat.icon className="h-4 w-4 text-primary" />
-                <p className="text-xs text-muted-foreground">{stat.label}</p>
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2.5">
+                <stat.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
+                <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{stat.label}</p>
               </div>
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-foreground">{stat.value}</span>
+              <div className="flex items-baseline gap-0.5 sm:gap-1">
+                <span className="text-xl sm:text-3xl font-bold text-foreground">{stat.value}</span>
                 {stat.suffix && (
-                  <span className="text-sm text-muted-foreground">{stat.suffix}</span>
+                  <span className="text-[10px] sm:text-sm text-muted-foreground">{stat.suffix}</span>
                 )}
               </div>
               {stat.change && (
-                <p className="text-xs text-primary mt-1.5 font-medium">{stat.change}</p>
+                <p className="text-[10px] sm:text-xs text-primary mt-1 sm:mt-1.5 font-medium">{stat.change}</p>
               )}
             </div>
           </motion.div>
         ))}
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Quick Actions */}
         <motion.div 
           initial={prefersReducedMotion ? {} : { opacity: 0, x: -10 }}

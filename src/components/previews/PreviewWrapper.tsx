@@ -124,27 +124,27 @@ export const PreviewWrapper = memo(function PreviewWrapper({
         </motion.div>
       </motion.div>
 
-      {/* Full Demo Modal - Mobile optimized */}
+      {/* Full Demo Modal - Fully mobile optimized */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-4xl w-[95vw] sm:w-auto max-h-[90vh] overflow-y-auto p-0 gap-0 bg-background border-border/50 shadow-2xl">
+        <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 gap-0 bg-background border-border/50 shadow-2xl rounded-2xl">
           <VisuallyHidden>
             <DialogTitle>{title} Demo</DialogTitle>
           </VisuallyHidden>
           
           {/* Modal Header with gradient */}
-          <div className="sticky top-0 z-10 flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border bg-gradient-to-r from-background via-background to-muted/30 backdrop-blur-xl">
-            <div className="flex items-center gap-3">
+          <div className="sticky top-0 z-10 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b border-border bg-gradient-to-r from-background via-background to-muted/30 backdrop-blur-xl">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
               <motion.div 
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0"
               >
-                <Sparkles className="h-5 w-5 text-primary" />
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </motion.div>
-              <div>
-                <h2 className="font-display text-lg font-bold text-foreground">{title}</h2>
-                <p className="text-sm text-muted-foreground">Full dashboard preview</p>
+              <div className="min-w-0">
+                <h2 className="font-display text-sm sm:text-lg font-bold text-foreground truncate">{title}</h2>
+                <p className="text-xs sm:text-sm text-muted-foreground hidden xs:block">Full dashboard preview</p>
               </div>
             </div>
             <motion.button
@@ -152,18 +152,18 @@ export const PreviewWrapper = memo(function PreviewWrapper({
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
               onClick={() => setIsModalOpen(false)}
-              className="p-2.5 rounded-xl hover:bg-muted transition-colors"
+              className="p-2 sm:p-2.5 rounded-lg sm:rounded-xl hover:bg-muted transition-colors flex-shrink-0"
             >
-              <X className="h-5 w-5 text-muted-foreground" />
+              <X className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
             </motion.button>
           </div>
           
-          {/* Modal Content with animation */}
+          {/* Modal Content with animation - mobile responsive padding */}
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.3 }}
-            className="p-6"
+            className="p-3 sm:p-6"
           >
             {expandedContent || children}
           </motion.div>

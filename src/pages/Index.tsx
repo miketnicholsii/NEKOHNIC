@@ -421,23 +421,26 @@ export default function Index() {
 
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="max-w-4xl mx-auto">
-            {/* Hello accent - brand emphasis */}
-            <motion.p 
+            {/* Hello, NÈKO. - brand signature */}
+            <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1, ease: easeOutExpo }}
-              className="text-xs sm:text-sm font-medium tracking-[0.25em] sm:tracking-[0.3em] uppercase mb-4 sm:mb-6"
+              transition={{ duration: 0.6, delay: 0.1, ease: easeOutExpo }}
+              className="mb-4 sm:mb-6"
             >
-              <span className="text-primary-foreground/40">Hey, it's </span>
-              <span className="text-primary font-semibold tracking-[0.2em]">Hello</span>
-            </motion.p>
-            
-            <motion.h1 
-              className="font-logo font-bold tracking-tighter text-primary-foreground mb-4 sm:mb-6 text-[clamp(3.5rem,12vw,9rem)] leading-[0.85] neko-title"
-            >
-              <NekoLogo />
-              <span className="neko-dot">.</span>
-            </motion.h1>
+              <h1 className="font-logo font-bold tracking-tighter text-primary-foreground text-[clamp(3rem,10vw,7rem)] leading-[0.9]">
+                <motion.span 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                  className="text-primary-foreground/50 font-normal text-[0.4em] tracking-[0.15em] align-middle mr-1 sm:mr-2"
+                >
+                  Hello,
+                </motion.span>
+                <NekoLogo />
+                <span className="neko-dot">.</span>
+              </h1>
+            </motion.div>
 
             <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.5 }} className="text-base sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-3 sm:mb-4 leading-relaxed px-2 sm:px-0 font-medium">
               Build business credit. Establish your professional identity. Start with confidence.

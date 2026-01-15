@@ -212,82 +212,82 @@ function ExpandedContent() {
   const prefersReducedMotion = useReducedMotion();
   
   return (
-    <div className="space-y-6">
-      {/* Analytics Overview */}
+    <div className="space-y-4 sm:space-y-6">
+      {/* Analytics Overview - Mobile responsive grid */}
       <motion.div 
         variants={prefersReducedMotion ? {} : staggerContainer}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-3 gap-4"
+        className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4"
       >
         {analytics.map((stat) => (
           <motion.div
             key={stat.label}
             variants={prefersReducedMotion ? {} : staggerItem}
             whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -2 }}
-            className="p-5 rounded-2xl bg-card border border-border text-center relative overflow-hidden group"
+            className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-card border border-border text-center relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative">
-              <div className="flex items-center justify-center gap-2 mb-3">
-                <stat.icon className="h-4 w-4 text-primary" />
-                <p className="text-xs text-muted-foreground">{stat.label}</p>
+              <div className="flex items-center justify-center gap-2 mb-2 sm:mb-3">
+                <stat.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
+                <p className="text-[10px] sm:text-xs text-muted-foreground">{stat.label}</p>
               </div>
-              <p className="text-3xl font-bold text-foreground">{stat.value}</p>
-              <p className="text-xs text-primary mt-1 font-medium">{stat.change} this month</p>
+              <p className="text-2xl sm:text-3xl font-bold text-foreground">{stat.value}</p>
+              <p className="text-[10px] sm:text-xs text-primary mt-1 font-medium">{stat.change} this month</p>
             </div>
           </motion.div>
         ))}
       </motion.div>
 
-      {/* Full Profile Preview */}
+      {/* Full Profile Preview - Mobile responsive */}
       <motion.div 
         initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
-        className="bg-card border border-border rounded-2xl overflow-hidden"
+        className="bg-card border border-border rounded-xl sm:rounded-2xl overflow-hidden"
       >
-        <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-muted/50 to-transparent flex items-center justify-between">
-          <h4 className="font-semibold text-foreground">Profile Preview</h4>
+        <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-border bg-gradient-to-r from-muted/50 to-transparent flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h4 className="font-semibold text-sm sm:text-base text-foreground">Profile Preview</h4>
           <div className="flex items-center gap-2">
             <motion.span 
               animate={prefersReducedMotion ? {} : { scale: [1, 1.2, 1] }}
               transition={{ repeat: Infinity, duration: 2 }}
               className="w-2 h-2 rounded-full bg-primary"
             />
-            <span className="text-xs text-primary font-medium">Live at alexrivera.co</span>
+            <span className="text-[10px] sm:text-xs text-primary font-medium">Live at alexrivera.co</span>
           </div>
         </div>
         
-        <div className="p-6">
-          <div className="flex items-start gap-5 mb-6">
+        <div className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5 mb-4 sm:mb-6">
             <motion.div 
               whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-              className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/30 via-primary/20 to-primary/5 flex items-center justify-center text-3xl font-bold text-primary ring-4 ring-primary/20"
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/30 via-primary/20 to-primary/5 flex items-center justify-center text-xl sm:text-3xl font-bold text-primary ring-2 sm:ring-4 ring-primary/20 flex-shrink-0"
             >
               {profile.initials}
             </motion.div>
             <div className="flex-1">
-              <h3 className="font-display text-2xl font-bold text-foreground">{profile.name}</h3>
-              <p className="text-primary font-medium">{profile.headline}</p>
-              <p className="text-muted-foreground mt-2 max-w-md">{profile.bio}</p>
+              <h3 className="font-display text-lg sm:text-2xl font-bold text-foreground">{profile.name}</h3>
+              <p className="text-sm sm:text-base text-primary font-medium">{profile.headline}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2 max-w-md">{profile.bio}</p>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6">
             {profile.skills.map((skill) => (
               <motion.span 
                 key={skill} 
                 whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-                className="px-3.5 py-1.5 rounded-lg bg-muted hover:bg-muted/80 text-sm text-muted-foreground transition-colors cursor-default"
+                className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg bg-muted hover:bg-muted/80 text-[10px] sm:text-sm text-muted-foreground transition-colors cursor-default"
               >
                 {skill}
               </motion.span>
             ))}
           </div>
 
-          {/* Links */}
-          <div className="grid grid-cols-3 gap-3">
+          {/* Links - Mobile responsive */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
             {links.map((link, index) => (
               <motion.div
                 key={link.label}
@@ -295,12 +295,12 @@ function ExpandedContent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + index * 0.08 }}
                 whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -2 }}
-                className="flex items-center gap-3 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-all cursor-pointer group"
+                className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg sm:rounded-xl bg-muted/50 hover:bg-muted transition-all cursor-pointer group"
               >
-                <link.icon className="h-5 w-5 text-primary" />
-                <div>
-                  <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{link.label}</p>
-                  <p className="text-xs text-muted-foreground">{link.url}</p>
+                <link.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">{link.label}</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{link.url}</p>
                 </div>
               </motion.div>
             ))}
@@ -308,21 +308,21 @@ function ExpandedContent() {
         </div>
       </motion.div>
 
-      {/* Projects Grid */}
+      {/* Projects Grid - Mobile responsive */}
       <motion.div 
         initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="bg-card border border-border rounded-2xl p-6"
+        className="bg-card border border-border rounded-xl sm:rounded-2xl p-4 sm:p-6"
       >
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-4 sm:mb-5">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-accent-gold" />
-            <h4 className="font-semibold text-foreground">Featured Projects</h4>
+            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-accent-gold" />
+            <h4 className="font-semibold text-sm sm:text-base text-foreground">Featured Projects</h4>
           </div>
-          <button className="text-xs text-primary hover:underline font-medium">Edit Projects</button>
+          <button className="text-[10px] sm:text-xs text-primary hover:underline font-medium">Edit Projects</button>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {expandedProjects.map((project, index) => (
             <motion.div
               key={project.title}
@@ -330,37 +330,37 @@ function ExpandedContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + index * 0.08 }}
               whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -3 }}
-              className="p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all cursor-pointer group border border-transparent hover:border-border"
+              className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-muted/30 hover:bg-muted/50 transition-all cursor-pointer group border border-transparent hover:border-border"
             >
-              <div className="w-full h-24 rounded-lg bg-gradient-to-br from-accent-gold/30 to-accent-gold/10 mb-3 group-hover:shadow-md transition-shadow ring-1 ring-accent-gold/20" />
-              <h5 className="font-medium text-foreground group-hover:text-primary transition-colors">{project.title}</h5>
-              <p className="text-xs text-muted-foreground">{project.type}</p>
-              <p className="text-xs text-muted-foreground mt-1.5">{project.description}</p>
+              <div className="w-full h-16 sm:h-24 rounded-lg bg-gradient-to-br from-accent-gold/30 to-accent-gold/10 mb-2 sm:mb-3 group-hover:shadow-md transition-shadow ring-1 ring-accent-gold/20" />
+              <h5 className="font-medium text-sm sm:text-base text-foreground group-hover:text-primary transition-colors">{project.title}</h5>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">{project.type}</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 sm:mt-1.5 line-clamp-2">{project.description}</p>
             </motion.div>
           ))}
         </div>
       </motion.div>
 
-      {/* Settings Quick Access */}
+      {/* Settings Quick Access - Mobile responsive */}
       <motion.div 
         initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="flex items-center justify-between p-5 rounded-2xl bg-gradient-to-r from-muted/50 to-transparent border border-border"
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-muted/50 to-transparent border border-border"
       >
-        <div className="flex items-center gap-4">
-          <div className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center">
-            <Settings className="h-5 w-5 text-muted-foreground" />
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-muted flex items-center justify-center flex-shrink-0">
+            <Settings className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
           </div>
           <div>
-            <p className="font-medium text-foreground">SEO Settings</p>
-            <p className="text-sm text-muted-foreground">Optimize your profile for search engines</p>
+            <p className="font-medium text-sm sm:text-base text-foreground">SEO Settings</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">Optimize your profile for search engines</p>
           </div>
         </div>
         <motion.button 
           whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
           whileTap={{ scale: 0.98 }}
-          className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+          className="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl bg-primary text-primary-foreground text-xs sm:text-sm font-medium hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
         >
           Configure
         </motion.button>
