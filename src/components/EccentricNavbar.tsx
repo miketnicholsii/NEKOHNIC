@@ -187,17 +187,17 @@ export const EccentricNavbar = memo(function EccentricNavbar({
             {/* Right side - CTAs */}
             <div className="hidden lg:flex items-center justify-end gap-3 flex-shrink-0 relative z-10">
               {user ? (
-                <Link to="/app" className="flex items-center gap-2.5">
-                  <span className={`text-xs whitespace-nowrap ${showDarkText ? "text-muted-foreground" : "text-white/70"}`}>
+                <Link to="/app" className="flex items-center gap-2.5 group">
+                  <span className={`text-xs whitespace-nowrap transition-colors duration-200 ${showDarkText ? "text-muted-foreground group-hover:text-foreground" : "text-white/70 group-hover:text-white"}`}>
                     {user.email?.split('@')[0]}
                   </span>
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className={`h-8 px-3 text-xs font-medium rounded-full ${showDarkText ? "bg-muted/60 hover:bg-muted text-foreground" : "bg-white/15 hover:bg-white/25 text-white"}`}
+                    className={`h-8 px-3 text-xs font-medium rounded-full transition-all duration-200 ${showDarkText ? "bg-muted/60 hover:bg-primary hover:text-primary-foreground text-foreground" : "bg-white/15 hover:bg-white/30 text-white"}`}
                   >
                     Dashboard
-                    <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                    <ArrowRight className="h-3.5 w-3.5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
                   </Button>
                 </Link>
               ) : (
