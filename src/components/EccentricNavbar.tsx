@@ -150,9 +150,9 @@ export const EccentricNavbar = memo(function EccentricNavbar({
       >
         <div className={`absolute inset-0 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" : isHeroPage ? "bg-transparent" : "bg-background/90 backdrop-blur-lg border-b border-border/50"}`} aria-hidden="true" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="flex items-center h-11 lg:h-12 min-w-0 w-full gap-3">
-            {/* Left side - Logo */}
-            <div className="hidden lg:flex items-center w-48 xl:w-56 flex-shrink-0">
+          <div className="flex items-center justify-between h-11 lg:h-12 w-full">
+            {/* Left side - Logo (fixed width for symmetry) */}
+            <div className="hidden lg:flex items-center justify-start w-40 flex-shrink-0">
               <Link to="/" className="flex items-center relative z-10" title="NÈKO - pronounced 'ē-ko'">
                 <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
               </Link>
@@ -163,11 +163,11 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               <span className={`font-display text-xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
             </Link>
 
-            {/* Centered navigation */}
-            <div className="hidden lg:flex items-center justify-center flex-1 min-w-0 px-2">
+            {/* Centered navigation - absolutely positioned for true center */}
+            <div className="hidden lg:flex items-center justify-center absolute left-1/2 -translate-x-1/2">
               <motion.div
                 layout
-                className="flex items-center flex-nowrap gap-0.5 lg:gap-1 xl:gap-1.5 px-1.5 py-1 rounded-full max-w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                className="flex items-center flex-nowrap gap-0.5 lg:gap-1 xl:gap-1.5 px-1.5 py-1 rounded-full"
                 style={{ background: showDarkText ? "hsl(var(--muted) / 0.5)" : "hsl(0 0% 100% / 0.1)", backdropFilter: "blur(8px)" }}
               >
                 {NAV_LINKS.map((link) => (
@@ -184,8 +184,8 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               </motion.div>
             </div>
 
-            {/* Right side - CTAs (simplified - no Get Started button, only login) */}
-            <div className="hidden lg:flex items-center justify-end gap-3 min-w-fit flex-shrink-0 relative z-10">
+            {/* Right side - CTAs (fixed width for symmetry) */}
+            <div className="hidden lg:flex items-center justify-end w-40 flex-shrink-0 relative z-10">
               {user ? (
                 <>
                   <span className={`text-xs font-medium ${showDarkText ? "text-muted-foreground" : "text-white/60"}`}>

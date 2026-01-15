@@ -421,9 +421,9 @@ export default function Index() {
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
         <HeroBackground reduceMotion={performanceMode.reduceMotion} />
 
-        <div id="main-content" className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center w-full max-w-4xl">
-          <div className="w-full">
-            {/* Hello, NÈKO. - brand signature with centered NÈKO */}
+        <div id="main-content" className="relative z-10 text-center w-full px-4 sm:px-6 lg:px-8">
+          <div className="w-full max-w-4xl mx-auto">
+            {/* Hello, NÈKO. - brand signature with NÈKO truly centered on viewport */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -447,32 +447,25 @@ export default function Index() {
                 </h1>
               </div>
               
-              {/* Desktop: 3-column grid to center NÈKO perfectly */}
-              <div className="hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-0 w-full">
-                {/* Left column: Hello, - right aligned */}
-                <motion.div 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.2 }}
-                  className="flex justify-end pr-3 md:pr-4"
-                  aria-hidden="true"
-                >
-                  <span className="text-primary-foreground/60 font-normal text-sm md:text-base lg:text-lg tracking-[0.25em] uppercase self-center whitespace-nowrap">
+              {/* Desktop: Position NÈKO at true center, Hello floats left of it */}
+              <div className="hidden sm:flex items-center justify-center w-full">
+                <div className="relative inline-flex items-center">
+                  {/* Hello positioned to the left of NÈKO */}
+                  <motion.span 
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: 0.2 }}
+                    className="absolute right-full mr-3 md:mr-4 text-primary-foreground/60 font-normal text-sm md:text-base lg:text-lg tracking-[0.25em] uppercase whitespace-nowrap"
+                    aria-hidden="true"
+                  >
                     Hello,
-                  </span>
-                </motion.div>
-                
-                {/* Center column: NÈKO - perfectly centered */}
-                <h1 className="font-logo font-bold tracking-tighter text-primary-foreground text-[clamp(4rem,9vw,6.5rem)] leading-[0.9] whitespace-nowrap">
-                  <NekoLogo />
-                  <span className="neko-dot">.</span>
-                </h1>
-                
-                {/* Right column: invisible spacer matching Hello width */}
-                <div className="flex justify-start pl-3 md:pl-4" aria-hidden="true">
-                  <span className="invisible text-sm md:text-base lg:text-lg tracking-[0.25em] uppercase whitespace-nowrap">
-                    Hello,
-                  </span>
+                  </motion.span>
+                  
+                  {/* NÈKO - this is the centered element */}
+                  <h1 className="font-logo font-bold tracking-tighter text-primary-foreground text-[clamp(4rem,9vw,6.5rem)] leading-[0.9] whitespace-nowrap">
+                    <NekoLogo />
+                    <span className="neko-dot">.</span>
+                  </h1>
                 </div>
               </div>
             </motion.div>
