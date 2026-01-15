@@ -1,43 +1,111 @@
 import { test as base, expect, Page } from "@playwright/test";
+import { 
+  TEST_USERS, 
+  getEnvTestUser, 
+  getTestUserByTier,
+  getAdminTestUser,
+  getNewTestUser,
+  type TestUserCredentials 
+} from "./test-users";
 
 /**
- * Test user credentials for E2E tests
- * In CI, these should be configured via environment variables
+ * Re-export test users for convenience
  */
-export const TEST_USER = {
-  email: process.env.TEST_USER_EMAIL || "test@example.com",
-  password: process.env.TEST_USER_PASSWORD || "TestPassword123!",
-  name: "Test User",
-};
+export { TEST_USERS, getEnvTestUser, getTestUserByTier, getAdminTestUser, getNewTestUser };
+export type { TestUserCredentials };
 
 /**
- * Extended test fixture with common utilities
+ * Legacy TEST_USER export for backward compatibility
+ */
+export const TEST_USER = getEnvTestUser();
+
+/**
+ * Extended test fixture with authentication utilities
  */
 export const test = base.extend<{
   loginPage: Page;
   authenticatedPage: Page;
+  freeUserPage: Page;
+  proUserPage: Page;
+  adminPage: Page;
 }>({
   loginPage: async ({ page }, use) => {
     await page.goto("/login");
     await use(page);
   },
 
+  /**
+   * Page authenticated with default test user (from env or free tier)
+   */
   authenticatedPage: async ({ page }, use) => {
-    // This would require a real test user in the database
-    // For now, we mock the auth state or use a test account
-    await page.goto("/login");
+    await loginAsUser(page, getEnvTestUser());
+    await use(page);
+  },
 
-    // Fill login form
-    await page.getByLabel(/email/i).fill(TEST_USER.email);
-    await page.getByLabel(/password/i).fill(TEST_USER.password);
-    await page.getByRole("button", { name: /sign in/i }).click();
+  /**
+   * Page authenticated with free tier user
+   */
+  freeUserPage: async ({ page }, use) => {
+    await loginAsUser(page, TEST_USERS.free);
+    await use(page);
+  },
 
-    // Wait for navigation to dashboard or onboarding
-    await page.waitForURL(/\/(app|onboarding)/);
+  /**
+   * Page authenticated with pro tier user
+   */
+  proUserPage: async ({ page }, use) => {
+    await loginAsUser(page, TEST_USERS.pro);
+    await use(page);
+  },
 
+  /**
+   * Page authenticated with admin user
+   */
+  adminPage: async ({ page }, use) => {
+    await loginAsUser(page, TEST_USERS.admin);
     await use(page);
   },
 });
+
+/**
+ * Helper function to log in as a specific user
+ */
+export async function loginAsUser(page: Page, user: TestUserCredentials): Promise<void> {
+  await page.goto("/login");
+  await page.getByLabel(/email/i).fill(user.email);
+  await page.getByLabel(/password/i).fill(user.password);
+  await page.getByRole("button", { name: /sign in/i }).click();
+
+  // Wait for navigation - either to app (onboarded) or onboarding (new user)
+  if (user.onboardingCompleted) {
+    await page.waitForURL(/\/app/, { timeout: 15000 });
+  } else {
+    await page.waitForURL(/\/onboarding/, { timeout: 15000 });
+  }
+}
+
+/**
+ * Helper to check if user is logged in
+ */
+export async function isLoggedIn(page: Page): Promise<boolean> {
+  // Check for presence of logout button or user menu
+  const hasLogout = await page.getByRole("button", { name: /log.*out|sign.*out/i }).isVisible().catch(() => false);
+  const hasUserMenu = await page.locator('[data-testid="user-menu"]').isVisible().catch(() => false);
+  const isOnApp = page.url().includes("/app");
+  
+  return hasLogout || hasUserMenu || isOnApp;
+}
+
+/**
+ * Helper to log out current user
+ */
+export async function logout(page: Page): Promise<void> {
+  const logoutButton = page.getByRole("button", { name: /log.*out|sign.*out/i });
+  if (await logoutButton.isVisible()) {
+    await logoutButton.click();
+    await page.waitForURL(/^\/(login)?$/, { timeout: 10000 });
+  }
+}
 
 export { expect };
 
