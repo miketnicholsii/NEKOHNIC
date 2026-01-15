@@ -11,9 +11,9 @@ import { TEST_USERS } from "../fixtures/test-users";
 
 // Extend test with mocker fixture
 const test = base.extend<{ mocker: SupabaseMocker }>({
-  mocker: async ({ page }, use) => {
+  mocker: async ({ page }, runFixture) => {
     const mocker = await setupSupabaseMock(page);
-    await use(mocker);
+    await runFixture(mocker);
   },
 });
 

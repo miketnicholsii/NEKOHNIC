@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -203,31 +203,4 @@ export function StrategyTour({ onComplete }: StrategyTourProps) {
       )}
     </AnimatePresence>
   );
-}
-
-export function useStrategyTour() {
-  const [showTour, setShowTour] = useState(false);
-  const [hasChecked, setHasChecked] = useState(false);
-
-  useEffect(() => {
-    const tourCompleted = localStorage.getItem(TOUR_STORAGE_KEY);
-    if (!tourCompleted) {
-      // Small delay to let page render first
-      const timer = setTimeout(() => setShowTour(true), 500);
-      return () => clearTimeout(timer);
-    }
-    setHasChecked(true);
-  }, []);
-
-  const completeTour = () => {
-    setShowTour(false);
-    setHasChecked(true);
-  };
-
-  const resetTour = () => {
-    localStorage.removeItem(TOUR_STORAGE_KEY);
-    setShowTour(true);
-  };
-
-  return { showTour, completeTour, resetTour, hasChecked };
 }

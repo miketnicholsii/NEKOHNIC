@@ -99,9 +99,8 @@ export default function Analytics() {
     fetchProgress();
   }, [user]);
 
-  // Filter data by time range (used for future time-filtered views)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _filteredProgress = useMemo(() => {
+  // Filter data by time range
+  const filteredProgress = useMemo(() => {
     if (timeRange === "all") return progress;
     
     const now = new Date();
@@ -115,7 +114,7 @@ export default function Analytics() {
 
   // Completion over time data
   const completionOverTime = useMemo(() => {
-    const completedItems = progress.filter(p => p.completed && p.completed_at);
+    const completedItems = filteredProgress.filter(p => p.completed && p.completed_at);
     const grouped: Record<string, number> = {};
 
     completedItems.forEach(item => {
@@ -132,14 +131,14 @@ export default function Analytics() {
       cumulative += count;
       return { date, completed: count, cumulative };
     });
-  }, [progress]);
+  }, [filteredProgress]);
 
   // Module breakdown data
   const moduleBreakdown = useMemo(() => {
     const modules = ["business_starter", "business_credit", "personal_brand"];
     
     return modules.map(module => {
-      const moduleProgress = progress.filter(p => p.module === module);
+      const moduleProgress = filteredProgress.filter(p => p.module === module);
       const completed = moduleProgress.filter(p => p.completed).length;
       const total = MODULE_STEP_COUNTS[module];
       
@@ -152,7 +151,7 @@ export default function Analytics() {
         percentage: Math.round((completed / total) * 100),
       };
     });
-  }, [progress]);
+  }, [filteredProgress]);
 
   // Pie chart data
   const pieData = useMemo(() => {

@@ -48,6 +48,7 @@ export function useAsyncWithTimeout<T>(
 
   const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isMountedRef = useRef(true);
+  const hasTimedOutRef = useRef(false);
 
   const clearTimeoutRef = useCallback(() => {
     if (timeoutIdRef.current) {
@@ -62,6 +63,7 @@ export function useAsyncWithTimeout<T>(
     setIsLoading(true);
     setError(null);
     setIsTimedOut(false);
+    hasTimedOutRef.current = false;
     clearTimeoutRef();
 
     // Set up timeout
@@ -69,25 +71,26 @@ export function useAsyncWithTimeout<T>(
       if (isMountedRef.current) {
         setIsTimedOut(true);
         setIsLoading(false);
+        hasTimedOutRef.current = true;
         onTimeout?.();
       }
     }, timeout);
 
     try {
       const result = await asyncFn();
-      if (isMountedRef.current && !isTimedOut) {
+      if (isMountedRef.current && !hasTimedOutRef.current) {
         clearTimeoutRef();
         setData(result);
         setIsLoading(false);
       }
     } catch (err) {
-      if (isMountedRef.current && !isTimedOut) {
+      if (isMountedRef.current && !hasTimedOutRef.current) {
         clearTimeoutRef();
         setError(err instanceof Error ? err : new Error(String(err)));
         setIsLoading(false);
       }
     }
-  }, [asyncFn, timeout, onTimeout, clearTimeoutRef, isTimedOut]);
+  }, [asyncFn, timeout, onTimeout, clearTimeoutRef]);
 
   const retry = useCallback(() => {
     setRetryCount((c) => c + 1);
@@ -109,7 +112,7 @@ export function useAsyncWithTimeout<T>(
       isMountedRef.current = false;
       clearTimeoutRef();
     };
-  }, [retryCount]); // Re-execute on retry
+  }, [retryCount, execute, clearTimeoutRef]); // Re-execute on retry
 
   return { data, isLoading, error, isTimedOut, retry, reset };
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -147,13 +147,7 @@ export default function ResourceDetail() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  useEffect(() => {
-    if (id) {
-      loadResource(id);
-    }
-  }, [id]);
-
-  const loadResource = async (resourceId: string) => {
+  const loadResource = useCallback(async (resourceId: string) => {
     setIsLoading(true);
     try {
       // Fetch main resource
@@ -188,7 +182,13 @@ export default function ResourceDetail() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    if (id) {
+      loadResource(id);
+    }
+  }, [id, loadResource]);
 
   const hasAccess = useMemo(() => {
     if (!resource) return false;

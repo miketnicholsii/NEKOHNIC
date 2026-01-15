@@ -29,41 +29,41 @@ export const test = base.extend<{
   proUserPage: Page;
   adminPage: Page;
 }>({
-  loginPage: async ({ page }, use) => {
+  loginPage: async ({ page }, runFixture) => {
     await page.goto("/login");
-    await use(page);
+    await runFixture(page);
   },
 
   /**
    * Page authenticated with default test user (from env or free tier)
    */
-  authenticatedPage: async ({ page }, use) => {
+  authenticatedPage: async ({ page }, runFixture) => {
     await loginAsUser(page, getEnvTestUser());
-    await use(page);
+    await runFixture(page);
   },
 
   /**
    * Page authenticated with free tier user
    */
-  freeUserPage: async ({ page }, use) => {
+  freeUserPage: async ({ page }, runFixture) => {
     await loginAsUser(page, TEST_USERS.free);
-    await use(page);
+    await runFixture(page);
   },
 
   /**
    * Page authenticated with pro tier user
    */
-  proUserPage: async ({ page }, use) => {
+  proUserPage: async ({ page }, runFixture) => {
     await loginAsUser(page, TEST_USERS.pro);
-    await use(page);
+    await runFixture(page);
   },
 
   /**
    * Page authenticated with admin user
    */
-  adminPage: async ({ page }, use) => {
+  adminPage: async ({ page }, runFixture) => {
     await loginAsUser(page, TEST_USERS.admin);
-    await use(page);
+    await runFixture(page);
   },
 });
 
