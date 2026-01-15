@@ -34,6 +34,7 @@ const BusinessStarter = lazyWithRetry(() => import("@/pages/app/BusinessStarter"
 const BusinessCredit = lazyWithRetry(() => import("@/pages/app/BusinessCredit"));
 const PersonalBrandBuilder = lazyWithRetry(() => import("@/pages/app/PersonalBrandBuilder"));
 const Resources = lazyWithRetry(() => import("@/pages/app/Resources"));
+const Strategy = lazyWithRetry(() => import("@/pages/app/Strategy"));
 const Account = lazyWithRetry(() => import("@/pages/app/Account"));
 const Support = lazyWithRetry(() => import("@/pages/app/Support"));
 const Analytics = lazyWithRetry(() => import("@/pages/app/Analytics"));
@@ -94,6 +95,7 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
             <Route path="business-credit" element={<BusinessCredit />} />
             <Route path="personal-brand" element={<PersonalBrandBuilder />} />
             <Route path="resources" element={<Resources />} />
+            <Route path="strategy" element={<Strategy />} />
             <Route path="account" element={<Account />} />
             <Route path="support" element={<Support />} />
             <Route path="analytics" element={<Analytics />} />
