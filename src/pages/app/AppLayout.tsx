@@ -19,6 +19,7 @@ import {
   BarChart3,
   Trophy,
   Loader2,
+  Gift,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -28,6 +29,7 @@ const navItems = [
   { href: "/app/business-starter", label: "Business Starter", icon: Building2 },
   { href: "/app/business-credit", label: "Business Credit", icon: CreditCard },
   { href: "/app/personal-brand", label: "Personal Brand", icon: UserIcon },
+  { href: "/app/strategy", label: "Strategy Guide", icon: Gift },
   { href: "/app/achievements", label: "Achievements", icon: Trophy },
   { href: "/app/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/app/resources", label: "Resources", icon: BookOpen },
