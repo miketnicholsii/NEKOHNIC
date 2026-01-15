@@ -156,7 +156,72 @@ const NekoLogo = memo(function NekoLogo() {
   );
 });
 
-// Parallax hero background
+// Animated floating shapes for hero
+const FloatingShape = memo(function FloatingShape({ 
+  className, 
+  delay = 0, 
+  duration = 20,
+  animate = true 
+}: { 
+  className: string; 
+  delay?: number; 
+  duration?: number;
+  animate?: boolean;
+}) {
+  if (!animate) {
+    return <div className={className} />;
+  }
+  
+  return (
+    <motion.div
+      className={className}
+      animate={{
+        y: [0, -20, 0],
+        rotate: [0, 5, -5, 0],
+        scale: [1, 1.05, 1],
+      }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+    />
+  );
+});
+
+// Animated gradient orb
+const GradientOrb = memo(function GradientOrb({
+  className,
+  delay = 0,
+  animate = true,
+}: {
+  className: string;
+  delay?: number;
+  animate?: boolean;
+}) {
+  if (!animate) {
+    return <div className={className} />;
+  }
+
+  return (
+    <motion.div
+      className={className}
+      animate={{
+        scale: [1, 1.2, 1],
+        opacity: [0.3, 0.5, 0.3],
+      }}
+      transition={{
+        duration: 8,
+        delay,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+    />
+  );
+});
+
+// Parallax hero background with animated elements
 const HeroBackground = memo(function HeroBackground({ reduceMotion }: { reduceMotion: boolean }) {
   const prefersReducedMotion = useReducedMotion();
   const { scrollY } = useScroll();
@@ -170,25 +235,120 @@ const HeroBackground = memo(function HeroBackground({ reduceMotion }: { reduceMo
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      <motion.div 
-        style={{ y: y1, opacity }}
-        className="absolute top-1/4 left-[10%] w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50" 
-      />
-      <motion.div 
-        style={{ y: y2, opacity }}
-        className="absolute bottom-1/4 right-[10%] w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50" 
-      />
+      {/* Animated gradient orbs */}
+      <motion.div style={{ y: y1, opacity }}>
+        <GradientOrb 
+          animate={!shouldReduceMotion}
+          delay={0}
+          className="absolute top-[15%] left-[5%] w-64 sm:w-96 lg:w-[500px] h-64 sm:h-96 lg:h-[500px] bg-gradient-to-br from-primary/20 via-primary/10 to-transparent rounded-full blur-3xl" 
+        />
+      </motion.div>
+      
+      <motion.div style={{ y: y2, opacity }}>
+        <GradientOrb 
+          animate={!shouldReduceMotion}
+          delay={2}
+          className="absolute bottom-[10%] right-[5%] w-56 sm:w-80 lg:w-[450px] h-56 sm:h-80 lg:h-[450px] bg-gradient-to-tl from-accent/20 via-accent/10 to-transparent rounded-full blur-3xl" 
+        />
+      </motion.div>
+      
+      <motion.div style={{ y: y3, opacity }}>
+        <GradientOrb 
+          animate={!shouldReduceMotion}
+          delay={4}
+          className="absolute top-[40%] right-[20%] w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 bg-gradient-to-bl from-secondary/15 to-transparent rounded-full blur-3xl" 
+        />
+      </motion.div>
+
+      {/* Animated geometric rings */}
       <motion.div 
         style={{ scale, opacity }}
-        className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] border border-primary-foreground/10 rounded-full" 
-      />
+        className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      >
+        <FloatingShape 
+          animate={!shouldReduceMotion}
+          duration={25}
+          className="w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] border border-primary-foreground/10 rounded-full" 
+        />
+      </motion.div>
+      
       <motion.div 
         style={{ y: y3, opacity }}
-        className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-primary-foreground/5 rounded-full" 
+        className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      >
+        <FloatingShape 
+          animate={!shouldReduceMotion}
+          duration={20}
+          delay={1}
+          className="w-[350px] h-[350px] border border-primary-foreground/5 rounded-full" 
+        />
+      </motion.div>
+      
+      {/* Small floating accent shapes */}
+      <FloatingShape 
+        animate={!shouldReduceMotion}
+        duration={15}
+        delay={0.5}
+        className="hidden md:block absolute top-[20%] right-[15%] w-4 h-4 bg-primary/30 rounded-full blur-sm" 
       />
+      <FloatingShape 
+        animate={!shouldReduceMotion}
+        duration={18}
+        delay={1.5}
+        className="hidden md:block absolute top-[60%] left-[12%] w-3 h-3 bg-accent/40 rounded-full blur-sm" 
+      />
+      <FloatingShape 
+        animate={!shouldReduceMotion}
+        duration={22}
+        delay={2.5}
+        className="hidden lg:block absolute bottom-[25%] right-[25%] w-5 h-5 bg-secondary/30 rounded-full blur-sm" 
+      />
+      <FloatingShape 
+        animate={!shouldReduceMotion}
+        duration={20}
+        delay={3}
+        className="hidden lg:block absolute top-[35%] left-[25%] w-2 h-2 bg-primary-foreground/20 rounded-full" 
+      />
+      
+      {/* Animated gradient line */}
+      <motion.div
+        style={{ opacity }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 sm:h-48"
+      >
+        {!shouldReduceMotion ? (
+          <motion.div
+            className="w-full h-full bg-gradient-to-b from-transparent via-primary/30 to-transparent"
+            animate={{ 
+              opacity: [0.3, 0.6, 0.3],
+              scaleY: [0.8, 1, 0.8]
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-b from-transparent via-primary/30 to-transparent opacity-40" />
+        )}
+      </motion.div>
+
+      {/* Central glow effect */}
       <motion.div 
         style={{ opacity }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] w-[300px] sm:w-[500px] h-[150px] sm:h-[200px] bg-gradient-to-b from-primary/10 via-primary/5 to-transparent blur-3xl rounded-full" 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[55%] w-[350px] sm:w-[600px] lg:w-[800px] h-[180px] sm:h-[250px] lg:h-[300px] bg-gradient-to-b from-primary/15 via-primary/5 to-transparent blur-3xl rounded-full" 
+      />
+      
+      {/* Grid pattern overlay */}
+      <div 
+        className="absolute inset-0 opacity-[0.015]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px'
+        }}
       />
     </div>
   );
