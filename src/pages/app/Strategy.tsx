@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import Confetti from "@/components/ui/confetti";
 import { supabase } from "@/integrations/supabase";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
 import { tierMeetsRequirement } from "@/lib/subscription-tiers";
@@ -52,6 +53,8 @@ export default function Strategy() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeStep, setActiveStep] = useState(0);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const hasShownConfettiRef = useRef(false);
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(() => {
     const saved = localStorage.getItem(STRATEGY_STORAGE_KEY);
     return saved ? new Set(JSON.parse(saved)) : new Set();
@@ -329,11 +332,21 @@ export default function Strategy() {
 
           {/* Completion Celebration */}
           {completedSteps.size === resources.length && resources.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-6 p-6 rounded-xl bg-gradient-to-br from-primary/10 via-background to-accent/10 border border-primary/20 text-center"
-            >
+            <>
+              {showConfetti && <Confetti />}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                onAnimationComplete={() => {
+                  if (!hasShownConfettiRef.current) {
+                    hasShownConfettiRef.current = true;
+                    setShowConfetti(true);
+                    // Auto-hide confetti after animation
+                    setTimeout(() => setShowConfetti(false), 4000);
+                  }
+                }}
+                className="mt-6 p-6 rounded-xl bg-gradient-to-br from-primary/10 via-background to-accent/10 border border-primary/20 text-center"
+              >
               <div className="inline-flex items-center justify-center p-3 rounded-full bg-primary/10 text-primary mb-4">
                 <Sparkles className="h-8 w-8" />
               </div>
@@ -356,7 +369,8 @@ export default function Strategy() {
                   </Button>
                 </Link>
               </div>
-            </motion.div>
+              </motion.div>
+            </>
           )}
         </div>
       </div>
