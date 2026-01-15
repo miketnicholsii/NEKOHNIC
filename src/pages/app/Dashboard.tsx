@@ -20,7 +20,10 @@ import {
   BarChart3,
   Gift,
   Sparkles,
+  X,
 } from "lucide-react";
+
+const STRATEGY_BANNER_DISMISSED_KEY = "neko-strategy-banner-dismissed";
 
 export default function Dashboard() {
   const { refreshSubscription, isAdmin } = useAuth();
@@ -28,6 +31,14 @@ export default function Dashboard() {
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("overview");
+  const [isStrategyBannerDismissed, setIsStrategyBannerDismissed] = useState(() => {
+    return localStorage.getItem(STRATEGY_BANNER_DISMISSED_KEY) === "true";
+  });
+
+  const handleDismissStrategyBanner = () => {
+    setIsStrategyBannerDismissed(true);
+    localStorage.setItem(STRATEGY_BANNER_DISMISSED_KEY, "true");
+  };
 
   // Check for checkout success
   useEffect(() => {
@@ -49,43 +60,55 @@ export default function Dashboard() {
       <AnnouncementsBanner />
 
       {/* Featured Strategy Banner */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-background to-accent/5"
-      >
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-accent/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
-        
-        <div className="relative p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-          <div className="flex-shrink-0 p-3 rounded-xl bg-primary/10 text-primary">
-            <Gift className="h-6 w-6" aria-hidden="true" />
-          </div>
+      {!isStrategyBannerDismissed && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+          transition={{ delay: 0.1 }}
+          className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-background to-accent/5"
+        >
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-accent/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
           
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="inline-flex items-center gap-1 text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                <Sparkles className="h-3 w-3" aria-hidden="true" />
-                New
-              </span>
+          {/* Dismiss button */}
+          <button
+            onClick={handleDismissStrategyBanner}
+            className="absolute top-3 right-3 p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors z-10"
+            aria-label="Dismiss banner"
+          >
+            <X className="h-4 w-4" />
+          </button>
+          
+          <div className="relative p-6 sm:p-8 pr-12 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+            <div className="flex-shrink-0 p-3 rounded-xl bg-primary/10 text-primary">
+              <Gift className="h-6 w-6" aria-hidden="true" />
             </div>
-            <h3 className="font-display text-lg font-bold text-foreground mb-1">
-              The Art of Generous First Impressions
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Learn how to build trust and credibility by leading with value—a calm, strategic approach to creating offers that open doors.
-            </p>
+            
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="inline-flex items-center gap-1 text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                  <Sparkles className="h-3 w-3" aria-hidden="true" />
+                  New
+                </span>
+              </div>
+              <h3 className="font-display text-lg font-bold text-foreground mb-1">
+                The Art of Generous First Impressions
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Learn how to build trust and credibility by leading with value—a calm, strategic approach to creating offers that open doors.
+              </p>
+            </div>
+            
+            <Link to="/app/resources?category=strategy" className="flex-shrink-0 w-full sm:w-auto">
+              <Button variant="outline" className="w-full sm:w-auto group">
+                Explore Strategy
+                <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </Button>
+            </Link>
           </div>
-          
-          <Link to="/app/resources?category=strategy" className="flex-shrink-0 w-full sm:w-auto">
-            <Button variant="outline" className="w-full sm:w-auto group">
-              Explore Strategy
-              <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-            </Button>
-          </Link>
-        </div>
-      </motion.div>
+        </motion.div>
+      )}
 
       {/* Personalized Welcome Header */}
       <WelcomeHeader />
