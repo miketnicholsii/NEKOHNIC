@@ -38,32 +38,32 @@ export default function DashboardStats() {
 
   const stats = [
     {
-      label: "Overall Progress",
+      label: "Progress",
       value: `${overallProgress}%`,
       icon: TrendingUp,
       color: "text-primary",
       bgColor: "bg-primary/10",
     },
     {
-      label: "Steps Completed",
+      label: "Steps Done",
       value: completedSteps.toString(),
       icon: CheckCircle2,
-      color: "text-emerald-600",
-      bgColor: "bg-emerald-50 dark:bg-emerald-500/10",
+      color: "text-emerald-600 dark:text-emerald-400",
+      bgColor: "bg-emerald-500/10",
     },
     {
-      label: "Active Tasks",
+      label: "In Progress",
       value: inProgressTasks.toString(),
       icon: Clock,
-      color: "text-amber-600",
-      bgColor: "bg-amber-50 dark:bg-amber-500/10",
+      color: "text-amber-600 dark:text-amber-400",
+      bgColor: "bg-amber-500/10",
     },
     {
-      label: "Tasks Done",
+      label: "Completed",
       value: completedTasks.toString(),
       icon: Target,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50 dark:bg-blue-500/10",
+      color: "text-blue-600 dark:text-blue-400",
+      bgColor: "bg-blue-500/10",
     },
   ];
 
@@ -77,15 +77,15 @@ export default function DashboardStats() {
             initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
-            className="bg-card border border-border rounded-xl p-4"
+            className="bg-card border border-border rounded-xl p-4 hover:border-primary/20 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-lg ${stat.bgColor} flex items-center justify-center`}>
-                <Icon className={`h-5 w-5 ${stat.color}`} aria-hidden="true" />
+              <div className={`w-9 h-9 rounded-lg ${stat.bgColor} flex items-center justify-center`}>
+                <Icon className={`h-4 w-4 ${stat.color}`} aria-hidden="true" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                <p className="text-xs text-muted-foreground">{stat.label}</p>
+                <p className="text-xl font-bold text-foreground">{stat.value}</p>
+                <p className="text-[11px] text-muted-foreground">{stat.label}</p>
               </div>
             </div>
           </motion.div>

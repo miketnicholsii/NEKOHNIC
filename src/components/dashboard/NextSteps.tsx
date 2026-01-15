@@ -73,7 +73,7 @@ export default function NextSteps() {
         return step;
       }
     }
-    return null; // All complete
+    return null;
   };
 
   // Get urgent/high priority incomplete tasks
@@ -100,47 +100,47 @@ export default function NextSteps() {
   const primaryNextStep = sortedSteps[0];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div>
-        <h2 className="font-display text-xl font-bold text-foreground mb-1">Next Steps</h2>
-        <p className="text-sm text-muted-foreground">
-          Your recommended actions based on your progress
+        <h2 className="font-display text-base font-semibold text-foreground mb-0.5">Next Steps</h2>
+        <p className="text-xs text-muted-foreground">
+          Recommended actions based on your progress
         </p>
       </div>
 
-      {/* Primary Next Action */}
+      {/* Primary Next Action - Compact */}
       {primaryNextStep && (
         <motion.div
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-6 rounded-2xl bg-gradient-primary text-primary-foreground"
+          className="p-4 rounded-xl bg-primary text-primary-foreground"
         >
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-primary-foreground/20 flex items-center justify-center flex-shrink-0">
-              <Sparkles className="h-6 w-6" aria-hidden="true" />
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-primary-foreground/15 flex items-center justify-center flex-shrink-0">
+              <Sparkles className="h-5 w-5" aria-hidden="true" />
             </div>
             <div className="flex-1">
-              <p className="text-sm text-primary-foreground/80 mb-1">
+              <p className="text-xs text-primary-foreground/70">
                 {MODULE_INFO[primaryNextStep.module]?.name}
               </p>
-              <h3 className="font-display text-lg font-semibold">
+              <h3 className="font-semibold text-sm">
                 {primaryNextStep.title}
               </h3>
             </div>
             <Link to={primaryNextStep.href}>
-              <Button variant="hero" className="group">
+              <Button variant="secondary" size="sm" className="group h-8">
                 Continue
-                <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                <ArrowRight className="h-3.5 w-3.5 ml-1.5 transition-transform group-hover:translate-x-0.5" />
               </Button>
             </Link>
           </div>
         </motion.div>
       )}
 
-      {/* Upcoming Steps */}
+      {/* Upcoming Steps - Compact */}
       {sortedSteps.length > 1 && (
-        <div className="space-y-3">
-          <h3 className="font-semibold text-foreground text-sm">Coming Up</h3>
+        <div className="space-y-2">
+          <h3 className="font-medium text-foreground text-xs">Coming Up</h3>
           {sortedSteps.slice(1, 4).map((step, index) => {
             if (!step) return null;
             const info = MODULE_INFO[step.module];
@@ -151,20 +151,20 @@ export default function NextSteps() {
                 key={`${step.module}-${step.id}`}
                 initial={prefersReducedMotion ? false : { opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.05 }}
               >
                 <Link
                   to={step.href}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border hover:border-primary/30 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  className="flex items-center gap-3 p-2.5 rounded-lg bg-card border border-border hover:border-primary/20 transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                    <Icon className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                  <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
+                    <Icon className="h-3.5 w-3.5 text-muted-foreground" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-muted-foreground">{info?.name}</p>
-                    <p className="text-sm font-medium text-foreground truncate">{step.title}</p>
+                    <p className="text-[10px] text-muted-foreground">{info?.name}</p>
+                    <p className="text-xs font-medium text-foreground truncate">{step.title}</p>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                  <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
                 </Link>
               </motion.div>
             );
@@ -172,11 +172,11 @@ export default function NextSteps() {
         </div>
       )}
 
-      {/* Urgent Tasks */}
+      {/* Urgent Tasks - Compact */}
       {urgentTasks.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="font-semibold text-foreground text-sm flex items-center gap-2">
-            <Clock className="h-4 w-4 text-destructive" aria-hidden="true" />
+        <div className="space-y-2">
+          <h3 className="font-medium text-foreground text-xs flex items-center gap-1.5">
+            <Clock className="h-3.5 w-3.5 text-destructive" />
             Priority Tasks
           </h3>
           {urgentTasks.map((task, index) => (
@@ -184,28 +184,28 @@ export default function NextSteps() {
               key={task.id}
               initial={prefersReducedMotion ? false : { opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className={`flex items-center gap-3 p-3 rounded-lg border ${
+              transition={{ delay: index * 0.05 }}
+              className={`flex items-center gap-2.5 p-2.5 rounded-lg border ${
                 task.priority === "urgent" 
-                  ? "bg-destructive/5 border-destructive/30" 
-                  : "bg-orange-50 dark:bg-orange-900/10 border-orange-200 dark:border-orange-800/30"
+                  ? "bg-destructive/5 border-destructive/20" 
+                  : "bg-amber-500/5 border-amber-500/20"
               }`}
             >
-              <Circle className={`h-4 w-4 flex-shrink-0 ${
-                task.priority === "urgent" ? "text-destructive" : "text-orange-600"
-              }`} aria-hidden="true" />
+              <Circle className={`h-3.5 w-3.5 flex-shrink-0 ${
+                task.priority === "urgent" ? "text-destructive" : "text-amber-600"
+              }`} />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">{task.title}</p>
+                <p className="text-xs font-medium text-foreground truncate">{task.title}</p>
                 {task.due_date && (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[10px] text-muted-foreground">
                     Due: {new Date(task.due_date).toLocaleDateString()}
                   </p>
                 )}
               </div>
-              <span className={`text-xs px-2 py-0.5 rounded-full ${
+              <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${
                 task.priority === "urgent" 
                   ? "bg-destructive/10 text-destructive" 
-                  : "bg-orange-100 dark:bg-orange-900/30 text-orange-600"
+                  : "bg-amber-500/10 text-amber-600"
               }`}>
                 {task.priority}
               </span>
@@ -216,11 +216,11 @@ export default function NextSteps() {
 
       {/* All Complete State */}
       {sortedSteps.length === 0 && urgentTasks.length === 0 && (
-        <div className="text-center py-8" role="status">
-          <CheckCircle2 className="h-12 w-12 text-primary mx-auto mb-4" aria-hidden="true" />
-          <h3 className="font-semibold text-foreground mb-1">All caught up!</h3>
-          <p className="text-sm text-muted-foreground">
-            You've completed all available steps. Great work!
+        <div className="text-center py-6" role="status">
+          <CheckCircle2 className="h-10 w-10 text-primary mx-auto mb-3" />
+          <h3 className="font-semibold text-foreground text-sm mb-0.5">All caught up!</h3>
+          <p className="text-xs text-muted-foreground">
+            You've completed all available steps.
           </p>
         </div>
       )}
