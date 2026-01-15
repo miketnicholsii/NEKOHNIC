@@ -6,6 +6,7 @@ import {
   FileText,
   CreditCard,
   Megaphone,
+  Wrench,
   LogOut,
   Menu,
   X,
@@ -23,6 +24,7 @@ const navItems = [
   { href: "/admin/content", label: "Content", icon: FileText },
   { href: "/admin/plans", label: "Plans", icon: CreditCard },
   { href: "/admin/announcements", label: "Announcements", icon: Megaphone },
+  { href: "/admin/diagnostics", label: "Diagnostics", icon: Wrench },
 ];
 
 export default function AdminLayout() {

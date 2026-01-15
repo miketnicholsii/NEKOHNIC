@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase, setRememberMePreference } from "@/integrations/supabase";
 import { useAuth } from "@/hooks/use-auth";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { isGoogleOAuthEnabled } from "@/lib/auth-providers";
 import { Eye, EyeOff, Loader2, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
@@ -104,6 +105,14 @@ export default function Signup() {
   const businessId = useId();
 
   const handleGoogleSignup = async () => {
+    if (!isGoogleOAuthEnabled) {
+      toast({
+        title: "Google sign-in isn't configured",
+        description: "Please use email signup or ask an admin to enable Google OAuth.",
+        variant: "destructive",
+      });
+      return;
+    }
     if (isGoogleLoading || isLoading) return;
     
     setIsGoogleLoading(true);
@@ -337,37 +346,45 @@ export default function Signup() {
             </div>
 
             {/* Google OAuth Button */}
-            <Button
-              type="button"
-              variant="outline"
-              size="lg"
-              className="w-full h-12 text-base font-medium gap-3 bg-background hover:bg-muted/50"
-              onClick={handleGoogleSignup}
-              disabled={isGoogleLoading || isLoading}
-              aria-busy={isGoogleLoading}
-            >
-              {isGoogleLoading ? (
-                <span className="flex items-center gap-2">
-                  <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
-                  Connecting…
-                </span>
-              ) : (
-                <>
-                  <GoogleIcon />
-                  Continue with Google
-                </>
-              )}
-            </Button>
+            {isGoogleOAuthEnabled ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                className="w-full h-12 text-base font-medium gap-3 bg-background hover:bg-muted/50"
+                onClick={handleGoogleSignup}
+                disabled={isGoogleLoading || isLoading}
+                aria-busy={isGoogleLoading}
+              >
+                {isGoogleLoading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
+                    Connecting…
+                  </span>
+                ) : (
+                  <>
+                    <GoogleIcon />
+                    Continue with Google
+                  </>
+                )}
+              </Button>
+            ) : (
+              <div className="rounded-xl border border-border/60 bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
+                Google sign-in isn&apos;t configured yet. Please use email to continue.
+              </div>
+            )}
 
             {/* Divider */}
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-border" />
+            {isGoogleOAuthEnabled && (
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-border" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-3 text-muted-foreground">or continue with email</span>
+                </div>
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-3 text-muted-foreground">or continue with email</span>
-              </div>
-            </div>
+            )}
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>

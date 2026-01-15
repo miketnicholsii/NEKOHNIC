@@ -50,6 +50,7 @@ const AdminUsers = lazyWithRetry(() => import("@/pages/admin/AdminUsers"));
 const AdminContent = lazyWithRetry(() => import("@/pages/admin/AdminContent"));
 const AdminPlans = lazyWithRetry(() => import("@/pages/admin/AdminPlans"));
 const AdminAnnouncements = lazyWithRetry(() => import("@/pages/admin/AdminAnnouncements"));
+const AdminDiagnostics = lazyWithRetry(() => import("@/pages/admin/Diagnostics"));
 
 // Loading fallback component - simplified for faster render
 const PageLoader = memo(function PageLoader() {
@@ -114,6 +115,7 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
             <Route path="content" element={<AdminContent />} />
             <Route path="plans" element={<AdminPlans />} />
             <Route path="announcements" element={<AdminAnnouncements />} />
+            <Route path="diagnostics" element={<AdminDiagnostics />} />
           </Route>
           
           {/* Public profile route */}
